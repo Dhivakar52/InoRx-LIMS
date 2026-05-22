@@ -22,9 +22,13 @@ import Subject from './components/Subject/SubjectEnrollment/Subject.tsx';
 import VisitSchedule from './components/VisitSchedulingModule/VisitSchedule.tsx';
 import AmendmentForm from './components/StudyModule/StudyAmendmentModule/AmendmentForm.tsx';
 import SiteForm from './components/StudyModule/SiteRegistrationModule/SiteForm.tsx';
+
 import TestRegistration from './components/Test Registration/TestRegistration.tsx';
 import TestRegistrationForm from "./components/Test Registration/TestRegistrationForm.tsx";
 import GenerateReport from "./components/Reports/GenerateReport.tsx";
+
+
+import Result from "./components/ResultModule/Result.tsx"
 
 //import PresidentLevelDetail from './components/PresidentLevel/PresidentLevelDetail.tsx';
 
@@ -52,8 +56,12 @@ const pageComponents: Record<string, React.ReactNode> = {
   'Enrollment':<Subject/>,
   'Adverse': <Adverse/>,
   'Visit':<VisitSchedule/>,
+
   'TestRegistration':<TestRegistration/>,
   'GenerateReport':<GenerateReport/>
+
+
+  'Result': <Result/>
 
 
   // 'My Nominations': <NominationPage />,

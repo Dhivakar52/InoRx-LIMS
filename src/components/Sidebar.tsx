@@ -79,6 +79,7 @@ const navigationItems: NavigationItem[] = [
     path: '/visit',
     pageKey: 'Visit',
   },
+
   // Test Registration
   {
     icon: FlaskConical,
@@ -99,6 +100,13 @@ const navigationItems: NavigationItem[] = [
         pageKey: 'GenerateReport',
       },
     ],
+
+  {
+    icon: CalendarDays,
+    label: 'Result',
+    path: '/result',
+    pageKey: 'Result',
+
   },
 
   // ✅ ADMIN
