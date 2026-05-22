@@ -31,7 +31,6 @@ import Dashboard from './components/Dashboard/Dashboard.tsx';
 import StudyMasterStepper from './components/StudyModule/StudyMasterModule/StudyMasterStepper.tsx';
 
 // Import all 5 modules
-
 import VisitForm from './components/VisitSchedulingModule/VisitForm.tsx';
 import AnalyzerIntegrationTable from './components/AnalyzerIntegrationModule/AnalyzerIntegrationTable.tsx';
 import AnalyzerForm from './components/AnalyzerIntegrationModule/AnalyzerForm.tsx';
@@ -42,11 +41,10 @@ import ResultsForm from './components/ResultsReviewModule/ResultsForm.tsx';
 import FinalQCApprovalTable from './components/FinalQCApproval/FinalQCApprovalTable.tsx';
 import QcForm from './components/FinalQCApproval/QcForm.tsx';
 
-import Dashboard from './components/Dashboard/Dashboard.tsx';
-import StudyMasterStepper from './components/StudyModule/StudyMasterModule/StudyMasterStepper.tsx';
 import SubjectEnrollmentForm from './components/Subject/SubjectEnrollment/SubjectEnrollmentForm.tsx';
 import AdverseEventTrackingForm from './components/Subject/AdverseEvents/AdverseEventTrackingForm.tsx';
 import SampleReceptionForm from './components/Sample/SampleRegistrationModule/SampleReceptionStepper.tsx';
+
 // -------------------------
 // Main page components
 // -------------------------
@@ -67,49 +65,18 @@ const pageComponents: Record<string, React.ReactNode> = {
   'TestRegistration': <TestRegistration />,
   'GenerateReport': <GenerateReport />,
   'Result': <Result />,
-  'Enrollment':<Subject/>,
-  'Adverse': <Adverse/>,
-  'Visit':<VisitSchedule/>,
-  'Sample':<Sample/>,
-  'TestRegistration':<TestRegistration/>,
-  'GenerateReport':<GenerateReport/>,
-  'Result': <Result/>
-
-
-  // 'My Nominations': <NominationPage />,
-  
+  'Sample': <Sample />,
 };
-
-
 
 // -------------------------
 // Admin sub-pages
 // -------------------------
-const adminSubPages: Record<string, React.ReactNode> = {
-  // 'award-categories': <AwardCategories />,
-  // 'entities-departments': <EntitiesDepartments />,
-  // 'nomination-cycle': <NominationCycleMaster />,
-  // 'jury-panel-setup': <JuryPanelSetup />,
-  // 'jury-evaluation-settings': <JuryEvaluationConfiguration />,
-  // 'jury-role-mapping': <JuryRoleMapping />,
-  // 'role-list': <RoleAccessLevels />,
-  
-};
+const adminSubPages: Record<string, React.ReactNode> = {};
 
 // -------------------------
 // Allowed roles for admin sub-pages
 // -------------------------
-const adminSubPageRoles: Record<string, UserRole[]> = {
-  
-  'award-categories': ['admin'],
-  'entities-departments': ['admin'],
-  'nomination-cycle': ['admin'],
-  'jury-panel-setup': ['admin'],
-  'jury-evaluation-settings': ['admin'],
-  'jury-role-mapping': ['admin'],
-  'role-list': ['admin'],
-  
-};
+const adminSubPageRoles: Record<string, UserRole[]> = {};
 
 const getAllowedRoles = (pageLabel: string): UserRole[] => {
   const matches = Object.entries(ROLE_PAGES)
@@ -135,12 +102,15 @@ const App: React.FC = () => {
     <AuthProvider>
       <Router>
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Login setUserRole={setUserRole} />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verify-otp" element={<VerifyOtp />} />
           <Route path="/reset-password" element={<ResetPassword />} />
 
+          {/* Protected Routes with Layout */}
           <Route element={<Layout />}>
+            {/* Dynamic page components */}
             {Object.entries(pageComponents).map(([label, component]) => {
               const path = '/' + label.toLowerCase().replace(/\s+/g, '-');
               const allowedRoles = getAllowedRoles(label);
@@ -157,195 +127,141 @@ const App: React.FC = () => {
               );
             })}
 
-            {/* Visit Module */}
-            <Route path="/visit" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><VisitSchedule /></ProtectedRoute>} />
-            <Route path="/visit/new-add" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><VisitForm /></ProtectedRoute>} />
+            {/* Admin sub-pages */}
+            {Object.entries(adminSubPages).map(([slug, component]) => (
+              <Route
+                key={slug}
+                path={`/admin-setting/${slug}`}
+                element={
+                  <ProtectedRoute userRole={userRole} allowedRoles={adminSubPageRoles[slug]}>
+                    {component}
+                  </ProtectedRoute>
+                }
+              />
+            ))}
 
-            {/* Analyzer Integration Module */}
-            <Route path="/analyzer" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><AnalyzerIntegrationTable /></ProtectedRoute>} />
-            <Route path="/analyzer/new-add" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><AnalyzerForm /></ProtectedRoute>} />
+            {/* ✅ Visit Module */}
+            <Route path="/visit" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <VisitSchedule />
+              </ProtectedRoute>
+            } />
+            <Route path="/visit/new-add" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <VisitForm />
+              </ProtectedRoute>
+            } />
 
-            {/* Biobank Management Module */}
-            <Route path="/biobank" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><BiobankManagementTable /></ProtectedRoute>} />
-            <Route path="/biobank/new-add" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><BiobankForm /></ProtectedRoute>} />
+            {/* ✅ Analyzer Integration Module */}
+            <Route path="/analyzer" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <AnalyzerIntegrationTable />
+              </ProtectedRoute>
+            } />
+            <Route path="/analyzer/new-add" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <AnalyzerForm />
+              </ProtectedRoute>
+            } />
 
-            {/* Results Review Module */}
-            <Route path="/results" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><ResultsReviewTable /></ProtectedRoute>} />
-            <Route path="/results/new-add" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><ResultsForm /></ProtectedRoute>} />
+            {/* ✅ Biobank Management Module */}
+            <Route path="/biobank" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <BiobankManagementTable />
+              </ProtectedRoute>
+            } />
+            <Route path="/biobank/new-add" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <BiobankForm />
+              </ProtectedRoute>
+            } />
 
-            {/* Final QC Approval Module */}
-            <Route path="/qc" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><FinalQCApprovalTable /></ProtectedRoute>} />
-            <Route path="/qc/new-add" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><QcForm /></ProtectedRoute>} />
+            {/* ✅ Results Review Module */}
+            <Route path="/results" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <ResultsReviewTable />
+              </ProtectedRoute>
+            } />
+            <Route path="/results/new-add" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <ResultsForm />
+              </ProtectedRoute>
+            } />
 
-            {/* Existing Routes */}
-            <Route path="/study/master" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><Study /></ProtectedRoute>} />
-            <Route path="/study/amendment" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><AmendmentModule /></ProtectedRoute>} />
-            <Route path="/study/site" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><SiteModule /></ProtectedRoute>} />
-            <Route path="/subject/enrollment" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><Subject /></ProtectedRoute>} />
-            <Route path="/subject/adverse" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><Adverse /></ProtectedRoute>} />
-            <Route path="/reports/generate" element={<ProtectedRoute userRole={userRole} allowedRoles={['admin']}><GenerateReport /></ProtectedRoute>} />
+            {/* ✅ Final QC Approval Module */}
+            <Route path="/qc" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <FinalQCApprovalTable />
+              </ProtectedRoute>
+            } />
+            <Route path="/qc/new-add" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <QcForm />
+              </ProtectedRoute>
+            } />
+
+            {/* Study Module Routes */}
+            <Route path="/study/master" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <Study />
+              </ProtectedRoute>
+            } />
+            <Route path="/study/amendment" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <AmendmentModule />
+              </ProtectedRoute>
+            } />
+            <Route path="/study/site" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <SiteModule />
+              </ProtectedRoute>
+            } />
             <Route path="/study/master/new-add" element={<StudyMasterStepper />} />
             <Route path="/study/amendment/new-add" element={<AmendmentForm />} />
-            <Route path="/testRegistration/new-add" element={<TestRegistrationForm />} />
             <Route path="/study/site/new-add" element={<SiteForm />} />
+
+            {/* Subject Module Routes */}
+            <Route path="/subject/enrollment" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <Subject />
+              </ProtectedRoute>
+            } />
+            <Route path="/subject/adverse" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <Adverse />
+              </ProtectedRoute>
+            } />
+            <Route path="/subject/master/sub-add" element={<SubjectEnrollmentForm />} />
+            <Route path="/subject/master/adv-add" element={<AdverseEventTrackingForm />} />
+
+            {/* Sample Module Routes */}
+            <Route path="/sample/reception" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <Sample />
+              </ProtectedRoute>
+            } />
+            <Route path="/sample/master/smp-add" element={<SampleReceptionForm />} />
+
+            {/* Test Registration Routes */}
+            <Route path="/testRegistration/new-add" element={<TestRegistrationForm />} />
+
+            {/* Reports Routes */}
+            <Route path="/reports/generate" element={
+              <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+                <GenerateReport />
+              </ProtectedRoute>
+            } />
+
+            {/* Forgot Password Route */}
             <Route path="/forgot" element={<ForgotPassword />} />
+
+            {/* Fallback Route */}
             <Route path="*" element={<Navigate to="/home" replace />} />
           </Route>
         </Routes>
       </Router>
-     {/* Protected routes */}
-     <Route element={<Layout />}>
-       {/* Main pages */}
-       {Object.entries(pageComponents).map(([label, component]) => {
-         const path = '/' + label.toLowerCase().replace(/\s+/g, '-');
-         const allowedRoles = getAllowedRoles(label);
-         console.log("userRole:", userRole);
-console.log("allowedRoles:", allowedRoles);
-         return (
-           <Route
-             key={label}
-             path={path}
-             element={
-               <ProtectedRoute userRole={userRole} allowedRoles={allowedRoles}>
-                 {component}
-               </ProtectedRoute>
-             }
-           />
-         );
-       })}
-
-       {/* Admin sub-pages */}
-       {Object.entries(adminSubPages).map(([slug, component]) => (
-         <Route
-           key={slug}
-           path={`/admin-setting/${slug}`}
-           element={
-             <ProtectedRoute
-               userRole={userRole}
-               allowedRoles={adminSubPageRoles[slug]}
-             >
-               {component}
-             </ProtectedRoute>
-           }
-         />
-       ))}
-
-       {/* Add Nomination nested route */}
-    
- {/* Self Nomination */}
-       
-
-       {/* Add Nomination nested route */}
-     
-        {/* <Route
-          path="/business-jury-evaluation"
-          element={<BusinessJuryEvaluation />}
-        /> */}
-        {/* <Route
-          path="/presidentlevel-detail/:nominationId"
-          element={
-            <ProtectedRoute userRole={userRole} allowedRoles={getAllowedRoles('President Details')}>
-              <PresidentLevelDetail />
-            </ProtectedRoute>
-          }
-        /> */}
-       {/* Fallback */}
-         <Route
-  path="/study/master"
-  element={
-    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
-      <Study />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/study/amendment"
-  element={
-    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
-      <AmendmentModule />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/study/site"
-  element={
-    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
-      <SiteModule />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/subject/enrollment"
-  element={
-    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
-      <Subject />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/subject/adverse"
-  element={
-    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
-      <Adverse />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/sample/reception"
-  element={
-    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
-      <Sample />
-    </ProtectedRoute>
-  }
-/>
-{/* <Route
-  path="/study/master/new-add"
-  element={
-    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
-      <StudyMasterStepper />
-    </ProtectedRoute>
-  }
-/> */}
-<Route
-  path="/reports/generate"
-  element={
-    <ProtectedRoute
-      userRole={userRole}
-      allowedRoles={['admin']}
-    >
-      <GenerateReport />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/study/master/new-add"
-  element={<StudyMasterStepper />}
-/>
-<Route
-  path="/study/amendment/new-add"
-  element={<AmendmentForm />}
-/>
-<Route
-  path="/testRegistration/new-add"
-  element={<TestRegistrationForm />}
-/>
-<Route
-  path="/study/site/new-add"
-  element={<SiteForm />}
-/>
-        <Route path="/forgot" element={<ForgotPassword/>} />
-       <Route path="*" element={<Navigate to="/home" replace />} />
-       <Route path="/subject/master/sub-add" element={<SubjectEnrollmentForm />}/>
-       <Route path="/subject/master/adv-add" element={<AdverseEventTrackingForm />}/>
-       <Route path="/sample/master/smp-add" element={<SampleReceptionForm />}/>
-     </Route>
-   </Routes>
- </Router>
     </AuthProvider>
   );
 };
 
 export default App;
-
