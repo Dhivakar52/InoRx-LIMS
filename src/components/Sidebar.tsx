@@ -21,6 +21,10 @@ import {
   FileSpreadsheet,
   CalendarDays,
   AlertTriangle,
+  Microscope,
+  Database,
+  CheckCircle,
+  ClipboardCheck,
 
   
 } from "lucide-react";
@@ -80,6 +84,38 @@ const navigationItems: NavigationItem[] = [
     pageKey: 'Visit',
   },
 
+   // ✅ ANALYZER INTEGRATION - MAIN HEADING ONLY (NO SUBHEADINGS)
+  {
+    icon: Microscope,
+    label: 'Analyzer Integration',
+    path: '/analyzer',
+    pageKey: 'AnalyzerIntegration',
+  },
+
+  // ✅ BIOBANK MANAGEMENT - MAIN HEADING ONLY (NO SUBHEADINGS)
+{
+  icon: Database,
+  label: 'Biobank Management',
+  path: '/biobank',
+  pageKey: 'BiobankManagement', // Make sure this matches exactly with ROLE_PAGES
+},
+
+  // ✅ RESULTS REVIEW - MAIN HEADING ONLY (NO SUBHEADINGS)
+  {
+    icon: ClipboardCheck,
+    label: 'Results Review',
+    path: '/results',
+    pageKey: 'ResultsReview',
+  },
+
+  // ✅ FINAL QC APPROVAL - MAIN HEADING ONLY (NO SUBHEADINGS)
+  {
+    icon: CheckCircle,
+    label: 'Final QC Approval',
+    path: '/qc',
+    pageKey: 'FinalQCApproval',
+  },
+
   // Test Registration
   {
     icon: FlaskConical,
@@ -100,7 +136,7 @@ const navigationItems: NavigationItem[] = [
         pageKey: 'GenerateReport',
       },
     ],
-
+  },
   {
     icon: CalendarDays,
     label: 'Result',

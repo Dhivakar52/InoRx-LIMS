@@ -7,8 +7,17 @@ export const USER_ROLES = {
   ADMIN: 'admin',
 } as const;
 
-export type UserRole = typeof USER_ROLES[keyof typeof USER_ROLES];
+// export type UserRole = typeof USER_ROLES[keyof typeof USER_ROLES];
+// export const USER_ROLES = {
+//   // USER: 'user',
+//   // MANAGER: 'manager',
+//   // JURY: 'jury',
+//   // PRESIDENT_UNIT: 'presidentUnit',
+//   // PRESIDENT_LEVEL: 'presidentLevel',
+//   ADMIN: 'admin',
+// } as const;
 
+export type UserRole = typeof USER_ROLES[keyof typeof USER_ROLES];
 
 export const ROLE_PAGES: Record<UserRole, string[]> = {
   // user: ['Home', 'Notifications', 'Self Nominations','Other Nomination', 'My Nominations','Add Nomination','Referral Approval','Grand Jury','Primary Business Jury','Leader Board'],
@@ -24,7 +33,8 @@ export const ROLE_PAGES: Record<UserRole, string[]> = {
   //    'President Level','Award Management',
   //    'Grand Jury','Primary Business Jury','Leader Board',
   //    'Admin Setting','Category Wise Nomination'],
-      admin: 
-  ['Dashboard','Home','Study','StudyMasterStepper','SiteModule','AmendmentModule','Subject','Enrollment','Adverse','Visit','Result', 'Admin'],
+  admin: 
+  ['Dashboard','Home','Study','StudyMasterStepper','SiteModule','AmendmentModule','Subject','Enrollment','Adverse','Visit','Result', 'Admin','Analyzer Integration',
+   // ✅ NEW PAGE KEYS - Add these 3 to the admin array
+   'BiobankManagement', 'ResultsReview', 'FinalQCApproval','AnalyzerIntegration'],
 };
-
