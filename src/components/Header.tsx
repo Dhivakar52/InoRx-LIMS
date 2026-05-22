@@ -82,6 +82,8 @@ const headerTitleMap: Record<string, string> = {
         return "Adverse Event Tracking";  
       case "/visit":
         return "Visit Scheduling";
+         case "/testRegistration":
+        return "Test Registration List";
       case "/referral-approval":
       case "/referral-detail":
         return "Referral Approval";
