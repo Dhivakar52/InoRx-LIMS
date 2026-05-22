@@ -1,0 +1,270 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Printer, RefreshCw, QrCode } from "lucide-react";
+
+const SampleLabelingForm = () => {
+  const [barcode, setBarcode] = useState("");
+
+  // AUTO BARCODE GENERATION
+  useEffect(() => {
+    generateBarcode();
+  }, []);
+
+  const generateBarcode = () => {
+    const random = Math.floor(
+      100000 + Math.random() * 900000
+    );
+
+    setBarcode(`BAR-${random}`);
+  };
+const handlePrint = () => {
+  const printContent = document.getElementById("barcode-print");
+
+  if (!printContent) return;
+
+  const printWindow = window.open("", "", "width=800,height=600");
+
+  if (!printWindow) return;
+
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Print Barcode</title>
+
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+          }
+
+          .barcode-container {
+            border: 1px solid #ccc;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            width: 320px;
+          }
+
+          .barcode-lines {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2px;
+            height: 90px;
+            margin-bottom: 16px;
+          }
+
+          .line1 {
+            width: 3px;
+            height: 100%;
+            background: black;
+          }
+
+          .line2 {
+            width: 2px;
+            height: 70%;
+            background: black;
+          }
+
+          .line3 {
+            width: 1px;
+            height: 90%;
+            background: black;
+          }
+
+          .barcode-text {
+            letter-spacing: 6px;
+            font-size: 18px;
+            font-weight: bold;
+          }
+        </style>
+      </head>
+
+      <body>
+        ${printContent.innerHTML}
+      </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+
+  setTimeout(() => {
+    printWindow.print();
+    printWindow.close();
+  }, 500);
+};
+  return (
+    <div className="space-y-6">
+      <div className="border-b pb-3">
+        <h2 className="text-xl font-semibold text-[#00458F]">
+          Sample Labeling
+        </h2>
+
+        <p className="text-sm text-gray-500 mt-1">
+          Generate barcode and manage sample labels
+        </p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-5">
+        <div>
+          <label className="text-sm font-medium">
+            Label Code
+          </label>
+
+          <input
+            className="w-full border rounded-md h-10 px-3 mt-1 bg-gray-50"
+            value="LBL-0001"
+            disabled
+          />
+        </div>
+        <div>
+          <label className="text-sm font-medium">
+            Sample ID
+          </label>
+
+          <input
+            className="w-full border rounded-md h-10 px-3 mt-1"
+            placeholder="Enter Sample ID"
+          />
+        </div>
+        <div>
+          <label className="text-sm font-medium">
+            Subject ID
+          </label>
+
+          <input
+            className="w-full border rounded-md h-10 px-3 mt-1"
+            placeholder="Enter Subject ID"
+          />
+        </div>
+        <div>
+          <label className="text-sm font-medium">
+            Barcode Number
+          </label>
+
+          <div className="flex gap-2 mt-1">
+            <input
+              value={barcode}
+              readOnly
+              className="w-full border rounded-md h-10 px-3 bg-gray-50 font-medium"
+            />
+
+            <button
+              type="button"
+              onClick={generateBarcode}
+              className="h-10 w-10 flex items-center justify-center rounded-md border hover:bg-gray-100">
+              <RefreshCw size={16} />
+            </button>
+          </div>
+        </div>
+        <div>
+          <label className="text-sm font-medium">
+            Label Status
+          </label>
+
+          <select className="w-full border rounded-md h-10 px-3 mt-1">
+            <option>Printed</option>
+            <option>Pending</option>
+            <option>Reprinted</option>
+          </select>
+        </div>
+        <div>
+          <label className="text-sm font-medium">
+            Label Type
+          </label>
+
+          <select className="w-full border rounded-md h-10 px-3 mt-1">
+            <option>Primary</option>
+            <option>Secondary</option>
+            <option>Aliquot</option>
+          </select>
+        </div>
+
+        {/* GENERATED DATE */}
+        <div>
+          <label className="text-sm font-medium">
+            Generated Date
+          </label>
+
+          <input
+            type="date"
+            className="w-full border rounded-md h-10 px-3 mt-1"
+          />
+        </div>
+        <div>
+          <label className="text-sm font-medium">
+            Generated By
+          </label>
+
+          <input
+            className="w-full border rounded-md h-10 px-3 mt-1"
+            placeholder="Enter User Name"
+          />
+        </div>
+      </div>
+      <div className="border rounded-xl p-6 bg-gray-50">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-base font-semibold">
+            Barcode Preview
+          </h3>
+
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={generateBarcode}
+              className="flex items-center gap-2 border border-[#00458F] text-[#00458F] px-4 py-2 rounded-md hover:bg-blue-50">
+              <RefreshCw size={16} />
+              Generate
+            </button>
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="flex items-center gap-2 bg-[#00458F] text-white px-4 py-2 rounded-md hover:bg-[#00366f]">
+              
+              <Printer size={16} />
+              Print
+            </button>
+            {/* <button
+              type="button"
+              className="flex items-center gap-2 bg-[#00458F] text-white px-4 py-2 rounded-md hover:bg-[#00366f]">
+              <Printer size={16} />
+              Print
+            </button> */}
+          </div>
+        </div>
+
+        <div className="bg-white border rounded-xl p-8 flex flex-col items-center">
+          
+          <div className="flex items-end gap-[2px] h-24">
+            {[...Array(45)].map((_, index) => (
+              <div
+                key={index}
+                className={`bg-black ${
+                  index % 2 === 0
+                    ? "w-[3px] h-full"
+                    : index % 3 === 0
+                    ? "w-[2px] h-[70%]"
+                    : "w-[1px] h-[90%]"
+                }`}
+              />
+            ))}
+          </div>
+
+          <div className="mt-4 text-lg tracking-[6px] font-semibold">
+            {barcode}
+          </div>
+
+          <div className="mt-3 text-sm text-gray-500">
+            Sample Label Generated Successfully
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SampleLabelingForm;

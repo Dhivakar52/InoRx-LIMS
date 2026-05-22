@@ -16,8 +16,8 @@ export default function FormActions({
   isLoading = false,
 }: Props) {
   return (
-    <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
-           <Button
+<div className="flex justify-end gap-3">
+             <Button
         onClick={onSave}
         disabled={isLoading}
         className="px-6 rounded-full  btn-theme-save"
