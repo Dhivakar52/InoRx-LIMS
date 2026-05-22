@@ -17,7 +17,8 @@ import {
   Building2,
   Users,
   UserPlus,
-  
+  ClipboardList,
+  TestTube2,
   CalendarDays,
   AlertTriangle,
 
@@ -70,7 +71,14 @@ const navigationItems: NavigationItem[] = [
       { icon: AlertTriangle, label: 'Adverse Events', path: '/subject/adverse', pageKey: 'Adverse' },
     ],
   },
-
+  {
+    icon: TestTube2,
+    label: 'Sample',
+    pageKey: 'Sample',
+    children: [
+      { icon: ClipboardList, label: 'Sample Reception', path: '/sample/reception', pageKey: 'Sample' },
+    ],
+  },
   // ✅ VISIT
   {
     icon: CalendarDays,
