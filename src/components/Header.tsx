@@ -3,6 +3,7 @@ import { Bell, Menu } from "lucide-react";
 
 // import { useAuth } from "./ContextAPI/AuthContext";
 import { useLocation } from "react-router-dom";
+import NotificationSidebar from "./Notifications/NotificationSideBar";
 // import axios from "axios";
  
 // Header Component
@@ -19,7 +20,7 @@ interface NotificationCount {
 // const apiUrl = import.meta.env.VITE_API_URL;
  
 const Header: React.FC<HeaderProps> = ({ onMobileMenuToggle }) => {
-  // const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notificationCount, _setNotificationCount] =
     useState<NotificationCount | null>(null);
   // const [headerNotification, setHeaderNotification] = useState<any[]>([]);
@@ -180,6 +181,12 @@ const headerTitleMap: Record<string, string> = {
       case "/report":
         return "Category Wise Nomination";
 
+      case "/notifications":
+        return "Notifications";
+      case "/inventory":
+        return "Inventory Management";
+      case "/user-form":
+        return "User Management";
       default:
         // Check for dynamic routes with parameters
         if (location.pathname.match(/\/my-nominations\/\d+/)) {
@@ -209,7 +216,9 @@ const headerTitleMap: Record<string, string> = {
  
       <div className="flex items-center space-x-3 sm:space-x-5">
         {/* Notification Icon */}
-        <div className="relative cursor-pointer">
+        <div className="relative cursor-pointer"          
+             onClick={() => setIsNotificationOpen(true)}
+>
           <Bell size={20} className="text-gray-600" />
           {notificationCount?.UnReadCount && notificationCount.UnReadCount > 0 && (
             <span className="absolute -top-2 -right-3 w-6 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
@@ -237,6 +246,12 @@ const headerTitleMap: Record<string, string> = {
           </div>
         </div>
       </div>
+
+       <NotificationSidebar
+        isOpen={isNotificationOpen}
+        onClose={() => setIsNotificationOpen(false)}
+      />
+     
     </div>
   );
 };

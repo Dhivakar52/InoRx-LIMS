@@ -38,6 +38,7 @@ export const ROLE_PAGES: Record<UserRole, string[]> = {
     'Dashboard',
     'Home', 
     'Admin',
+    'Notifications',
     
     // Study Module
     'Study',
@@ -67,5 +68,7 @@ export const ROLE_PAGES: Record<UserRole, string[]> = {
     'GenerateReport',
     
     // Sample Module
-    'Sample']
+    'Sample',
+  
+   'Settings']
 };

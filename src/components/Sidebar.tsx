@@ -27,6 +27,9 @@ import {
   Database,
   CheckCircle,
   ClipboardCheck,
+  Settings,
+  Warehouse,
+  Bell
 
   
 } from "lucide-react";
@@ -54,6 +57,7 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   { icon: Home, label: 'Home', path: '/home', pageKey: 'Home' },
+  { icon: Bell, label: 'Notifications', path: '/notifications', pageKey: 'Notifications' },
 
   // ✅ STUDY
   {
@@ -153,6 +157,13 @@ const navigationItems: NavigationItem[] = [
     pageKey: 'Result',
 
   },
+  {icon:Settings, 
+    label:'Settings',
+    pageKey:'Settings',
+    children: [
+      { icon: Users, label: 'User Management', path: '/user-form', pageKey: 'User Management' },
+      { icon: Warehouse, label: 'Inventory Management', path: '/inventory', pageKey: 'Inventory Management' },
+    ],}
 
   // ✅ ADMIN
   // {

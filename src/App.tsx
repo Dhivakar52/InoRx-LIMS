@@ -52,6 +52,12 @@ import ResultsReviewTable from './components/ResultsReviewModule/ResultsReviewTa
 import ResultsForm from './components/ResultsReviewModule/ResultsForm.tsx';
 import FinalQCApprovalTable from './components/FinalQCApproval/FinalQCApprovalTable.tsx';
 import QcForm from './components/FinalQCApproval/QcForm.tsx';
+import AddInventoryForm from './components/Settings/InventoryManagement/AddInventoryForm.tsx';
+import InventoryForm from './components/Settings/InventoryManagement/InventoryForm.tsx';
+import Notifications from './components/Notifications/Notifications.tsx';
+import NotificationSidebar from './components/Notifications/NotificationSideBar.tsx';
+import UserForm from './components/Settings/UserManagement/UserForm.tsx';
+import AddUserForm from './components/Settings/UserManagement/AddUserForm.tsx';
 
 // -------------------------
 // Main page components
@@ -354,6 +360,34 @@ console.log("allowedRoles:", allowedRoles);
 <Route
   path="/testRegistration/new-add"
   element={<TestRegistrationForm />}
+/>
+
+<Route
+  path="/notifications"
+  element={<Notifications />}
+/>
+<Route
+  path="/notifications-sidebar"
+  element={<NotificationSidebar isOpen={false} onClose={function (): void {
+    throw new Error('Function not implemented.');
+  } } />}
+/>
+<Route
+  path="/user-form"
+  element={<UserForm />}
+/>
+<Route
+  path="/user-form/new"
+  element={<AddUserForm />}
+/>
+
+<Route
+  path="/inventory"
+  element={<InventoryForm />}
+/>
+<Route
+  path="/inventory/new"
+  element={<AddInventoryForm />}
 />
 <Route
   path="/study/site/new-add"
