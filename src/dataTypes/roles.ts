@@ -37,4 +37,7 @@ export const ROLE_PAGES: Record<UserRole, string[]> = {
   ['Dashboard','Home','Study','StudyMasterStepper','SiteModule','AmendmentModule','Subject','Enrollment','Adverse','Visit','Result', 'Admin','Analyzer Integration',
    // ✅ NEW PAGE KEYS - Add these 3 to the admin array
    'BiobankManagement', 'ResultsReview', 'FinalQCApproval','AnalyzerIntegration'],
+      admin: 
+  ['Dashboard','Home','Study','StudyMasterStepper','SiteModule','AmendmentModule','Subject','Enrollment','Sample',
+    'Adverse','Visit','Result', 'Admin','TestRegistration','Reports','GenerateReport'],
 };

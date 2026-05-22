@@ -119,6 +119,10 @@ const headerTitleMap: Record<string, string> = {
       case "/Analysis":
         return "Analysis Management";
       case "/testRegistration":
+        return "Visit Scheduling";
+      case "/sample/reception":
+        return "Sample Reception";
+         case "/testRegistration":
         return "Test Registration List";
       case "/testRegistration/new-add":
         return "Add New Test";
