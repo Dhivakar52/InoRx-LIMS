@@ -5,6 +5,7 @@ import {
   ChevronLeft,
   LogOut,
   X,
+  FlaskConical,
   // BrickWallShield,
   ChevronDown,
    FileText,
@@ -12,12 +13,12 @@ import {
   // Calendar,
   // User,
 
-   
+   FileBarChart,
   FileEdit,
   Building2,
   Users,
   UserPlus,
-  
+  FileSpreadsheet,
   CalendarDays,
   AlertTriangle,
 
@@ -78,11 +79,34 @@ const navigationItems: NavigationItem[] = [
     path: '/visit',
     pageKey: 'Visit',
   },
+
+  // Test Registration
+  {
+    icon: FlaskConical,
+    label: 'Test Registration',
+    path: '/testRegistration',
+    pageKey: 'TestRegistration',
+  },
+   //  Reports
+  {
+    icon: FileBarChart,
+    label: 'Reports',
+    pageKey: 'Reports',
+    children: [
+      {
+        icon: FileSpreadsheet,
+        label: 'Generate Report',
+        path: '/reports/generate',
+        pageKey: 'GenerateReport',
+      },
+    ],
+
   {
     icon: CalendarDays,
     label: 'Result',
     path: '/result',
     pageKey: 'Result',
+
   },
 
   // ✅ ADMIN

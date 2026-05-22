@@ -22,7 +22,14 @@ import Subject from './components/Subject/SubjectEnrollment/Subject.tsx';
 import VisitSchedule from './components/VisitSchedulingModule/VisitSchedule.tsx';
 import AmendmentForm from './components/StudyModule/StudyAmendmentModule/AmendmentForm.tsx';
 import SiteForm from './components/StudyModule/SiteRegistrationModule/SiteForm.tsx';
+
+import TestRegistration from './components/Test Registration/TestRegistration.tsx';
+import TestRegistrationForm from "./components/Test Registration/TestRegistrationForm.tsx";
+import GenerateReport from "./components/Reports/GenerateReport.tsx";
+
+
 import Result from "./components/ResultModule/Result.tsx"
+
 //import PresidentLevelDetail from './components/PresidentLevel/PresidentLevelDetail.tsx';
 
 //import BusinessJuryEvaluation from './components/Jury/BusinessJuryEvaluation.tsx';
@@ -49,7 +56,13 @@ const pageComponents: Record<string, React.ReactNode> = {
   'Enrollment':<Subject/>,
   'Adverse': <Adverse/>,
   'Visit':<VisitSchedule/>,
+
+  'TestRegistration':<TestRegistration/>,
+  'GenerateReport':<GenerateReport/>
+
+
   'Result': <Result/>
+
 
   // 'My Nominations': <NominationPage />,
   
@@ -234,12 +247,27 @@ console.log("allowedRoles:", allowedRoles);
   }
 /> */}
 <Route
+  path="/reports/generate"
+  element={
+    <ProtectedRoute
+      userRole={userRole}
+      allowedRoles={['admin']}
+    >
+      <GenerateReport />
+    </ProtectedRoute>
+  }
+/>
+<Route
   path="/study/master/new-add"
   element={<StudyMasterStepper />}
 />
 <Route
   path="/study/amendment/new-add"
   element={<AmendmentForm />}
+/>
+<Route
+  path="/testRegistration/new-add"
+  element={<TestRegistrationForm />}
 />
 <Route
   path="/study/site/new-add"
