@@ -100,7 +100,7 @@ const navigationItems: NavigationItem[] = [
         pageKey: 'GenerateReport',
       },
     ],
-
+  },
   {
     icon: CalendarDays,
     label: 'Result',

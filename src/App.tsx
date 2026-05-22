@@ -58,7 +58,7 @@ const pageComponents: Record<string, React.ReactNode> = {
   'Visit':<VisitSchedule/>,
 
   'TestRegistration':<TestRegistration/>,
-  'GenerateReport':<GenerateReport/>
+  'GenerateReport':<GenerateReport/>,
 
 
   'Result': <Result/>
