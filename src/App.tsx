@@ -63,8 +63,6 @@ const pageComponents: Record<string, React.ReactNode> = {
   'Sample':<Sample/>,
   'TestRegistration':<TestRegistration/>,
   'GenerateReport':<GenerateReport/>,
-
-
   'Result': <Result/>
 
 
