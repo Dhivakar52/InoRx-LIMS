@@ -34,7 +34,7 @@ export default function FormWrapper({
         </div>
 
         {/* Dynamic Fields */}
-        <div className={`grid grid-cols-${columns} gap-4`}>
+        <div className={`grid grid-cols-3 gap-4`}>
           {children}
         </div>
 

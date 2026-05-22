@@ -6,6 +6,7 @@ type ActionMenuProps<T> = {
   onView?: (item: T) => void;
   onEdit?: (item: T) => void;
   onDelete?: (item: T) => void;
+  onAuditLog?: (item: T) => void;
 };
 
 export function ActionMenu<T>({
@@ -13,6 +14,7 @@ export function ActionMenu<T>({
   onView,
   onEdit,
   onDelete,
+  onAuditLog,
 }: ActionMenuProps<T>) {
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -83,6 +85,14 @@ export function ActionMenu<T>({
               className="block w-full px-3 py-2 text-left hover:bg-gray-100 text-sm"
             >
               Edit
+            </button>
+          )}
+          {onAuditLog && (
+            <button
+              onClick={() => handleAction(onAuditLog)}
+              className="block w-full px-3 py-2 text-left hover:bg-blue-50 text-blue-600 text-sm"
+            >
+              Audit Log
             </button>
           )}
 

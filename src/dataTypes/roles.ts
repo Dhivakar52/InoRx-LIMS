@@ -26,5 +26,7 @@ export const ROLE_PAGES: Record<UserRole, string[]> = {
   //    'Admin Setting','Category Wise Nomination'],
       admin: 
   ['Dashboard','Home','Study','StudyMasterStepper','SiteModule','AmendmentModule','Subject','Enrollment','Adverse','Visit', 'Admin','Sample'],
+  ['Dashboard','Home','Study','StudyMasterStepper','SiteModule','AmendmentModule','Subject','Enrollment',
+    'Adverse','Visit','Result', 'Admin','TestRegistration','Reports','GenerateReport'],
 };
 
