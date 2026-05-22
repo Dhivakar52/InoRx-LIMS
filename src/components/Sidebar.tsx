@@ -78,6 +78,12 @@ const navigationItems: NavigationItem[] = [
     path: '/visit',
     pageKey: 'Visit',
   },
+  {
+    icon: CalendarDays,
+    label: 'Result',
+    path: '/result',
+    pageKey: 'Result',
+  },
 
   // ✅ ADMIN
   // {

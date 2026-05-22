@@ -22,7 +22,7 @@ import Subject from './components/Subject/SubjectEnrollment/Subject.tsx';
 import VisitSchedule from './components/VisitSchedulingModule/VisitSchedule.tsx';
 import AmendmentForm from './components/StudyModule/StudyAmendmentModule/AmendmentForm.tsx';
 import SiteForm from './components/StudyModule/SiteRegistrationModule/SiteForm.tsx';
-
+import Result from "./components/ResultModule/Result.tsx"
 //import PresidentLevelDetail from './components/PresidentLevel/PresidentLevelDetail.tsx';
 
 //import BusinessJuryEvaluation from './components/Jury/BusinessJuryEvaluation.tsx';
@@ -48,7 +48,8 @@ const pageComponents: Record<string, React.ReactNode> = {
   'SiteModule': <SiteModule />,
   'Enrollment':<Subject/>,
   'Adverse': <Adverse/>,
-  'Visit':<VisitSchedule/>
+  'Visit':<VisitSchedule/>,
+  'Result': <Result/>
 
   // 'My Nominations': <NominationPage />,
   

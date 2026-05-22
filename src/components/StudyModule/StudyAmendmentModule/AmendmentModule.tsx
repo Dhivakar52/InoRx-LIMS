@@ -1,4 +1,5 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
+import Swal from "sweetalert2";
 import {
   useReactTable,
   getCoreRowModel,
@@ -15,6 +16,7 @@ import ColumnToggle from "../../../common/ColumnToggle";
 import { ActionMenu } from "../../../common/ActionMenu";
 import NavigateButton from "../../../common/NavigateButton";
 import { Plus } from "lucide-react";
+import CustomPanel from "../../../common/CustomPanel";
 
 // ✅ TYPE
 type StudyVersion = {
@@ -26,143 +28,205 @@ type StudyVersion = {
   newStatus: string;
 };
 
-const StudyVersionTable = () => {
+type PanelMode = "view" | "edit" | null;
 
- const data: StudyVersion[] = useMemo(
-  () => [
-    {
-      id: 1,
-      study: "ST001",
-      code: "v1.0",
-      oldVersion: "v0.9",
-      versionDate: "01-Jan-26",
-      newStatus: "Active",
-    },
-    {
-      id: 2,
-      study: "ST002",
-      code: "v1.1",
-      oldVersion: "v1.0",
-      versionDate: "05-Jan-26",
-      newStatus: "Draft",
-    },
-    {
-      id: 3,
-      study: "ST003",
-      code: "v2.0",
-      oldVersion: "v1.5",
-      versionDate: "10-Jan-26",
-      newStatus: "Active",
-    },
-    {
-      id: 4,
-      study: "ST004",
-      code: "v2.1",
-      oldVersion: "v2.0",
-      versionDate: "12-Jan-26",
-      newStatus: "Inactive",
-    },
-    {
-      id: 5,
-      study: "ST005",
-      code: "v3.0",
-      oldVersion: "v2.5",
-      versionDate: "15-Jan-26",
-      newStatus: "Draft",
-    },
-    {
-      id: 6,
-      study: "ST006",
-      code: "v3.1",
-      oldVersion: "v3.0",
-      versionDate: "18-Jan-26",
-      newStatus: "Active",
-    },
-    {
-      id: 7,
-      study: "ST007",
-      code: "v4.0",
-      oldVersion: "v3.5",
-      versionDate: "20-Jan-26",
-      newStatus: "Draft",
-    },
-    {
-      id: 8,
-      study: "ST008",
-      code: "v4.1",
-      oldVersion: "v4.0",
-      versionDate: "22-Jan-26",
-      newStatus: "Active",
-    },
-    {
-      id: 9,
-      study: "ST009",
-      code: "v5.0",
-      oldVersion: "v4.5",
-      versionDate: "25-Jan-26",
-      newStatus: "Inactive",
-    },
-    {
-      id: 10,
-      study: "ST010",
-      code: "v5.1",
-      oldVersion: "v5.0",
-      versionDate: "28-Jan-26",
-      newStatus: "Active",
-    },
-    {
-      id: 11,
-      study: "ST011",
-      code: "v6.0",
-      oldVersion: "v5.5",
-      versionDate: "01-Feb-26",
-      newStatus: "Draft",
-    },
-    {
-      id: 12,
-      study: "ST012",
-      code: "v6.1",
-      oldVersion: "v6.0",
-      versionDate: "03-Feb-26",
-      newStatus: "Active",
-    },
-    {
-      id: 13,
-      study: "ST013",
-      code: "v7.0",
-      oldVersion: "v6.5",
-      versionDate: "06-Feb-26",
-      newStatus: "Inactive",
-    },
-    {
-      id: 14,
-      study: "ST014",
-      code: "v7.1",
-      oldVersion: "v7.0",
-      versionDate: "08-Feb-26",
-      newStatus: "Draft",
-    },
-    {
-      id: 15,
-      study: "ST015",
-      code: "v8.0",
-      oldVersion: "v7.5",
-      versionDate: "12-Feb-26",
-      newStatus: "Active",
-    },
-  ],
-  []
-);
+const AmendmentModule = () => {
+  const initialData: StudyVersion[] = useMemo(
+    () => [
+      {
+        id: 1,
+        study: "ST001",
+        code: "v1.0",
+        oldVersion: "v0.9",
+        versionDate: "01-Jan-26",
+        newStatus: "Active",
+      },
+      {
+        id: 2,
+        study: "ST002",
+        code: "v1.1",
+        oldVersion: "v1.0",
+        versionDate: "05-Jan-26",
+        newStatus: "Draft",
+      },
+      {
+        id: 3,
+        study: "ST003",
+        code: "v2.0",
+        oldVersion: "v1.5",
+        versionDate: "10-Jan-26",
+        newStatus: "Active",
+      },
+      {
+        id: 4,
+        study: "ST004",
+        code: "v2.1",
+        oldVersion: "v2.0",
+        versionDate: "12-Jan-26",
+        newStatus: "Inactive",
+      },
+      {
+        id: 5,
+        study: "ST005",
+        code: "v3.0",
+        oldVersion: "v2.5",
+        versionDate: "15-Jan-26",
+        newStatus: "Draft",
+      },
+      {
+        id: 6,
+        study: "ST006",
+        code: "v3.1",
+        oldVersion: "v3.0",
+        versionDate: "18-Jan-26",
+        newStatus: "Active",
+      },
+      {
+        id: 7,
+        study: "ST007",
+        code: "v4.0",
+        oldVersion: "v3.5",
+        versionDate: "20-Jan-26",
+        newStatus: "Draft",
+      },
+      {
+        id: 8,
+        study: "ST008",
+        code: "v4.1",
+        oldVersion: "v4.0",
+        versionDate: "22-Jan-26",
+        newStatus: "Active",
+      },
+      {
+        id: 9,
+        study: "ST009",
+        code: "v5.0",
+        oldVersion: "v4.5",
+        versionDate: "25-Jan-26",
+        newStatus: "Inactive",
+      },
+      {
+        id: 10,
+        study: "ST010",
+        code: "v5.1",
+        oldVersion: "v5.0",
+        versionDate: "28-Jan-26",
+        newStatus: "Active",
+      },
+      {
+        id: 11,
+        study: "ST011",
+        code: "v6.0",
+        oldVersion: "v5.5",
+        versionDate: "01-Feb-26",
+        newStatus: "Draft",
+      },
+      {
+        id: 12,
+        study: "ST012",
+        code: "v6.1",
+        oldVersion: "v6.0",
+        versionDate: "03-Feb-26",
+        newStatus: "Active",
+      },
+      {
+        id: 13,
+        study: "ST013",
+        code: "v7.0",
+        oldVersion: "v6.5",
+        versionDate: "06-Feb-26",
+        newStatus: "Inactive",
+      },
+      {
+        id: 14,
+        study: "ST014",
+        code: "v7.1",
+        oldVersion: "v7.0",
+        versionDate: "08-Feb-26",
+        newStatus: "Draft",
+      },
+      {
+        id: 15,
+        study: "ST015",
+        code: "v8.0",
+        oldVersion: "v7.5",
+        versionDate: "12-Feb-26",
+        newStatus: "Active",
+      },
+    ],
+    []
+  );
 
+  const [data, setData] = useState<StudyVersion[]>(initialData);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  
+  // Panel state
+  const [panelMode, setPanelMode] = useState<PanelMode>(null);
+  const [selectedItem, setSelectedItem] = useState<StudyVersion | null>(null);
+  const [editFormData, setEditFormData] = useState<Partial<StudyVersion>>({});
 
-  // ✅ FIXED CLOSE HANDLER (no lag)
+  // ✅ ACTION HANDLERS
+  const handleView = useCallback((item: StudyVersion) => {
+    console.log("View:", item);
+    setSelectedItem(item);
+    setPanelMode("view");
+    setOpenMenuId(null);
+  }, []);
+
+  const handleEdit = useCallback((item: StudyVersion) => {
+    console.log("Edit:", item);
+    setSelectedItem(item);
+    setEditFormData({ ...item });
+    setPanelMode("edit");
+    setOpenMenuId(null);
+  }, []);
+
+  const handleDelete = useCallback((item: StudyVersion) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Delete ${item.study}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setData((prev) => prev.filter((d) => d.id !== item.id));
+        Swal.fire("Deleted!", "Study has been removed.", "success");
+      }
+    });
+    setOpenMenuId(null);
+  }, []);
+
+  // ✅ Save edited data
+  const handleSaveEdit = useCallback(() => {
+    if (selectedItem && editFormData) {
+      setData((prevData) =>
+        prevData.map((item) =>
+          item.id === selectedItem.id ? { ...item, ...editFormData } : item
+        )
+      );
+      console.log("Saved:", { ...selectedItem, ...editFormData });
+      setPanelMode(null);
+      setSelectedItem(null);
+      setEditFormData({});
+    }
+  }, [selectedItem, editFormData]);
+
+  // ✅ Close panel
+  const handleClosePanel = useCallback(() => {
+    setPanelMode(null);
+    setSelectedItem(null);
+    setEditFormData({});
+  }, []);
+
+  // ✅ CLOSE DROPDOWN WHEN CLICKING OUTSIDE
   useEffect(() => {
     const close = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-
       if (!target.closest(".menu-container")) {
         setOpenMenuId(null);
       }
@@ -179,19 +243,19 @@ const StudyVersionTable = () => {
       { accessorKey: "code", header: "Code" },
       { accessorKey: "oldVersion", header: "Old Version" },
       { accessorKey: "versionDate", header: "Version Date" },
-
       {
         accessorKey: "newStatus",
         header: "Status",
         cell: ({ getValue }) => {
           const value = getValue<string>();
-
           return (
             <span
               className={`px-2 py-1 rounded text-xs font-medium ${
                 value === "Active"
                   ? "bg-green-100 text-green-700"
-                  : "bg-yellow-100 text-yellow-700"
+                  : value === "Draft"
+                  ? "bg-yellow-100 text-yellow-700"
+                  : "bg-red-100 text-red-700"
               }`}
             >
               {value}
@@ -199,26 +263,23 @@ const StudyVersionTable = () => {
           );
         },
       },
-
-      
-    {
-         id: "actions",
-         header: "Actions",
-         cell: ({ row }) => {
-           const item = row.original;
-       
-           return (
-             <ActionMenu
-               item={item}
-               onView={(data) => console.log("View:", data)}
-               onEdit={(data) => console.log("Edit:", data)}
-                  onDelete={(data) => console.log("onDelete:", data)}
-             />
-           );
-         },
-       }
+      {
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => {
+          const item = row.original;
+          return (
+            <ActionMenu
+              item={item}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          );
+        },
+      },
     ],
-    [openMenuId]
+    [handleView, handleEdit, handleDelete]
   );
 
   // ✅ PAGINATION
@@ -236,23 +297,22 @@ const StudyVersionTable = () => {
       globalFilter,
       columnVisibility,
     },
-
     onPaginationChange: setPagination,
     onGlobalFilterChange: setGlobalFilter,
     onColumnVisibilityChange: setColumnVisibility,
-
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-
     globalFilterFn: "includesString",
   });
+
+  // ✅ Panel title based on mode
+  const panelTitle = panelMode === "view" ? "View Study Version" : "Edit Study Version";
 
   return (
     <div className="p-6">
       <div className="bg-white shadow-md rounded-lg p-6">
-
         {/* HEADER */}
         <div className="flex justify-end items-center mb-4 gap-3">
           <TableSearch
@@ -260,13 +320,12 @@ const StudyVersionTable = () => {
             onChange={setGlobalFilter}
             placeholder="Search..."
           />
-
           <ColumnToggle table={table} />
-  <NavigateButton
-   label="Add Study"
-   path="/study/amendment/new-add"
-   icon={<Plus size={18} />}
- />
+          <NavigateButton
+            label="Add Study"
+            path="/study/amendment/new-add"
+            icon={<Plus size={18} />}
+          />
         </div>
 
         {/* TABLE */}
@@ -277,10 +336,138 @@ const StudyVersionTable = () => {
           table={table}
           totalCount={table.getFilteredRowModel().rows.length}
         />
-
       </div>
+
+      {/* CUSTOM PANEL - View Mode */}
+      <CustomPanel
+        isOpen={panelMode === "view"}
+        title={panelTitle}
+        onClose={handleClosePanel}
+        onSave={handleClosePanel}
+        saveLabel="Close"
+      >
+        {selectedItem && (
+          <div className="grid grid-cols-2 gap-4">
+            <div className="border-b pb-3">
+              <label className="block text-sm font-medium text-gray-600">Study</label>
+              <p className="mt-1 text-gray-900">{selectedItem.study}</p>
+            </div>
+            <div className="border-b pb-3">
+              <label className="block text-sm font-medium text-gray-600">Code</label>
+              <p className="mt-1 text-gray-900">{selectedItem.code}</p>
+            </div>
+            <div className="border-b pb-3">
+              <label className="block text-sm font-medium text-gray-600">Old Version</label>
+              <p className="mt-1 text-gray-900">{selectedItem.oldVersion}</p>
+            </div>
+            <div className="border-b pb-3">
+              <label className="block text-sm font-medium text-gray-600">Version Date</label>
+              <p className="mt-1 text-gray-900">{selectedItem.versionDate}</p>
+            </div>
+            <div className="border-b pb-3 col-span-2">
+              <label className="block text-sm font-medium text-gray-600">Status</label>
+              <p className="mt-1">
+                <span
+                  className={`px-2 py-1 rounded text-xs font-medium ${
+                    selectedItem.newStatus === "Active"
+                      ? "bg-green-100 text-green-700"
+                      : selectedItem.newStatus === "Draft"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : "bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  {selectedItem.newStatus}
+                </span>
+              </p>
+            </div>
+          </div>
+        )}
+      </CustomPanel>
+
+      {/* CUSTOM PANEL - Edit Mode */}
+      <CustomPanel
+        isOpen={panelMode === "edit"}
+        title={panelTitle}
+        onClose={handleClosePanel}
+        onSave={handleSaveEdit}
+        saveLabel="Save Changes"
+      >
+        {selectedItem && (
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Study
+              </label>
+              <input
+                type="text"
+                value={editFormData.study || ""}
+                onChange={(e) =>
+                  setEditFormData({ ...editFormData, study: e.target.value })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Code
+              </label>
+              <input
+                type="text"
+                value={editFormData.code || ""}
+                onChange={(e) =>
+                  setEditFormData({ ...editFormData, code: e.target.value })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Old Version
+              </label>
+              <input
+                type="text"
+                value={editFormData.oldVersion || ""}
+                onChange={(e) =>
+                  setEditFormData({ ...editFormData, oldVersion: e.target.value })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Version Date
+              </label>
+              <input
+                type="text"
+                value={editFormData.versionDate || ""}
+                onChange={(e) =>
+                  setEditFormData({ ...editFormData, versionDate: e.target.value })
+                }
+                placeholder="DD-MMM-YY"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Status
+              </label>
+              <select
+                value={editFormData.newStatus || ""}
+                onChange={(e) =>
+                  setEditFormData({ ...editFormData, newStatus: e.target.value })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="Active">Active</option>
+                <option value="Draft">Draft</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+        )}
+      </CustomPanel>
     </div>
   );
 };
 
-export default StudyVersionTable;
+export default AmendmentModule;
