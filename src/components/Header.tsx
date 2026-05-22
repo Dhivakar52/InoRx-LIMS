@@ -167,8 +167,19 @@ const headerTitleMap: Record<string, string> = {
         return "jury Panel";
       case "/leader-board":
         return "LeaderBoard";
+
+        case "/report":
+          return "Category Wise Nomination";
+           case "/reports/generate":
+          return "Report List";
+           case "/testRegistration/new-add":
+          return "Test Registration";
+          case "/report-form":
+          return "Report";
+
       case "/report":
         return "Category Wise Nomination";
+
       default:
         // Check for dynamic routes with parameters
         if (location.pathname.match(/\/my-nominations\/\d+/)) {

@@ -26,7 +26,21 @@ import Sample from './components/Sample/SampleRegistrationModule/SampleReception
 import TestRegistration from './components/Test Registration/TestRegistration.tsx';
 import TestRegistrationForm from "./components/Test Registration/TestRegistrationForm.tsx";
 import GenerateReport from "./components/Reports/GenerateReport.tsx";
+
+import ReportForm from "./components/Reports/ReportForm.tsx";
+
+
+import Result from "./components/ResultModule/Result.tsx"
+
+//import PresidentLevelDetail from './components/PresidentLevel/PresidentLevelDetail.tsx';
+
+//import BusinessJuryEvaluation from './components/Jury/BusinessJuryEvaluation.tsx';
+
+
+
+
 import Result from "./components/ResultModule/Result.tsx";
+
 import Dashboard from './components/Dashboard/Dashboard.tsx';
 import StudyMasterStepper from './components/StudyModule/StudyMasterModule/StudyMasterStepper.tsx';
 
@@ -107,6 +121,151 @@ const App: React.FC = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verify-otp" element={<VerifyOtp />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+
+
+     {/* Protected routes */}
+     <Route element={<Layout />}>
+       {/* Main pages */}
+       {Object.entries(pageComponents).map(([label, component]) => {
+         const path = '/' + label.toLowerCase().replace(/\s+/g, '-');
+         const allowedRoles = getAllowedRoles(label);
+         console.log("userRole:", userRole);
+console.log("allowedRoles:", allowedRoles);
+         return (
+           <Route
+             key={label}
+             path={path}
+             element={
+               <ProtectedRoute userRole={userRole} allowedRoles={allowedRoles}>
+                 {component}
+               </ProtectedRoute>
+             }
+           />
+         );
+       })}
+
+       {/* Admin sub-pages */}
+       {Object.entries(adminSubPages).map(([slug, component]) => (
+         <Route
+           key={slug}
+           path={`/admin-setting/${slug}`}
+           element={
+             <ProtectedRoute
+               userRole={userRole}
+               allowedRoles={adminSubPageRoles[slug]}
+             >
+               {component}
+             </ProtectedRoute>
+           }
+         />
+       ))}
+
+       {/* Add Nomination nested route */}
+    
+ {/* Self Nomination */}
+       
+
+       {/* Add Nomination nested route */}
+     
+        {/* <Route
+          path="/business-jury-evaluation"
+          element={<BusinessJuryEvaluation />}
+        /> */}
+        {/* <Route
+          path="/presidentlevel-detail/:nominationId"
+          element={
+            <ProtectedRoute userRole={userRole} allowedRoles={getAllowedRoles('President Details')}>
+              <PresidentLevelDetail />
+            </ProtectedRoute>
+          }
+        /> */}
+       {/* Fallback */}
+         <Route
+  path="/study/master"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <Study />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/study/amendment"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <AmendmentModule />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/study/site"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <SiteModule />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/subject/enrollment"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <Subject />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/subject/adverse"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <Adverse />
+    </ProtectedRoute>
+  }
+/>
+{/* <Route
+  path="/study/master/new-add"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <StudyMasterStepper />
+    </ProtectedRoute>
+  }
+/> */}
+<Route
+  path="/reports/generate"
+  element={
+    <ProtectedRoute
+      userRole={userRole}
+      allowedRoles={['admin']}
+    >
+      <GenerateReport />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/report-form"
+  element={<ReportForm />}
+/>
+<Route
+  path="/study/master/new-add"
+  element={<StudyMasterStepper />}
+/>
+<Route
+  path="/study/amendment/new-add"
+  element={<AmendmentForm />}
+/>
+<Route
+  path="/testRegistration/new-add"
+  element={<TestRegistrationForm />}
+/>
+<Route
+  path="/study/site/new-add"
+  element={<SiteForm />}
+/>
+        <Route path="/forgot" element={<ForgotPassword/>} />
+       <Route path="*" element={<Navigate to="/home" replace />} />
+     </Route>
+   </Routes>
+ </Router>
 
           {/* Protected Routes with Layout */}
           <Route element={<Layout />}>
@@ -260,6 +419,7 @@ const App: React.FC = () => {
           </Route>
         </Routes>
       </Router>
+
     </AuthProvider>
   );
 };
