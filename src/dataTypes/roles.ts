@@ -34,10 +34,38 @@ export const ROLE_PAGES: Record<UserRole, string[]> = {
   //    'Grand Jury','Primary Business Jury','Leader Board',
   //    'Admin Setting','Category Wise Nomination'],
   admin: 
-  ['Dashboard','Home','Study','StudyMasterStepper','SiteModule','AmendmentModule','Subject','Enrollment','Adverse','Visit','Result', 'Admin','Analyzer Integration',
-   // ✅ NEW PAGE KEYS - Add these 3 to the admin array
-   'BiobankManagement', 'ResultsReview', 'FinalQCApproval','AnalyzerIntegration'],
-      admin: 
-  ['Dashboard','Home','Study','StudyMasterStepper','SiteModule','AmendmentModule','Subject','Enrollment','Sample',
-    'Adverse','Visit','Result', 'Admin','TestRegistration','Reports','GenerateReport'],
+ [   // Core Modules
+    'Dashboard',
+    'Home', 
+    'Admin',
+    
+    // Study Module
+    'Study',
+    'StudyMasterStepper',
+    'SiteModule',
+    'AmendmentModule',
+    
+    // Subject Module
+    'Subject',
+    'Enrollment',
+    'Adverse',
+    
+    // Visit Module
+    'Visit',
+    'Result',
+    
+    // Laboratory Modules
+    'Analyzer Integration',
+    'AnalyzerIntegration',
+    'BiobankManagement',
+    'ResultsReview',
+    'FinalQCApproval',
+    'TestRegistration',
+    
+    // Reports
+    'Reports',
+    'GenerateReport',
+    
+    // Sample Module
+    'Sample']
 };
