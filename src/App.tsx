@@ -26,6 +26,7 @@ import SiteForm from './components/StudyModule/SiteRegistrationModule/SiteForm.t
 import TestRegistration from './components/Test Registration/TestRegistration.tsx';
 import TestRegistrationForm from "./components/Test Registration/TestRegistrationForm.tsx";
 import GenerateReport from "./components/Reports/GenerateReport.tsx";
+import ReportForm from "./components/Reports/ReportForm.tsx";
 
 
 import Result from "./components/ResultModule/Result.tsx"
@@ -256,6 +257,10 @@ console.log("allowedRoles:", allowedRoles);
       <GenerateReport />
     </ProtectedRoute>
   }
+/>
+<Route
+  path="/report-form"
+  element={<ReportForm />}
 />
 <Route
   path="/study/master/new-add"

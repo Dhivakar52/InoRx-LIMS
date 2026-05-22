@@ -115,6 +115,12 @@ const headerTitleMap: Record<string, string> = {
         return "LeaderBoard";
         case "/report":
           return "Category Wise Nomination";
+           case "/reports/generate":
+          return "Report List";
+           case "/testRegistration/new-add":
+          return "Test Registration";
+          case "/report-form":
+          return "Report";
       default:
         return "Nomination Management";
     }

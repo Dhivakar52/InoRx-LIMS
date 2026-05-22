@@ -22,7 +22,7 @@ const CustomPanel: React.FC<CustomPanel> = ({
   return (
     <div className="fixed inset-0 bg-black/30 z-40 flex justify-end"  onClick={onClose}>
       <div className="w-[560px] bg-white h-full shadow-xl flex flex-col" onClick={(e) => e.stopPropagation()}>
-        <div className="flex justify-between items-center py-3 px-6 border-b">
+        <div className="flex justify-between items-center py-3 px-6 border border-gray-300">
           <h3 className="text-lg font-semibold">{title}</h3>
           <button
             onClick={onClose}
@@ -34,7 +34,7 @@ const CustomPanel: React.FC<CustomPanel> = ({
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {children}
         </div>
-        <div className="p-4 border-t flex justify-end gap-3">
+        <div className="p-4 border border-gray-300 flex justify-end gap-3">
           <button
             onClick={onClose}
             className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-100">
