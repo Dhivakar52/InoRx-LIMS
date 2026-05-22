@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  // Home,
+  Home,
   SquareLibrary,
   ChevronLeft,
   LogOut,
@@ -46,7 +46,7 @@ interface NavigationItem {
 }
 
 const navigationItems: NavigationItem[] = [
-  // { icon: Home, label: 'Home', path: '/home', pageKey: 'Home' },
+  { icon: Home, label: 'Home', path: '/home', pageKey: 'Home' },
 
   // ✅ STUDY
   {
