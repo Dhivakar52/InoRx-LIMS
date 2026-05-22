@@ -1,5 +1,5 @@
-import { useMemo, useState, useEffect, useCallback } from "react";
-import Swal from "sweetalert2";
+import { useMemo, useState, useEffect } from "react";
+
 import {
   useReactTable,
   getCoreRowModel,
@@ -28,8 +28,6 @@ type Subject = {
   status: string;
 };
 
-type PanelMode = "view" | "edit" | null;
-
 const Subject = () => {
   const data = useMemo<Subject[]>(
     () => [
@@ -52,7 +50,6 @@ const Subject = () => {
     []
   );
 
-  const [data, setData] = useState<Subject[]>(initialData);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
   const [pagination, setPagination] = useState({
@@ -76,7 +73,7 @@ const Subject = () => {
   const columns: ColumnDef<Subject>[] = useMemo(
     () => [
       { accessorKey: "subject", header: "Subject" },
-      { accessorKey: "studyId", header: "Study ID" },
+      { accessorKey: "studyId", header: "ID" },
       { accessorKey: "study", header: "Study" },
       { accessorKey: "code", header: "Code" },
       { accessorKey: "gender", header: "Gender" },
@@ -123,12 +120,6 @@ const Subject = () => {
     []
   );
 
-  // ✅ Pagination state
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-
   const table = useReactTable({
     data,
     columns,
@@ -148,12 +139,10 @@ const Subject = () => {
     globalFilterFn: "includesString",
   });
 
-  // ✅ Panel title based on mode
-  const panelTitle = panelMode === "view" ? "View Subject" : "Edit Subject";
-
   return (
     <div className="p-6">
       <div className="bg-white shadow-md rounded-lg p-6">
+
         {/* HEADER */}
         <div className="flex justify-end items-center mb-4 gap-3">
           <TableSearch
@@ -173,188 +162,6 @@ const Subject = () => {
           table={table}
           totalCount={table.getFilteredRowModel().rows.length}/>
       </div>
-
-      {/* CUSTOM PANEL - View Mode */}
-      <CustomPanel
-        isOpen={panelMode === "view"}
-        title={panelTitle}
-        onClose={handleClosePanel}
-        onSave={handleClosePanel}
-        saveLabel="Close"
-      >
-        {selectedItem && (
-          <div className="grid grid-cols-2 gap-4">
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Subject</label>
-              <p className="mt-1 text-gray-900">{selectedItem.subject}</p>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Study ID</label>
-              <p className="mt-1 text-gray-900">{selectedItem.studyId}</p>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Study</label>
-              <p className="mt-1 text-gray-900">{selectedItem.study}</p>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Code</label>
-              <p className="mt-1 text-gray-900">{selectedItem.code}</p>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Gender</label>
-              <p className="mt-1 text-gray-900">{selectedItem.gender}</p>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Arm/Cohort</label>
-              <p className="mt-1 text-gray-900">{selectedItem.arm}</p>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Enrollment</label>
-              <p className="mt-1">
-                <span className={`px-2 py-1 rounded text-xs font-medium ${getEnrollmentColor(selectedItem.enrollment)}`}>
-                  {selectedItem.enrollment}
-                </span>
-              </p>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Status</label>
-              <p className="mt-1">
-                <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(selectedItem.status)}`}>
-                  {selectedItem.status}
-                </span>
-              </p>
-            </div>
-          </div>
-        )}
-      </CustomPanel>
-
-      {/* CUSTOM PANEL - Edit Mode */}
-      <CustomPanel
-        isOpen={panelMode === "edit"}
-        title={panelTitle}
-        onClose={handleClosePanel}
-        onSave={handleSaveEdit}
-        saveLabel="Save Changes"
-      >
-        {selectedItem && (
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Subject
-              </label>
-              <input
-                type="text"
-                value={editFormData.subject || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, subject: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Study ID
-              </label>
-              <input
-                type="text"
-                value={editFormData.studyId || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, studyId: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Study
-              </label>
-              <input
-                type="text"
-                value={editFormData.study || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, study: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Code
-              </label>
-              <input
-                type="text"
-                value={editFormData.code || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, code: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Gender
-              </label>
-              <select
-                value={editFormData.gender || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, gender: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Arm/Cohort
-              </label>
-              <input
-                type="text"
-                value={editFormData.arm || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, arm: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Enrollment
-              </label>
-              <select
-                value={editFormData.enrollment || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, enrollment: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="Enrolled">Enrolled</option>
-                <option value="Screening">Screening</option>
-                <option value="Failed">Failed</option>
-                <option value="Withdrawn">Withdrawn</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Status
-              </label>
-              <select
-                value={editFormData.status || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, status: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="Active">Active</option>
-                <option value="Pending">Pending</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-        )}
-      </CustomPanel>
     </div>
   );
 };

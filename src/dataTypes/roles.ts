@@ -9,7 +9,6 @@ export const USER_ROLES = {
 
 export type UserRole = typeof USER_ROLES[keyof typeof USER_ROLES];
 
-
 export const ROLE_PAGES: Record<UserRole, string[]> = {
   // user: ['Home', 'Notifications', 'Self Nominations','Other Nomination', 'My Nominations','Add Nomination','Referral Approval','Grand Jury','Primary Business Jury','Leader Board'],
   // manager: ['Home', 'Notifications', 'Self Nominations','Other Nomination', 'My Nominations', 'Approvals','Add Nomination','Referral Approval', 'Grand Jury','Primary Business Jury','Leader Board'],
@@ -25,8 +24,7 @@ export const ROLE_PAGES: Record<UserRole, string[]> = {
   //    'Grand Jury','Primary Business Jury','Leader Board',
   //    'Admin Setting','Category Wise Nomination'],
       admin: 
-  ['Dashboard','Home','Study','StudyMasterStepper','SiteModule','AmendmentModule','Subject','Enrollment','Adverse','Visit', 'Admin','Sample'],
-  ['Dashboard','Home','Study','StudyMasterStepper','SiteModule','AmendmentModule','Subject','Enrollment',
+  ['Dashboard','Home','Study','StudyMasterStepper','SiteModule','AmendmentModule','Subject','Enrollment','Sample',
     'Adverse','Visit','Result', 'Admin','TestRegistration','Reports','GenerateReport'],
 };
 

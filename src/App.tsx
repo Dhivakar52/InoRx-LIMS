@@ -60,12 +60,9 @@ const pageComponents: Record<string, React.ReactNode> = {
   'Enrollment':<Subject/>,
   'Adverse': <Adverse/>,
   'Visit':<VisitSchedule/>,
-  'Sample':<Sample/>
-
+  'Sample':<Sample/>,
   'TestRegistration':<TestRegistration/>,
   'GenerateReport':<GenerateReport/>,
-
-
   'Result': <Result/>
 
 

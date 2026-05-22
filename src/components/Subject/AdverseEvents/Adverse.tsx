@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useCallback } from "react";
-import Swal from "sweetalert2";
+
 import {
   useReactTable,
   getCoreRowModel,
@@ -24,8 +24,6 @@ type AE = {
   status: string;
 };
 
-type PanelMode = "view" | "edit" | null;
-
 const Adverse = () => {
   const data = useMemo<AE[]>(
     () => [
@@ -48,7 +46,6 @@ const Adverse = () => {
     []
   );
 
-  const [data, setData] = useState<AE[]>(initialData);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
   const [pagination, setPagination] = useState({
@@ -56,7 +53,7 @@ const Adverse = () => {
     pageSize: 10,
   });
 
-  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [_openMenuId, setOpenMenuId] = useState<number | null>(null);
 
   useEffect(() => {
     const close = (e: MouseEvent) => {
@@ -146,9 +143,6 @@ const Adverse = () => {
     globalFilterFn: "includesString",
   });
 
-  // ✅ Panel title based on mode
-  const panelTitle = panelMode === "view" ? "View Adverse Event" : "Edit Adverse Event";
-
   return (
     <div className="p-6">
       <div className="bg-white shadow-md rounded-lg p-6">
@@ -169,134 +163,6 @@ const Adverse = () => {
           table={table}
           totalCount={table.getFilteredRowModel().rows.length}/>
       </div>
-
-      {/* CUSTOM PANEL - View Mode */}
-      <CustomPanel
-        isOpen={panelMode === "view"}
-        title={panelTitle}
-        onClose={handleClosePanel}
-        onSave={handleClosePanel}
-        saveLabel="Update"
-      >
-        {selectedItem && (
-          <div className="grid grid-cols-2 gap-4">
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">AE</label>
-              <p className="mt-1 text-gray-900">{selectedItem.ae}</p>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Subject</label>
-              <p className="mt-1 text-gray-900">{selectedItem.subject}</p>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Severity</label>
-              <p className="mt-1">
-                <span className={`px-2 py-1 rounded text-xs font-medium ${getSeverityColor(selectedItem.severity)}`}>
-                  {selectedItem.severity}
-                </span>
-              </p>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Date</label>
-              <p className="mt-1 text-gray-900">{selectedItem.date}</p>
-            </div>
-            <div className="border-b pb-3 col-span-2">
-              <label className="block text-sm font-medium text-gray-600">Status</label>
-              <p className="mt-1">
-                <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(selectedItem.status)}`}>
-                  {selectedItem.status}
-                </span>
-              </p>
-            </div>
-          </div>
-        )}
-      </CustomPanel>
-
-      {/* CUSTOM PANEL - Edit Mode */}
-      <CustomPanel
-        isOpen={panelMode === "edit"}
-        title={panelTitle}
-        onClose={handleClosePanel}
-        onSave={handleSaveEdit}
-        saveLabel="Save Changes"
-      >
-        {selectedItem && (
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                AE
-              </label>
-              <input
-                type="text"
-                value={editFormData.ae || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, ae: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Subject
-              </label>
-              <input
-                type="text"
-                value={editFormData.subject || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, subject: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Severity
-              </label>
-              <select
-                value={editFormData.severity || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, severity: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="Mild">Mild</option>
-                <option value="Moderate">Moderate</option>
-                <option value="Severe">Severe</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Date
-              </label>
-              <input
-                type="text"
-                value={editFormData.date || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, date: e.target.value })
-                }
-                placeholder="DD-MMM-YY"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Status
-              </label>
-              <select
-                value={editFormData.status || ""}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, status: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="Open">Open</option>
-                <option value="Closed">Closed</option>
-                <option value="Under Review">Under Review</option>
-              </select>
-            </div>
-          </div>
-        )}
-      </CustomPanel>
     </div>
   );
 };
