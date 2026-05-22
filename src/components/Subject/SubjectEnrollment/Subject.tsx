@@ -5,7 +5,6 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel,
 } from "@tanstack/react-table";
 import type { ColumnDef } from "@tanstack/react-table";
 
@@ -14,7 +13,8 @@ import Pagination from "../../../common/Pagination";
 import TableSearch from "../../../common/TableSearch";
 import ColumnToggle from "../../../common/ColumnToggle";
 import { ActionMenu } from "../../../common/ActionMenu";
-import CustomPanel from "../../../common/CustomPanel";
+import NavigateButton from "../../../common/NavigateButton";
+import { Plus } from "lucide-react";
 
 type Subject = {
   id: number;
@@ -31,188 +31,38 @@ type Subject = {
 type PanelMode = "view" | "edit" | null;
 
 const Subject = () => {
-  const initialData: Subject[] = useMemo(() => [
-    {
-      id: 1,
-      subject: "SUB001",
-      studyId: "ST001",
-      study: "Apollo Study",
-      code: "ARM-A",
-      gender: "Female",
-      arm: "Treatment Group",
-      enrollment: "Enrolled",
-      status: "Active",
-    },
-    {
-      id: 2,
-      subject: "SUB002",
-      studyId: "ST002",
-      study: "SRM Research",
-      code: "ARM-B",
-      gender: "Male",
-      arm: "Control Group",
-      enrollment: "Screening",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      subject: "SUB003",
-      studyId: "ST003",
-      study: "Fortis Trial",
-      code: "ARM-C",
-      gender: "Female",
-      arm: "Treatment Group",
-      enrollment: "Enrolled",
-      status: "Active",
-    },
-    {
-      id: 4,
-      subject: "SUB004",
-      studyId: "ST004",
-      study: "MIOT Study",
-      code: "ARM-A",
-      gender: "Male",
-      arm: "Placebo Group",
-      enrollment: "Failed",
-      status: "Inactive",
-    },
-    {
-      id: 5,
-      subject: "SUB005",
-      studyId: "ST005",
-      study: "Vijaya Research",
-      code: "ARM-B",
-      gender: "Female",
-      arm: "Treatment Group",
-      enrollment: "Enrolled",
-      status: "Active",
-    },
-    {
-      id: 6,
-      subject: "SUB006",
-      studyId: "ST006",
-      study: "Apollo Study",
-      code: "ARM-C",
-      gender: "Male",
-      arm: "Control Group",
-      enrollment: "Screening",
-      status: "Pending",
-    },
-    {
-      id: 7,
-      subject: "SUB007",
-      studyId: "ST007",
-      study: "SRM Research",
-      code: "ARM-A",
-      gender: "Female",
-      arm: "Treatment Group",
-      enrollment: "Enrolled",
-      status: "Active",
-    },
-    {
-      id: 8,
-      subject: "SUB008",
-      studyId: "ST008",
-      study: "Fortis Trial",
-      code: "ARM-B",
-      gender: "Male",
-      arm: "Placebo Group",
-      enrollment: "Withdrawn",
-      status: "Inactive",
-    },
-    {
-      id: 9,
-      subject: "SUB009",
-      studyId: "ST009",
-      study: "MIOT Study",
-      code: "ARM-C",
-      gender: "Female",
-      arm: "Treatment Group",
-      enrollment: "Enrolled",
-      status: "Active",
-    },
-    {
-      id: 10,
-      subject: "SUB010",
-      studyId: "ST010",
-      study: "Vijaya Research",
-      code: "ARM-A",
-      gender: "Male",
-      arm: "Control Group",
-      enrollment: "Screening",
-      status: "Pending",
-    },
-    {
-      id: 11,
-      subject: "SUB011",
-      studyId: "ST011",
-      study: "Apollo Study",
-      code: "ARM-B",
-      gender: "Female",
-      arm: "Treatment Group",
-      enrollment: "Enrolled",
-      status: "Active",
-    },
-    {
-      id: 12,
-      subject: "SUB012",
-      studyId: "ST012",
-      study: "SRM Research",
-      code: "ARM-C",
-      gender: "Male",
-      arm: "Placebo Group",
-      enrollment: "Failed",
-      status: "Inactive",
-    },
-    {
-      id: 13,
-      subject: "SUB013",
-      studyId: "ST013",
-      study: "Fortis Trial",
-      code: "ARM-A",
-      gender: "Female",
-      arm: "Treatment Group",
-      enrollment: "Enrolled",
-      status: "Active",
-    },
-    {
-      id: 14,
-      subject: "SUB014",
-      studyId: "ST014",
-      study: "MIOT Study",
-      code: "ARM-B",
-      gender: "Male",
-      arm: "Control Group",
-      enrollment: "Screening",
-      status: "Pending",
-    },
-    {
-      id: 15,
-      subject: "SUB015",
-      studyId: "ST015",
-      study: "Vijaya Research",
-      code: "ARM-C",
-      gender: "Female",
-      arm: "Treatment Group",
-      enrollment: "Enrolled",
-      status: "Active",
-    },
-  ], []);
+  const data = useMemo<Subject[]>(
+    () => [
+      { id: 1, subject: "SUB001", studyId: "ST001", study: "Cardiology Study", code: "CD01", gender: "Male", arm: "Arm A", enrollment: "Enrolled", status: "Active" },
+      { id: 2, subject: "SUB002", studyId: "ST002", study: "Diabetes Study", code: "DB02", gender: "Female", arm: "Arm B", enrollment: "Screening", status: "Pending" },
+      { id: 3, subject: "SUB003", studyId: "ST003", study: "Cancer Trial", code: "CT03", gender: "Male", arm: "Arm C", enrollment: "Enrolled", status: "Active" },
+      { id: 4, subject: "SUB004", studyId: "ST004", study: "Neurology Study", code: "NR04", gender: "Female", arm: "Arm A", enrollment: "Completed", status: "Closed" },
+      { id: 5, subject: "SUB005", studyId: "ST005", study: "COVID Vaccine", code: "CV05", gender: "Male", arm: "Arm B", enrollment: "Enrolled", status: "Active" },
+      { id: 6, subject: "SUB006", studyId: "ST006", study: "Heart Research", code: "HR06", gender: "Female", arm: "Arm C", enrollment: "Screening", status: "Pending" },
+      { id: 7, subject: "SUB007", studyId: "ST007", study: "Kidney Study", code: "KD07", gender: "Male", arm: "Arm A", enrollment: "Enrolled", status: "Active" },
+      { id: 8, subject: "SUB008", studyId: "ST008", study: "Liver Study", code: "LV08", gender: "Female", arm: "Arm B", enrollment: "Withdrawn", status: "Inactive" },
+      { id: 9, subject: "SUB009", studyId: "ST009", study: "Asthma Trial", code: "AS09", gender: "Male", arm: "Arm C", enrollment: "Completed", status: "Closed" },
+      { id: 10, subject: "SUB010", studyId: "ST010", study: "BP Monitoring", code: "BP10", gender: "Female", arm: "Arm A", enrollment: "Enrolled", status: "Active" },
+      { id: 11, subject: "SUB011", studyId: "ST011", study: "Mental Health", code: "MH11", gender: "Male", arm: "Arm B", enrollment: "Screening", status: "Pending" },
+      { id: 12, subject: "SUB012", studyId: "ST012", study: "Skin Research", code: "SK12", gender: "Female", arm: "Arm C", enrollment: "Enrolled", status: "Active" },
+      { id: 13, subject: "SUB013", studyId: "ST013", study: "Eye Vision Study", code: "EV13", gender: "Male", arm: "Arm A", enrollment: "Completed", status: "Closed" },
+      { id: 14, subject: "SUB014", studyId: "ST014", study: "Bone Density", code: "BD14", gender: "Female", arm: "Arm B", enrollment: "Enrolled", status: "Active" },
+      { id: 15, subject: "SUB015", studyId: "ST015", study: "Nutrition Study", code: "NT15", gender: "Male", arm: "Arm C", enrollment: "Withdrawn", status: "Inactive" },
+    ],
+    []
+  );
 
   const [data, setData] = useState<Subject[]>(initialData);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  // close menu (optional keep)
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
-  
-  // Panel state
-  const [panelMode, setPanelMode] = useState<PanelMode>(null);
-  const [selectedItem, setSelectedItem] = useState<Subject | null>(null);
-  const [editFormData, setEditFormData] = useState<Partial<Subject>>({});
 
-  // ✅ overlay position
-  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
-
-  // ✅ close outside
   useEffect(() => {
     const close = (e: MouseEvent) => {
       if (!(e.target as HTMLElement).closest(".menu-container")) {
@@ -223,108 +73,6 @@ const Subject = () => {
     return () => document.removeEventListener("click", close);
   }, []);
 
-  // ✅ toggle menu
-  const handleToggleMenu = useCallback(
-    (id: number, e: React.MouseEvent<HTMLButtonElement>) => {
-      e.stopPropagation();
-      const rect = e.currentTarget.getBoundingClientRect();
-      setMenuPosition({
-        top: rect.bottom + 5,
-        left: rect.right - 130,
-      });
-      setOpenMenuId((prev) => (prev === id ? null : id));
-    },
-    []
-  );
-
-  // ✅ View handler
-  const handleView = useCallback((item: Subject) => {
-    console.log("View:", item);
-    setSelectedItem(item);
-    setPanelMode("view");
-    setOpenMenuId(null);
-  }, []);
-
-  // ✅ Edit handler
-  const handleEdit = useCallback((item: Subject) => {
-    console.log("Edit:", item);
-    setSelectedItem(item);
-    setEditFormData({ ...item });
-    setPanelMode("edit");
-    setOpenMenuId(null);
-  }, []);
-
-  // ✅ Delete handler with SweetAlert2
-  const handleDelete = useCallback((item: Subject) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: `Delete ${item.subject}?`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setData((prev) => prev.filter((d) => d.id !== item.id));
-        Swal.fire("Deleted!", "Subject has been removed.", "success");
-      }
-    });
-    setOpenMenuId(null);
-  }, []);
-
-  // ✅ Save edited data
-  const handleSaveEdit = useCallback(() => {
-    if (selectedItem && editFormData) {
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.id === selectedItem.id ? { ...item, ...editFormData } : item
-        )
-      );
-      console.log("Saved:", { ...selectedItem, ...editFormData });
-      setPanelMode(null);
-      setSelectedItem(null);
-      setEditFormData({});
-    }
-  }, [selectedItem, editFormData]);
-
-  // ✅ Close panel
-  const handleClosePanel = useCallback(() => {
-    setPanelMode(null);
-    setSelectedItem(null);
-    setEditFormData({});
-  }, []);
-
-  // ✅ Get status color
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Active":
-        return "bg-green-100 text-green-700";
-      case "Pending":
-        return "bg-yellow-100 text-yellow-700";
-      case "Inactive":
-        return "bg-red-100 text-red-700";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
-  };
-
-  // ✅ Get enrollment color
-  const getEnrollmentColor = (enrollment: string) => {
-    switch (enrollment) {
-      case "Enrolled":
-        return "bg-green-100 text-green-700";
-      case "Screening":
-        return "bg-blue-100 text-blue-700";
-      case "Failed":
-        return "bg-red-100 text-red-700";
-      case "Withdrawn":
-        return "bg-orange-100 text-orange-700";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
-  };
-
   const columns: ColumnDef<Subject>[] = useMemo(
     () => [
       { accessorKey: "subject", header: "Subject" },
@@ -333,47 +81,46 @@ const Subject = () => {
       { accessorKey: "code", header: "Code" },
       { accessorKey: "gender", header: "Gender" },
       { accessorKey: "arm", header: "Arm/Cohort" },
-      { 
-        accessorKey: "enrollment", 
-        header: "Enrollment",
-        cell: ({ getValue }) => {
-          const value = getValue<string>();
-          return (
-            <span className={`px-2 py-1 rounded text-xs font-medium ${getEnrollmentColor(value)}`}>
-              {value}
-            </span>
-          );
-        }
-      },
-      { 
-        accessorKey: "status", 
+      { accessorKey: "enrollment", header: "Enrollment" },
+
+      {
+        accessorKey: "status",
         header: "Status",
         cell: ({ getValue }) => {
           const value = getValue<string>();
+
           return (
-            <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(value)}`}>
+            <span
+              className={`px-2 py-1 rounded text-xs font-medium ${
+                value === "Active"
+                  ? "bg-green-100 text-green-700"
+                  : value === "Pending"
+                  ? "bg-yellow-100 text-yellow-700"
+                  : value === "Closed"
+                  ? "bg-gray-200 text-gray-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
               {value}
             </span>
           );
-        }
+        },
       },
+
       {
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => {
-          const item = row.original;
-          return (
-            <ActionMenu
-              item={item}
-              onView={handleView}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          );
-        },
-      }
+        cell: ({ row }) => (
+          <ActionMenu
+            item={row.original}
+            onView={(data) => console.log("View:", data)}
+            onEdit={(data) => console.log("Edit:", data)}
+            onDelete={(data) => console.log("Delete:", data)}
+          />
+        ),
+      },
     ],
-    [handleView, handleEdit, handleDelete]
+    []
   );
 
   // ✅ Pagination state
@@ -385,18 +132,19 @@ const Subject = () => {
   const table = useReactTable({
     data,
     columns,
-    state: { 
-      globalFilter, 
+    state: {
+      globalFilter,
       columnVisibility,
       pagination,
     },
     onGlobalFilterChange: setGlobalFilter,
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
+
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+
     globalFilterFn: "includesString",
   });
 
@@ -414,16 +162,16 @@ const Subject = () => {
             placeholder="Search..."
           />
           <ColumnToggle table={table} />
+          <NavigateButton
+            label="Add Subject"
+            path="/subject/master/sub-add"
+            icon={<Plus size={18} />}
+          />
         </div>
-
-        {/* TABLE */}
         <DataTable table={table} columns={columns} />
-
-        {/* PAGINATION */}
         <Pagination
           table={table}
-          totalCount={table.getFilteredRowModel().rows.length}
-        />
+          totalCount={table.getFilteredRowModel().rows.length}/>
       </div>
 
       {/* CUSTOM PANEL - View Mode */}

@@ -22,6 +22,7 @@ import Subject from './components/Subject/SubjectEnrollment/Subject.tsx';
 import VisitSchedule from './components/VisitSchedulingModule/VisitSchedule.tsx';
 import AmendmentForm from './components/StudyModule/StudyAmendmentModule/AmendmentForm.tsx';
 import SiteForm from './components/StudyModule/SiteRegistrationModule/SiteForm.tsx';
+import Sample from './components/Sample/SampleRegistrationModule/SampleReception.tsx';
 
 import TestRegistration from './components/Test Registration/TestRegistration.tsx';
 import TestRegistrationForm from "./components/Test Registration/TestRegistrationForm.tsx";
@@ -38,6 +39,9 @@ import Result from "./components/ResultModule/Result.tsx"
 
 import Dashboard from './components/Dashboard/Dashboard.tsx';
 import StudyMasterStepper from './components/StudyModule/StudyMasterModule/StudyMasterStepper.tsx';
+import SubjectEnrollmentForm from './components/Subject/SubjectEnrollment/SubjectEnrollmentForm.tsx';
+import AdverseEventTrackingForm from './components/Subject/AdverseEvents/AdverseEventTrackingForm.tsx';
+import SampleReceptionForm from './components/Sample/SampleRegistrationModule/SampleReceptionStepper.tsx';
 // -------------------------
 // Main page components
 // -------------------------
@@ -56,6 +60,7 @@ const pageComponents: Record<string, React.ReactNode> = {
   'Enrollment':<Subject/>,
   'Adverse': <Adverse/>,
   'Visit':<VisitSchedule/>,
+  'Sample':<Sample/>
 
   'TestRegistration':<TestRegistration/>,
   'GenerateReport':<GenerateReport/>,
@@ -238,6 +243,14 @@ console.log("allowedRoles:", allowedRoles);
     </ProtectedRoute>
   }
 />
+<Route
+  path="/sample/reception"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <Sample />
+    </ProtectedRoute>
+  }
+/>
 {/* <Route
   path="/study/master/new-add"
   element={
@@ -275,6 +288,9 @@ console.log("allowedRoles:", allowedRoles);
 />
         <Route path="/forgot" element={<ForgotPassword/>} />
        <Route path="*" element={<Navigate to="/home" replace />} />
+       <Route path="/subject/master/sub-add" element={<SubjectEnrollmentForm />}/>
+       <Route path="/subject/master/adv-add" element={<AdverseEventTrackingForm />}/>
+       <Route path="/sample/master/smp-add" element={<SampleReceptionForm />}/>
      </Route>
    </Routes>
  </Router>
