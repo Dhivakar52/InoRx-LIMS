@@ -10,9 +10,7 @@ export default function FormWrapper({
   children,
   onSubmit,
   onCancel,
-    columns = 3,
-  // isValid = true,
-
+  columns = 3,
 }: {
   title: string;
   children: ReactNode;
@@ -22,28 +20,31 @@ export default function FormWrapper({
   columns?: number;
 }) {
   return (
-    <Card className="border-0 m-[30px]  bg-white/80 ">
-      <div className="p-6 space-y-6">
-        <BackButton />
+    <Card className="border-0 m-4 bg-white shadow-sm rounded-xl">
+      
+      <div className="p-4">
 
         {/* Header */}
-        <div>
+        <div className="mb-4">
           <h2 className="text-2xl font-bold text-gray-800">
             {title}
           </h2>
         </div>
 
         {/* Dynamic Fields */}
-        <div className={`grid grid-cols-3 gap-4`}>
+        <div className={`grid grid-cols-${columns} gap-4`}>
           {children}
         </div>
 
         {/* Actions */}
-        <FormActions
-          onSave={onSubmit}
-          onCancel={onCancel || (() => console.log("Cancelled"))}
-         
-        />
+        <div className="flex justify-between items-center mt-5">
+          <BackButton />
+
+          <FormActions
+            onSave={onSubmit}
+            onCancel={onCancel || (() => console.log("Cancelled"))}
+          />
+        </div>
       </div>
     </Card>
   );
