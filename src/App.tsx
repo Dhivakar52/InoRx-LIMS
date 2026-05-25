@@ -226,7 +226,7 @@ console.log("allowedRoles:", allowedRoles);
     </ProtectedRoute>
   }
 />
-
+<Route path="/dashboard" element={<Dashboard />} />
 <Route
   path="/study/amendment"
   element={

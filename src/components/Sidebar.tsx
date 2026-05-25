@@ -56,7 +56,13 @@ interface NavigationItem {
 }
 
 const navigationItems: NavigationItem[] = [
-  { icon: Home, label: 'Home', path: '/home', pageKey: 'Home' },
+  // { icon: Home, label: 'Home', path: '/home', pageKey: 'Home' },
+  {
+  icon: Home, label: 'Dashboard', path: '/dashboard',pageKey: 'Dashboard'},
+ 
+ 
+  
+
   { icon: Bell, label: 'Notifications', path: '/notifications', pageKey: 'Notifications' },
 
   // ✅ STUDY
