@@ -144,7 +144,7 @@ const SiteModule = () => {
   const [data, setData] = useState<SiteRegistration[]>(initialData);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [_openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [loading, _setLoading] = useState(false);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
   
@@ -222,10 +222,7 @@ const SiteModule = () => {
     setEditFormData({});
   }, []);
 
-  const handleToggleMenu = useCallback((id: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setOpenMenuId((prev) => (prev === id ? null : id));
-  }, []);
+ 
 
   // ✅ COLUMNS (memoized with all dependencies)
   const siteRegistrationColumns: ColumnDef<SiteRegistration>[] = useMemo(

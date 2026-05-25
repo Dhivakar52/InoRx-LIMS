@@ -1,6 +1,6 @@
 "use client";
 
-import { Snowflake, MapPin, Archive } from "lucide-react";
+import { Snowflake, MapPin } from "lucide-react";
 
 const StorageAssignmentForm = () => {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Printer, RefreshCw, QrCode } from "lucide-react";
+import { Printer, RefreshCw } from "lucide-react";
 
 const SampleLabelingForm = () => {
   const [barcode, setBarcode] = useState("");
