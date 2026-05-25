@@ -62,7 +62,7 @@ const notifications = [
   },
 ];
 
-const NotificationSidebar : React.FC<NotificationModalProps>= ({ isOpen, onClose }) => {
+const NotificationIcon : React.FC<NotificationModalProps>= ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
 
@@ -148,4 +148,4 @@ const NotificationSidebar : React.FC<NotificationModalProps>= ({ isOpen, onClose
   );
 };
 
-export default NotificationSidebar;
+export default NotificationIcon;

@@ -3,7 +3,7 @@ import { Bell, Menu } from "lucide-react";
 
 // import { useAuth } from "./ContextAPI/AuthContext";
 import { useLocation } from "react-router-dom";
-import NotificationSidebar from "./Notifications/NotificationSideBar";
+import NotificationIcon from "./Notifications/NotificationIcon";
 // import axios from "axios";
  
 // Header Component
@@ -226,7 +226,7 @@ const headerTitleMap: Record<string, string> = {
         </div>
       </div>
 
-       <NotificationSidebar
+       <NotificationIcon
         isOpen={isNotificationOpen}
         onClose={() => setIsNotificationOpen(false)}
       />

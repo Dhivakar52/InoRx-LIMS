@@ -197,6 +197,9 @@ const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     console.log("Delete:", item);
     setIsDeleteDialogOpen(true);
     setOpenMenuId(null);
+    const oldData = { ...item };
+    setData((prev) => prev.filter((d) => d.id !== item.id));
+    addAuditLog("DELETE", item.id, oldData, null);
   }, []);
 
   const handleView = useCallback((item: User) => {
@@ -243,25 +246,14 @@ const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     setSelectedAuditLogs([]);
   }, []);
 
-
-  const getActionColor = (action: AuditLog["action"]) => {
-    switch (action) {
-      case "CREATE": return "bg-green-100 text-green-700 border-green-200";
-      case "UPDATE": return "bg-blue-100 text-blue-700 border-blue-200";
-      case "DELETE": return "bg-red-100 text-red-700 border-red-200";
-      case "VIEW": return "bg-gray-100 text-gray-700 border-gray-200";
-      default: return "bg-gray-100 text-gray-700";
-    }
-  };
-
-  const getActionIcon = (action: AuditLog["action"]) => {
-    switch (action) {
-      case "CREATE": return "➕";
-      case "UPDATE": return "✏️";
-      case "DELETE": return "🗑️";
-      case "VIEW": return "👁️";
-      default: return "📋";
-    }
+  const getActionBadge = (action: AuditLog["action"]) => {
+    const styles = {
+      CREATE: "bg-green-100 text-green-700",
+      UPDATE: "bg-blue-100 text-blue-700",
+      DELETE: "bg-red-100 text-red-700",
+      VIEW: "bg-gray-100 text-gray-700",
+    };
+    return styles[action];
   };
 
   useEffect(() => {
@@ -392,84 +384,50 @@ const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
             </CustomPanel>
       
             {/* Audit Log Panel with Demo Data */}
-            <CustomPanel 
-              isOpen={panelMode === "audit"} 
-              title={`Audit Log - ${selectedItem?.id || ""} (${selectedItem?.name || ""})`} 
-              onClose={handleClosePanel} 
-              onSave={handleClosePanel} 
-              saveLabel="Close"
-            >
-              {selectedAuditLogs.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="text-6xl mb-4">📋</div>
-                  <div className="text-gray-500 mb-2">No audit records found for this item.</div>
-                  <div className="text-sm text-gray-400">When you view, edit, or delete this record, activities will appear here.</div>
+             <CustomPanel isOpen={panelMode === "audit"} title={`Audit Log - ${selectedItem?.name || ""}`} onClose={handleClosePanel} onSave={handleClosePanel} saveLabel="Close">
+        {selectedAuditLogs.length === 0 ? (
+          <div className="text-center py-8">
+            <div className="text-4xl mb-3">📋</div>
+            <p className="text-gray-500">No audit records found</p>
+          </div>
+        ) : (
+          <div className="space-y-0">
+            {selectedAuditLogs.map((log, idx) => (
+              <div key={log.id} className="flex">
+                <div className="flex flex-col items-center mr-4">
+                  <div className={`w-3 h-3 rounded-full ${getActionBadge(log.action).split(' ')[0]}`}></div>
+                  {idx < selectedAuditLogs.length - 1 && (
+                    <div className="w-0.5 bg-gray-200 flex-1 my-1" style={{ minHeight: '40px' }}></div>
+                  )}
                 </div>
-              ) : (
-                <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-                  {/* Summary Stats */}
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-3 rounded-lg mb-4">
-                    <div className="text-sm font-medium text-gray-700 mb-2">📊 Activity Summary</div>
-                    <div className="flex gap-4 text-xs">
-                      <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500"></span> CREATE: {selectedAuditLogs.filter(l => l.action === "CREATE").length}</div>
-                      <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-500"></span> UPDATE: {selectedAuditLogs.filter(l => l.action === "UPDATE").length}</div>
-                      <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-gray-500"></span> VIEW: {selectedAuditLogs.filter(l => l.action === "VIEW").length}</div>
-                      <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500"></span> DELETE: {selectedAuditLogs.filter(l => l.action === "DELETE").length}</div>
+                <div className="flex-1 pb-4">
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <div className="flex justify-between items-start flex-wrap gap-2 mb-2">
+                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${getActionBadge(log.action)}`}>
+                        {log.action}
+                      </span>
+                      <span className="text-xs text-gray-400">{log.changedAt}</span>
                     </div>
+                    <p className="text-xs text-gray-500 mb-2">By: <span className="text-gray-700">{log.changedBy}</span></p>
+                    {log.oldData && (
+                      <div className="mt-2 text-xs">
+                        <span className="text-gray-500">Before: </span>
+                        <span className="text-gray-700 font-mono">{log.oldData.substring(0, 100)}...</span>
+                      </div>
+                    )}
+                    {log.newData && (
+                      <div className="mt-1 text-xs">
+                        <span className="text-gray-500">After: </span>
+                        <span className="text-gray-700 font-mono">{log.newData.substring(0, 100)}...</span>
+                      </div>
+                    )}
                   </div>
-      
-                  {/* Audit Log Entries */}
-                  {selectedAuditLogs.map((log, index) => (
-                    <div key={log.id} className={`border rounded-lg p-4 ${getActionColor(log.action)} bg-opacity-30`}>
-                      <div className="flex justify-between items-start mb-3 flex-wrap gap-2">
-                        <div className="flex items-center gap-2">
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${getActionColor(log.action)} border`}>
-                            {getActionIcon(log.action)} {log.action}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            #{log.id}
-                          </span>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-xs text-gray-500">{log.changedAt}</div>
-                          <div className="text-xs text-gray-400">IP: {log.ipAddress}</div>
-                        </div>
-                      </div>
-                      
-                      <div className="mb-2">
-                        <span className="text-xs font-medium text-gray-600">👤 Changed By:</span>
-                        <span className="text-xs text-gray-700 ml-2">{log.changedBy}</span>
-                      </div>
-      
-                      {log.oldData && (
-                        <div className="mb-3">
-                          <div className="text-xs font-medium text-red-600 mb-1 flex items-center gap-1">
-                            <span>📄 Before Change:</span>
-                          </div>
-                          <pre className="text-xs bg-red-50 p-2 rounded border border-red-200 overflow-x-auto max-h-32 overflow-y-auto">{log.oldData}</pre>
-                        </div>
-                      )}
-                      
-                      {log.newData && (
-                        <div>
-                          <div className="text-xs font-medium text-green-600 mb-1 flex items-center gap-1">
-                            <span>📄 After Change:</span>
-                          </div>
-                          <pre className="text-xs bg-green-50 p-2 rounded border border-green-200 overflow-x-auto max-h-32 overflow-y-auto">{log.newData}</pre>
-                        </div>
-                      )}
-      
-                      {/* Timeline connector */}
-                      {index < selectedAuditLogs.length - 1 && (
-                        <div className="relative mt-3">
-                          <div className="absolute left-4 top-0 w-px h-4 bg-gray-300"></div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
                 </div>
-              )}
-            </CustomPanel>
+              </div>
+            ))}
+          </div>
+        )}
+      </CustomPanel>
             {/* ================= Delete Confirmation Dialog ================= */}
       <Dialog.Root
         open={isDeleteDialogOpen}

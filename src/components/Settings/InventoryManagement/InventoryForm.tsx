@@ -40,11 +40,12 @@ type AuditLog = {
   ipAddress: string;
 };
 
+
 type PanelMode = "view" | "edit" | "audit" | null;
 
 const InventoryForm = () => {
 
-  const getDemoAuditLogs = (visitId: string, visitName: string): AuditLog[] => {
+  const getDemoAuditLogs = (qcId: string, testName: string): AuditLog[] => {
   return [
     {
       id: 1,
@@ -52,89 +53,43 @@ const InventoryForm = () => {
       recordId: 1,
       recordType: "Inventory",
       oldData: null,
-      newData: JSON.stringify({
-        visitId: visitId,
-        subject: "SUB001",
-        visitName: visitName,
-        status: "Scheduled"
-      }, null, 2),
-      changedBy: "admin@example.com",
-      changedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toLocaleString(),
+      newData: JSON.stringify({ qcId, batchId: "BATCH001", subjectId: "SUB001", testName, qcDate: "2024-01-10", qcType: "Daily", controlLevel: "Normal", observedValue: "5.0", expectedRange: "4.8-5.2", deviation: "0.2", status: "Pending", qcTechnician: "Tech John", comments: "Initial QC run" }, null, 2),
+      changedBy: "qc.technician@example.com",
+      changedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toLocaleString(),
       ipAddress: "192.168.1.100",
     },
     {
       id: 2,
-      action: "VIEW",
+      action: "UPDATE",
       recordId: 1,
       recordType: "Inventory",
-      oldData: null,
-      newData: JSON.stringify({
-        visitId: visitId,
-        subject: "SUB001",
-        visitName: visitName,
-        status: "Scheduled"
-      }, null, 2),
-      changedBy: "dr.smith@example.com",
-      changedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toLocaleString(),
+      oldData: JSON.stringify({ qcId, status: "Pending" }, null, 2),
+      newData: JSON.stringify({ qcId, status: "In Review", comments: "Sent for supervisor review" }, null, 2),
+      changedBy: "qc.supervisor@example.com",
+      changedAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toLocaleString(),
       ipAddress: "192.168.1.101",
     },
     {
       id: 3,
-      action: "UPDATE",
-      recordId: 1,
-      recordType: "Inventory",
-      oldData: JSON.stringify({
-        visitId: visitId,
-        subject: "SUB001",
-        visitName: visitName,
-        status: "Scheduled"
-      }, null, 2),
-      newData: JSON.stringify({
-        visitId: visitId,
-        subject: "SUB001",
-        visitName: visitName,
-        status: "In Progress"
-      }, null, 2),
-      changedBy: "coordinator@example.com",
-      changedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toLocaleString(),
-      ipAddress: "192.168.1.102",
-    },
-    {
-      id: 4,
       action: "VIEW",
       recordId: 1,
       recordType: "Inventory",
       oldData: null,
-      newData: JSON.stringify({
-        visitId: visitId,
-        subject: "SUB001",
-        visitName: visitName,
-        status: "In Progress"
-      }, null, 2),
-      changedBy: "dr.johnson@example.com",
-      changedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toLocaleString(),
-      ipAddress: "192.168.1.103",
+      newData: JSON.stringify({ qcId, testName, status: "In Review" }, null, 2),
+      changedBy: "quality.manager@example.com",
+      changedAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toLocaleString(),
+      ipAddress: "192.168.1.102",
     },
     {
-      id: 5,
+      id: 4,
       action: "UPDATE",
       recordId: 1,
       recordType: "Inventory",
-      oldData: JSON.stringify({
-        visitId: visitId,
-        subject: "SUB001",
-        visitName: visitName,
-        status: "In Progress"
-      }, null, 2),
-      newData: JSON.stringify({
-        visitId: visitId,
-        subject: "SUB001",
-        visitName: visitName,
-        status: "Completed"
-      }, null, 2),
-      changedBy: "admin@example.com",
-      changedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toLocaleString(),
-      ipAddress: "192.168.1.100",
+      oldData: JSON.stringify({ qcId, status: "In Review" }, null, 2),
+      newData: JSON.stringify({ qcId, status: "Approved", approvedBy: "Dr. Smith", approvalDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], comments: "QC passed - Approved for use" }, null, 2),
+      changedBy: "quality.manager@example.com",
+      changedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toLocaleString(),
+      ipAddress: "192.168.1.102",
     },
   ];
 };
@@ -147,7 +102,7 @@ const InventoryForm = () => {
     category: "Laboratory",
     quantity: 120,
     supplier: "MedSupply Pvt Ltd",
-    status: "In Stock",
+    status: "Available",
   },
   {
     id: 2,
@@ -163,7 +118,7 @@ const InventoryForm = () => {
     category: "Diagnostics",
     quantity: 300,
     supplier: "DiagnoTech",
-    status: "In Stock",
+    status: "Available",
   },
   {
     id: 4,
@@ -179,7 +134,7 @@ const InventoryForm = () => {
     category: "Safety",
     quantity: 500,
     supplier: "SafeCare Ltd",
-    status: "In Stock",
+    status: "Available",
   },
   {
     id: 6,
@@ -195,46 +150,43 @@ const InventoryForm = () => {
   const [columnVisibility, setColumnVisibility] = useState({});
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
- // Initialize with some demo audit logs for existing records
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => {
-    const initialLogs: AuditLog[] = [];
-    data.forEach(inventoryItem => {
-      const demos = getDemoAuditLogs(inventoryItem.category, inventoryItem.itemName);
-      initialLogs.push(...demos);
+ 
+    const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => {
+      const initialLogs: AuditLog[] = [];
+      data.forEach(inv => {
+        initialLogs.push(...getDemoAuditLogs(inv.itemName, inv.category));
+      });
+      return initialLogs;
     });
-    return initialLogs;
-  });
 
   const [panelMode, setPanelMode] = useState<PanelMode>(null);
   const [selectedItem, setSelectedItem] = useState<Inventory | null>(null);
   const [selectedAuditLogs, setSelectedAuditLogs] = useState<AuditLog[]>([]);
   const [editFormData, setEditFormData] = useState<Partial<Inventory>>({});
 
-  const addAuditLog = useCallback((
-    action: AuditLog["action"],
-    recordId: number,
-    oldData: any | null,
-    newData: any | null
-  ) => {
-    const newLog: AuditLog = {
-      id: auditLogs.length + 1,
-      action,
-      recordId,
-      recordType: "Inventory",
-      oldData: oldData ? JSON.stringify(oldData, null, 2) : null,
-      newData: newData ? JSON.stringify(newData, null, 2) : null,
-      changedBy: localStorage.getItem("userName") || "Current User",
-      changedAt: new Date().toLocaleString(),
-      ipAddress: "127.0.0.1",
-    };
-    setAuditLogs((prev) => [newLog, ...prev]);
-  }, [auditLogs.length]);
+  const addAuditLog = useCallback((action: AuditLog["action"], recordId: number, oldData: any | null, newData: any | null) => {
+      const newLog: AuditLog = {
+        id: auditLogs.length + 1,
+        action,
+        recordId,
+        recordType: "Inventory",
+        oldData: oldData ? JSON.stringify(oldData, null, 2) : null,
+        newData: newData ? JSON.stringify(newData, null, 2) : null,
+        changedBy: localStorage.getItem("userName") || "Current User",
+        changedAt: new Date().toLocaleString(),
+        ipAddress: "127.0.0.1",
+      };
+      setAuditLogs((prev) => [newLog, ...prev]);
+    }, [auditLogs.length]);
 
 
   const handleDelete = useCallback((item: Inventory) => {
     console.log("Delete:", item);
     setIsDeleteDialogOpen(true);
     setOpenMenuId(null);
+    const oldData = { ...item };
+    setData((prev) => prev.filter((d) => d.id !== item.id));
+        addAuditLog("DELETE", item.id, oldData, null);
   }, []);
 
   const handleView = useCallback((item: Inventory) => {
@@ -250,11 +202,11 @@ const InventoryForm = () => {
   }, []);
 
   const handleAuditLog = useCallback((item: Inventory) => {
-    const logs = auditLogs.filter(log => log.recordId === item.id);
-    setSelectedAuditLogs(logs);
-    setSelectedItem(item);
-    setPanelMode("audit");
-  }, [auditLogs]);
+      const logs = auditLogs.filter(log => log.recordId === item.id);
+      setSelectedAuditLogs(logs);
+      setSelectedItem(item);
+      setPanelMode("audit");
+    }, [auditLogs]);
 
 
   const handleSaveEdit = useCallback(() => {
@@ -289,24 +241,14 @@ const InventoryForm = () => {
     }
   };
 
-  const getActionColor = (action: AuditLog["action"]) => {
-    switch (action) {
-      case "CREATE": return "bg-green-100 text-green-700 border-green-200";
-      case "UPDATE": return "bg-blue-100 text-blue-700 border-blue-200";
-      case "DELETE": return "bg-red-100 text-red-700 border-red-200";
-      case "VIEW": return "bg-gray-100 text-gray-700 border-gray-200";
-      default: return "bg-gray-100 text-gray-700";
-    }
-  };
-
-  const getActionIcon = (action: AuditLog["action"]) => {
-    switch (action) {
-      case "CREATE": return "➕";
-      case "UPDATE": return "✏️";
-      case "DELETE": return "🗑️";
-      case "VIEW": return "👁️";
-      default: return "📋";
-    }
+    const getActionBadge = (action: AuditLog["action"]) => {
+    const styles = {
+      CREATE: "bg-green-100 text-green-700",
+      UPDATE: "bg-blue-100 text-blue-700",
+      DELETE: "bg-red-100 text-red-700",
+      VIEW: "bg-gray-100 text-gray-700",
+    };
+    return styles[action];
   };
 
   useEffect(() => {
@@ -328,7 +270,7 @@ const InventoryForm = () => {
       { accessorKey: "category", header: "Category" },
       { accessorKey: "quantity", header: "Quantity" },
       { accessorKey: "supplier", header: "Supplier" },
-      { accessorKey: "status", header: "Status" },
+      { accessorKey: "status", header: "Status",cell: ({ getValue }) => { const value = getValue<Inventory["status"]>(); return <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(value)}`}>{value}</span>; } },
       
        {
         id: "actions",
@@ -434,79 +376,45 @@ const InventoryForm = () => {
       </CustomPanel>
 
       {/* Audit Log Panel with Demo Data */}
-      <CustomPanel 
-        isOpen={panelMode === "audit"} 
-        title={`Audit Log - ${selectedItem?.id || ""} (${selectedItem?.itemName || ""})`} 
-        onClose={handleClosePanel} 
-        onSave={handleClosePanel} 
-        saveLabel="Close"
-      >
+      <CustomPanel isOpen={panelMode === "audit"} title={`Audit Log - ${selectedItem?.itemName || ""}`} onClose={handleClosePanel} onSave={handleClosePanel} saveLabel="Close">
         {selectedAuditLogs.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">📋</div>
-            <div className="text-gray-500 mb-2">No audit records found for this item.</div>
-            <div className="text-sm text-gray-400">When you view, edit, or delete this record, activities will appear here.</div>
+          <div className="text-center py-8">
+            <div className="text-4xl mb-3">📋</div>
+            <p className="text-gray-500">No audit records found</p>
           </div>
         ) : (
-          <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-            {/* Summary Stats */}
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-3 rounded-lg mb-4">
-              <div className="text-sm font-medium text-gray-700 mb-2">📊 Activity Summary</div>
-              <div className="flex gap-4 text-xs">
-                <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500"></span> CREATE: {selectedAuditLogs.filter(l => l.action === "CREATE").length}</div>
-                <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-500"></span> UPDATE: {selectedAuditLogs.filter(l => l.action === "UPDATE").length}</div>
-                <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-gray-500"></span> VIEW: {selectedAuditLogs.filter(l => l.action === "VIEW").length}</div>
-                <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500"></span> DELETE: {selectedAuditLogs.filter(l => l.action === "DELETE").length}</div>
-              </div>
-            </div>
-
-            {/* Audit Log Entries */}
-            {selectedAuditLogs.map((log, index) => (
-              <div key={log.id} className={`border rounded-lg p-4 ${getActionColor(log.action)} bg-opacity-30`}>
-                <div className="flex justify-between items-start mb-3 flex-wrap gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getActionColor(log.action)} border`}>
-                      {getActionIcon(log.action)} {log.action}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      #{log.id}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xs text-gray-500">{log.changedAt}</div>
-                    <div className="text-xs text-gray-400">IP: {log.ipAddress}</div>
+          <div className="space-y-0">
+            {selectedAuditLogs.map((log, idx) => (
+              <div key={log.id} className="flex">
+                <div className="flex flex-col items-center mr-4">
+                  <div className={`w-3 h-3 rounded-full ${getActionBadge(log.action).split(' ')[0]}`}></div>
+                  {idx < selectedAuditLogs.length - 1 && (
+                    <div className="w-0.5 bg-gray-200 flex-1 my-1" style={{ minHeight: '40px' }}></div>
+                  )}
+                </div>
+                <div className="flex-1 pb-4">
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <div className="flex justify-between items-start flex-wrap gap-2 mb-2">
+                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${getActionBadge(log.action)}`}>
+                        {log.action}
+                      </span>
+                      <span className="text-xs text-gray-400">{log.changedAt}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 mb-2">By: <span className="text-gray-700">{log.changedBy}</span></p>
+                    {log.oldData && (
+                      <div className="mt-2 text-xs">
+                        <span className="text-gray-500">Before: </span>
+                        <span className="text-gray-700 font-mono">{log.oldData.substring(0, 100)}...</span>
+                      </div>
+                    )}
+                    {log.newData && (
+                      <div className="mt-1 text-xs">
+                        <span className="text-gray-500">After: </span>
+                        <span className="text-gray-700 font-mono">{log.newData.substring(0, 100)}...</span>
+                      </div>
+                    )}
                   </div>
                 </div>
-                
-                <div className="mb-2">
-                  <span className="text-xs font-medium text-gray-600">👤 Changed By:</span>
-                  <span className="text-xs text-gray-700 ml-2">{log.changedBy}</span>
-                </div>
-
-                {log.oldData && (
-                  <div className="mb-3">
-                    <div className="text-xs font-medium text-red-600 mb-1 flex items-center gap-1">
-                      <span>📄 Before Change:</span>
-                    </div>
-                    <pre className="text-xs bg-red-50 p-2 rounded border border-red-200 overflow-x-auto max-h-32 overflow-y-auto">{log.oldData}</pre>
-                  </div>
-                )}
-                
-                {log.newData && (
-                  <div>
-                    <div className="text-xs font-medium text-green-600 mb-1 flex items-center gap-1">
-                      <span>📄 After Change:</span>
-                    </div>
-                    <pre className="text-xs bg-green-50 p-2 rounded border border-green-200 overflow-x-auto max-h-32 overflow-y-auto">{log.newData}</pre>
-                  </div>
-                )}
-
-                {/* Timeline connector */}
-                {index < selectedAuditLogs.length - 1 && (
-                  <div className="relative mt-3">
-                    <div className="absolute left-4 top-0 w-px h-4 bg-gray-300"></div>
-                  </div>
-                )}
               </div>
             ))}
           </div>

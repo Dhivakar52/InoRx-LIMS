@@ -55,7 +55,7 @@ import QcForm from './components/FinalQCApproval/QcForm.tsx';
 import AddInventoryForm from './components/Settings/InventoryManagement/AddInventoryForm.tsx';
 import InventoryForm from './components/Settings/InventoryManagement/InventoryForm.tsx';
 import Notifications from './components/Notifications/Notifications.tsx';
-import NotificationSidebar from './components/Notifications/NotificationSideBar.tsx';
+import NotificationIcon from './components/Notifications/NotificationIcon.tsx';
 import UserForm from './components/Settings/UserManagement/UserForm.tsx';
 import AddUserForm from './components/Settings/UserManagement/AddUserForm.tsx';
 
@@ -368,7 +368,7 @@ console.log("allowedRoles:", allowedRoles);
 />
 <Route
   path="/notifications-sidebar"
-  element={<NotificationSidebar isOpen={false} onClose={function (): void {
+  element={<NotificationIcon isOpen={false} onClose={function (): void {
     throw new Error('Function not implemented.');
   } } />}
 />

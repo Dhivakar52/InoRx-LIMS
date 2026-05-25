@@ -1,5 +1,5 @@
 // Notifications.jsx
-import  { useState } from "react";
+import  { useCallback, useState } from "react";
 import {
   Bell,
   Search,
@@ -8,6 +8,8 @@ import {
   CheckCircle2,
   Clock3,
 } from "lucide-react";
+import CustomPanel from "../../common/CustomPanel";
+
 
 const notificationData = [
   {
@@ -214,6 +216,21 @@ const Notifications = () => {
       item.message.toLowerCase().includes(search.toLowerCase())
   );
 
+  type PanelMode = "view" | null;
+    const [panelMode, setPanelMode] = useState<PanelMode>(null);
+    const [selectedItem, setSelectedItem] = useState<any>(null);
+
+    const handleNotificationClick = (notification: any) => {
+        setSelectedItem(notification);
+        setPanelMode("view");
+    };
+
+     const handleClosePanel = useCallback(() => {
+        setPanelMode(null);
+        setSelectedItem(null);
+      }, []);
+    
+
   return (
     <div className="min-h-screen ">
         <div className="mx-3 p-6 bg-white rounded-lg shadow-sm my-3">
@@ -243,6 +260,7 @@ const Notifications = () => {
         {filteredNotifications.map((notification) => (
           <div
             key={notification.id}
+            onClick={() => handleNotificationClick(notification)}
             className={`bg-[#F0F5FF] rounded-lg p-4 cursor-pointer hover:bg-[#E5EDFF] transition-all duration-200 border border-gray-200 shadow-sm hover:shadow-md`}>
             <div className="flex items-start justify-between gap-4">
               <div className="flex gap-4">
@@ -269,6 +287,44 @@ const Notifications = () => {
         ))}
       </div>
     </div>
+
+    <CustomPanel isOpen={panelMode === "view"} title="Notification Details" onClose={handleClosePanel} onSave={handleClosePanel} saveLabel="Close">
+            {selectedItem && (
+              <div className="space-y-4">
+                <div className="border-b pb-3">
+                  <label className="block text-sm font-medium text-gray-600">Title</label>
+                  <p className="mt-1 text-gray-900 font-semibold">{selectedItem.title}</p>
+                </div>
+                <div className="border-b pb-3">
+                  <label className="block text-sm font-medium text-gray-600">Message</label>
+                  <p className="mt-2 text-gray-700 leading-relaxed">{selectedItem.message}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="border-b pb-3">
+                    <label className="block text-sm font-medium text-gray-600">Type</label>
+                    <p className="mt-1 text-gray-900 capitalize">
+                      <span className="inline-flex items-center gap-2">
+                        {getIcon(selectedItem.type)}
+                        {selectedItem.type}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="border-b pb-3">
+                    <label className="block text-sm font-medium text-gray-600">Time</label>
+                    <p className="mt-1 text-gray-900">{selectedItem.time}</p>
+                  </div>
+                </div>
+                <div className="border-b pb-3">
+                  <label className="block text-sm font-medium text-gray-600">Status</label>
+                  <p className="mt-1 text-gray-900">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${selectedItem.unread ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}>
+                      {selectedItem.unread ? 'Unread' : 'Read'}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            )}
+          </CustomPanel>
     </div>
   );
 };
