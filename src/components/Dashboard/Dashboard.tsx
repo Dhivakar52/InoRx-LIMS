@@ -19,6 +19,8 @@ import {
   FileCheck,
   AlertTriangle,
   IndianRupee,
+  CalendarDays,
+  Search,
 } from "lucide-react";
 
 type Registration = {
@@ -32,6 +34,8 @@ type Registration = {
 export default function Dashboard() {
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
   const registrations: Registration[] = useMemo(
     () => [
@@ -180,14 +184,40 @@ export default function Dashboard() {
   return (
     <div className="p-4 bg-slate-50 min-h-screen">
       {/* Header */}
-      <div className="mb-4">
-        <h3 className="text-xl font-bold">
-          Laboratory Information Management System
-        </h3>
-        {/* <p className="text-sm text-gray-500">
-          Laboratory Information Management System
-        </p> */}
-      </div>
+      
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4 gap-3">
+  <div>
+    <h3 className="text-xl font-bold">
+      Laboratory Information Management System
+    </h3>
+  </div>
+
+ <div className="flex items-center gap-2">
+  <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm">
+    <CalendarDays className="w-4 h-4 text-gray-500" />
+
+    <input
+      type="date"
+      value={fromDate}
+      onChange={(e) => setFromDate(e.target.value)}
+      className="border border-gray-300 rounded px-2 py-1 text-sm"
+    />
+
+    <span className="text-sm text-gray-500">to</span>
+
+    <input
+      type="date"
+      value={toDate}
+      onChange={(e) => setToDate(e.target.value)}
+      className="border border-gray-300 rounded px-2 py-1 text-sm"
+    />
+  </div>
+
+  <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg shadow-sm">
+    <Search className="w-4 h-4" />
+  </button>
+</div>
+</div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
