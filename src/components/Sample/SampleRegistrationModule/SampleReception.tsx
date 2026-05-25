@@ -15,7 +15,8 @@ import ColumnToggle from "../../../common/ColumnToggle";
 import Pagination from "../../../common/Pagination";
 import { ActionMenu } from "../../../common/ActionMenu";
 import NavigateButton from "../../../common/NavigateButton";
-
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 
 type SampleReception = {
@@ -30,7 +31,8 @@ type SampleReception = {
 };
 
 const SampleReception = () => {
-  const data = useMemo<SampleReception[]>(
+  // const data = useMemo<SampleReception[]>(
+  const initialData = useMemo<SampleReception[]>(
     () => [
       {
         id: 1,
@@ -135,14 +137,15 @@ const SampleReception = () => {
     ],
     []
   );
-
+  const [data, setData] =
+  useState<SampleReception[]>(initialData);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
-
+  const navigate = useNavigate();
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -156,7 +159,58 @@ const SampleReception = () => {
 
     return () => document.removeEventListener("click", close);
   }, []);
+  // VIEW
+const handleView = (
+  item: SampleReception
+) => {
+  navigate("/sample/master/smp-add", {
+    state: {
+      mode: "view",
+      data: item,
+    },
+  });
+};
 
+// EDIT
+const handleEdit = (
+  item: SampleReception
+) => {
+  navigate("/sample/master/smp-add", {
+    state: {
+      mode: "edit",
+      data: item,
+    },
+  });
+};
+
+// DELETE
+const handleDelete = (
+  item: SampleReception
+) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: `Delete ${item.sampleId}?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      setData((prev) =>
+        prev.filter(
+          (d) => d.id !== item.id
+        )
+      );
+
+      Swal.fire(
+        "Deleted!",
+        "Sample removed successfully.",
+        "success"
+      );
+    }
+  });
+};
   const columns: ColumnDef<SampleReception>[] = useMemo(
     () => [
       {
@@ -209,9 +263,9 @@ const SampleReception = () => {
         cell: ({ row }) => (
           <ActionMenu
             item={row.original}
-            onView={(data) => console.log("View:", data)}
-            onEdit={(data) => console.log("Edit:", data)}
-            onDelete={(data) => console.log("Delete:", data)}
+            onView={handleView}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
           />
         ),
       },

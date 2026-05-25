@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
@@ -13,10 +13,67 @@ import {
 } from "../../ui/select";
 
 import FormWrapper from "../../../common/FormWrapper";
-
+import { useLocation } from "react-router-dom";
 export default function AdverseEventTrackingForm() {
   const [formData, setFormData] = useState<any>({});
+  const location = useLocation();
 
+  const mode = location.state?.mode || "add";
+
+  const initialData = location.state?.data;
+
+  const isViewMode = mode === "view";
+  useEffect(() => {
+  if (initialData) {
+    setFormData({
+      studyCode: initialData.studyCode || "",
+
+      subjectId: initialData.subject || "",
+
+      adverseEventId: initialData.ae || "",
+
+      eventCategory: "Adverse Event",
+
+      onsetDate: initialData.onsetDate || "",
+
+      resolutionDate:
+        initialData.resolutionDate || "",
+
+      eventDescription:
+        initialData.eventDescription || "",
+
+      severityLevel:
+        initialData.severity || "",
+
+      seriousEvent:
+        initialData.seriousEvent || "",
+
+      expectedEvent:
+        initialData.expectedEvent || "",
+
+      causalityAssessment:
+        initialData.causalityAssessment || "",
+
+      outcomeStatus:
+        initialData.outcomeStatus || "",
+
+      reportedBy:
+        initialData.reportedBy || "",
+
+      investigatorReviewStatus:
+        initialData.investigatorReviewStatus || "",
+
+      medicalMonitorReview:
+        initialData.medicalMonitorReview || "",
+
+      finalAssessment:
+        initialData.finalAssessment || "",
+
+      reviewComment:
+        initialData.reviewComment || "",
+    });
+  }
+}, [initialData]);
   const handleChange = (name: string, value: string) => {
     setFormData((prev: any) => ({
       ...prev,
@@ -41,7 +98,13 @@ export default function AdverseEventTrackingForm() {
 
   return (
     <FormWrapper
-      title="Adverse Event Tracking Module"
+      title={
+        mode === "view"
+          ? "View Adverse Event Tracking "
+          : mode === "edit"
+          ? "Edit Adverse Event Tracking"
+          : "Add Adverse Event Tracking"
+      }
       onSubmit={handleSubmit}
       isValid={isFormValid}>
       
@@ -50,9 +113,12 @@ export default function AdverseEventTrackingForm() {
       </div>
       <div className="space-y-2">
         <Label>Study Code *</Label>
-        <Select
+       <Select
+          disabled={isViewMode}
           value={formData.studyCode || ""}
-          onValueChange={(v) => handleChange("studyCode", v)}>
+          onValueChange={(v) =>
+            handleChange("studyCode", v)
+          }>
           <SelectTrigger className="w-full bg-white border">
             <SelectValue placeholder="Select Study Code" />
           </SelectTrigger>
@@ -65,8 +131,11 @@ export default function AdverseEventTrackingForm() {
       <div className="space-y-2">
         <Label>Subject ID *</Label>
         <Select
+          disabled={isViewMode}
           value={formData.subjectId || ""}
-          onValueChange={(v) => handleChange("subjectId", v)}>
+          onValueChange={(v) =>
+            handleChange("subjectId", v)
+          }>
           <SelectTrigger className="w-full bg-white border">
             <SelectValue placeholder="Select Subject ID" />
           </SelectTrigger>
@@ -78,42 +147,47 @@ export default function AdverseEventTrackingForm() {
       </div>
       <div className="space-y-2">
         <Label>Adverse Event ID *</Label>
-        <Input
-          disabled
-          placeholder="Auto Generated"
-          value={formData.adverseEventId || "AE-0001"}/>
+        <Input disabled value={formData.adverseEventId || ""}/>
       </div>
     <div className="space-y-2">
         <Label>Event Category</Label>
-        <Input
-          disabled
-          placeholder="Auto Generated"
-          value={formData.eventCategory || "Adverse Event"}/>
+        <Input disabled value={formData.eventCategory || ""}/>
       </div>
       <div className="space-y-2">
         <Label>Onset Date *</Label>
         <Input
           type="date"
+          disabled={isViewMode}
+          value={formData.onsetDate || ""}
           onChange={(e) =>
             handleChange("onsetDate", e.target.value)
-          } />
+          }
+        />
       </div>
       <div className="space-y-2">
         <Label>Resolution Date</Label>
         <Input
           type="date"
+          disabled={isViewMode}
+          value={formData.resolutionDate || ""}
           onChange={(e) =>
             handleChange("resolutionDate", e.target.value)
-          }/>
+          }
+        />
       </div>
       <div className="space-y-2 col-span-3">
         <Label>Event Description *</Label>
         <textarea
           rows={4}
+          disabled={isViewMode}
+          value={formData.eventDescription || ""}
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring resize-none"
           placeholder="Enter event description"
           onChange={(e) =>
-            handleChange("eventDescription", e.target.value)
+            handleChange(
+              "eventDescription",
+              e.target.value
+            )
           }/>
       </div>
       <div className="col-span-3 font-semibold text-lg mt-6 text-[#00458F] pb-2">
@@ -122,9 +196,11 @@ export default function AdverseEventTrackingForm() {
       <div className="space-y-2">
         <Label>Severity Level *</Label>
         <Select
+          disabled={isViewMode}
           value={formData.severityLevel || ""}
           onValueChange={(v) =>
-            handleChange("severityLevel", v)}>
+            handleChange("severityLevel", v)
+          }>
           <SelectTrigger className="w-full bg-white border">
             <SelectValue placeholder="Select Severity" />
           </SelectTrigger>
@@ -138,9 +214,11 @@ export default function AdverseEventTrackingForm() {
       <div className="space-y-2">
         <Label>Serious Event</Label>
         <Select
+          disabled={isViewMode}
           value={formData.seriousEvent || ""}
           onValueChange={(v) =>
-            handleChange("seriousEvent", v)}>
+            handleChange("seriousEvent", v)
+          }>
           <SelectTrigger className="w-full bg-white border">
             <SelectValue placeholder="Select Yes / No" />
           </SelectTrigger>
@@ -153,9 +231,11 @@ export default function AdverseEventTrackingForm() {
       <div className="space-y-2">
         <Label>Expected Event</Label>
         <Select
+          disabled={isViewMode}
           value={formData.expectedEvent || ""}
           onValueChange={(v) =>
-            handleChange("expectedEvent", v)}>
+            handleChange("expectedEvent", v)
+          }>
           <SelectTrigger className="w-full bg-white border">
             <SelectValue placeholder="Select Yes / No" />
           </SelectTrigger>
@@ -168,9 +248,14 @@ export default function AdverseEventTrackingForm() {
       <div className="space-y-2">
         <Label>Causality Assessment</Label>
         <Select
+          disabled={isViewMode}
           value={formData.causalityAssessment || ""}
           onValueChange={(v) =>
-            handleChange("causalityAssessment", v)}>
+            handleChange(
+              "causalityAssessment",
+              v
+            )
+          }>
           <SelectTrigger className="w-full bg-white border">
             <SelectValue placeholder="Select Assessment" />
           </SelectTrigger>
@@ -184,9 +269,11 @@ export default function AdverseEventTrackingForm() {
       <div className="space-y-2">
         <Label>Outcome Status</Label>
         <Select
+          disabled={isViewMode}
           value={formData.outcomeStatus || ""}
           onValueChange={(v) =>
-            handleChange("outcomeStatus", v)}>
+            handleChange("outcomeStatus", v)
+          }>
           <SelectTrigger className="w-full bg-white border">
             <SelectValue placeholder="Select Outcome" />
           </SelectTrigger>
@@ -205,6 +292,8 @@ export default function AdverseEventTrackingForm() {
       <div className="space-y-2">
         <Label>Reported By</Label>
         <Input
+          disabled={isViewMode}
+          value={formData.reportedBy || ""}
           onChange={(e) =>
             handleChange("reportedBy", e.target.value)
           }/>
@@ -212,9 +301,16 @@ export default function AdverseEventTrackingForm() {
       <div className="space-y-2">
         <Label>Investigator Review Status</Label>
         <Select
-          value={formData.investigatorReviewStatus || ""}
+          disabled={isViewMode}
+          value={
+            formData.investigatorReviewStatus || ""
+          }
           onValueChange={(v) =>
-            handleChange("investigatorReviewStatus", v)}>
+            handleChange(
+              "investigatorReviewStatus",
+              v
+            )
+          }>
           <SelectTrigger className="w-full bg-white border">
             <SelectValue placeholder="Select Status" />
           </SelectTrigger>
@@ -228,9 +324,14 @@ export default function AdverseEventTrackingForm() {
       <div className="space-y-2">
         <Label>Medical Monitor Review</Label>
         <Select
+          disabled={isViewMode}
           value={formData.medicalMonitorReview || ""}
           onValueChange={(v) =>
-            handleChange("medicalMonitorReview", v) }>
+            handleChange(
+              "medicalMonitorReview",
+              v
+            )
+          }>
           <SelectTrigger className="w-full bg-white border">
             <SelectValue placeholder="Select Review" />
           </SelectTrigger>
@@ -243,9 +344,11 @@ export default function AdverseEventTrackingForm() {
       <div className="space-y-2">
         <Label>Final Assessment</Label>
         <Select
+          disabled={isViewMode}
           value={formData.finalAssessment || ""}
           onValueChange={(v) =>
-            handleChange("finalAssessment", v)}>
+            handleChange("finalAssessment", v)
+          }>
           <SelectTrigger className="w-full bg-white border">
             <SelectValue placeholder="Select Assessment" />
           </SelectTrigger>
@@ -262,6 +365,8 @@ export default function AdverseEventTrackingForm() {
         <Label>Review Comment</Label>
         <textarea
           rows={4}
+          disabled={isViewMode}
+          value={formData.reviewComment || ""}
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring resize-none"
           placeholder="Enter review comments"
           onChange={(e) =>
