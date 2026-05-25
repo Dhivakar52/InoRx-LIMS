@@ -113,8 +113,8 @@ export default function Login({ setUserRole }: LoginProps) {
         // case USER_ROLES.JURY: navigate("/business-jury"); break;
         // case USER_ROLES.PRESIDENT_UNIT: navigate("/president-unit"); break;
         // case USER_ROLES.PRESIDENT_LEVEL: navigate("/president-level"); break;
-        case USER_ROLES.ADMIN: navigate("/home"); break;
-        default: navigate("/home");
+        case USER_ROLES.ADMIN: navigate("/dashboard"); break;
+        default: navigate("/dashboard");
       }
       window.location.reload();
      
@@ -328,7 +328,7 @@ const handleVerifyOtp = async () => {
     setUserRole(role_user);
 
     setTimeout(() => {
-      navigate("/home");
+      navigate("/dashboard");
       window.location.reload();
     }, 1000);
 
