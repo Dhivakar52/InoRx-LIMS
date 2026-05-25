@@ -146,7 +146,7 @@ const SampleReception = () => {
     pageSize: 10,
   });
   const navigate = useNavigate();
-  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [_openMenuId, setOpenMenuId] = useState<number | null>(null);
 
   useEffect(() => {
     const close = (e: MouseEvent) => {

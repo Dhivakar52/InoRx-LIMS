@@ -162,18 +162,14 @@ const StudyVersionTable = () => {
 
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [_openMenuId, setOpenMenuId] = useState<number | null>(null);
   
   // Panel state
   const [panelMode, setPanelMode] = useState<PanelMode>(null);
   const [selectedItem, setSelectedItem] = useState<StudyVersion | null>(null);
   const [editFormData, setEditFormData] = useState<Partial<StudyVersion>>({});
 
-  // ✅ ACTION HANDLERS
-  const handleToggleMenu = useCallback((id: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setOpenMenuId((prev) => (prev === id ? null : id));
-  }, []);
+  
 
   const handleView = useCallback((item: StudyVersion) => {
     console.log("View:", item);

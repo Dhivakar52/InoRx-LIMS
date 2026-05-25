@@ -104,7 +104,7 @@ const GenerateReport = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [panelMode, setPanelMode] = useState<"view" | "edit">("view");
 
-  const [selectedRow, setSelectedRow] = useState<Report | null>(null);
+  const [_selectedRow, setSelectedRow] = useState<Report | null>(null);
   const [editRow, setEditRow] = useState<Report | null>(null);
 
   const columns: ColumnDef<Report>[] = useMemo(

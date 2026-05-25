@@ -160,7 +160,7 @@ const AmendmentModule = () => {
   const [data, setData] = useState<StudyVersion[]>(initialData);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [_openMenuId, setOpenMenuId] = useState<number | null>(null);
   
   // Panel state
   const [panelMode, setPanelMode] = useState<PanelMode>(null);
