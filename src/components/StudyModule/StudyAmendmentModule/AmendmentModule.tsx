@@ -322,7 +322,7 @@ const AmendmentModule = () => {
           />
           <ColumnToggle table={table} />
           <NavigateButton
-            label="Add Study"
+            label="Add Amendment"
             path="/study/amendment/new-add"
             icon={<Plus size={18} />}
           />
