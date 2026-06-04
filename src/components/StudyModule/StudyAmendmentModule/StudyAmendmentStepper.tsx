@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -27,7 +26,7 @@ const steps = [
   "Review & Approval",
 ];
 
-export default function AmendmentForm() {
+export default function StudyAmendmentStepper() {
   const [currentStep, setCurrentStep] =
     useState(0);
 
@@ -68,7 +67,6 @@ export default function AmendmentForm() {
     effectiveDate: "",
 
     migrationPolicy: "",
-    consentDocument: null,
     cohorts: [
   {
     id: 1,
@@ -184,49 +182,34 @@ mfaVerified:false
   });
 
   const validateMetadata = () => {
-  const newErrors: any = {};
+    const validationErrors: any = {};
 
-  if (!form.amendmentCode?.trim()) {
-    newErrors.amendmentCode = "Amendment Code is required";
-  }
+    if (!form.amendmentCode) {
+      validationErrors.amendmentCode =
+        "Required";
+    }
 
-  if (!form.reasonForChange?.trim()) {
-    newErrors.reasonForChange = "Reason For Change is required";
-  }
+    if (
+      form.reasonForChange.trim()
+        .length < 20
+    ) {
+      validationErrors.reasonForChange =
+        "Minimum 20 characters required";
+    }
 
-  if (!form.effectiveDate) {
-    newErrors.effectiveDate = "Effective Date is required";
-  }
+    if (!form.effectiveDate) {
+      validationErrors.effectiveDate =
+        "Required";
+    }
 
-  if (!form.consentDocument) {
-    newErrors.consentDocument =
-      "Consent Document is required";
-  } else {
-    const allowedTypes = [
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
+    setErrors(validationErrors);
 
-    const file = form.consentDocument as File | null;
-
-    if (file) {
-      if (!allowedTypes.includes(file.type)) {
-        newErrors.consentDocument =
-          "Only PDF, DOC, DOCX files are allowed";
-      }
-
-      if (file.size > 10 * 1024 * 1024) {
-        newErrors.consentDocument =
-          "File size should not exceed 10 MB";
-      }
-}
-  }
-
-  setErrors(newErrors);
-
-  return Object.keys(newErrors).length === 0;
-};
+    return (
+      Object.keys(validationErrors)
+        .length === 0
+    );
+  };
+  
   const nextStep = () => {
     if (currentStep === 1) {
       if (!validateMetadata()) {
@@ -404,17 +387,12 @@ async()=>{
 
             Previous
           </button>
+
           <button
             onClick={nextStep}
             className="px-5 py-2 rounded-md bg-[#00458F] text-white">
 
-            Save Draft
-          </button>
-          <button
-            onClick={nextStep}
-            className="px-5 py-2 rounded-md bg-[#00458F] text-white">
-
-            Submit
+            Next
           </button>
         </div>
       </div>
