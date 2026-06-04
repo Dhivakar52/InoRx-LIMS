@@ -54,7 +54,20 @@ const isActive = status === "active";
     croName: "",
     principalInvestigator: "",
     studyCoordinator: "",
+    
   });
+
+  const [visitTemplates, setVisitTemplates] = useState([
+  {
+    visitName: "",
+    visitType: "",
+    targetDay: "",
+    windowMinus: "",
+    windowPlus: "",
+    specimens: [],
+    testCodes: [],
+  },
+]);
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({
@@ -107,6 +120,27 @@ const handleSubmit = async () => {
   } catch (error) {
     console.error(error);
   }
+};
+
+const addVisitRow = () => {
+  setVisitTemplates([
+    ...visitTemplates,
+    {
+      visitName: "",
+      visitType: "",
+      targetDay: "",
+      windowMinus: "",
+      windowPlus: "",
+      specimens: [],
+      testCodes: [],
+    },
+  ]);
+};
+
+const removeVisitRow = (index:any) => {
+  setVisitTemplates(
+    visitTemplates.filter((_, i) => i !== index)
+  );
 };
 
   return (
@@ -193,7 +227,7 @@ const handleSubmit = async () => {
       disabled={isViewMode}
     />
   </div>
-  
+
   <div className="space-y-2">
     <Label>Study Phase <span className="text-red-500">*</span></Label>
     <Select
@@ -518,6 +552,127 @@ const handleSubmit = async () => {
       </SelectItem>
     </SelectContent>
   </Select>
+</div>
+
+<div className="col-span-3 font-semibold text-lg mt-4 text-[#00458F] pb-2">
+  Visit Templates
+</div>
+
+<div className="col-span-3 overflow-x-auto">
+  <table className="w-full border">
+    <thead>
+      <tr className="bg-gray-100">
+        <th className="border p-2">Visit Name *</th>
+        <th className="border p-2">Visit Type</th>
+        <th className="border p-2">Target Day *</th>
+        <th className="border p-2">Window - *</th>
+        <th className="border p-2">Window + *</th>
+        <th className="border p-2">Required Specimen *</th>
+        <th className="border p-2">Test Codes *</th>
+        <th className="border p-2">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {visitTemplates.map((_visit: any, index: number) => (
+        <tr key={index}>
+          <td className="border p-2">
+            <Input />
+          </td>
+
+          <td className="border p-2">
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Screening">
+                  Screening
+                </SelectItem>
+                <SelectItem value="Baseline">
+                  Baseline
+                </SelectItem>
+                <SelectItem value="Treatment">
+                  Treatment
+                </SelectItem>
+                <SelectItem value="FollowUp">
+                  Follow-Up
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </td>
+
+          <td className="border p-2">
+            <Input type="number" />
+          </td>
+
+          <td className="border p-2">
+            <Input type="number" min="0" />
+          </td>
+
+          <td className="border p-2">
+            <Input type="number" min="0" />
+          </td>
+
+          <td className="border p-2">
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Specimen" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Blood">
+                  Blood
+                </SelectItem>
+                <SelectItem value="Urine">
+                  Urine
+                </SelectItem>
+                <SelectItem value="Plasma">
+                  Plasma
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </td>
+
+          <td className="border p-2">
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Test Code" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="CBC">
+                  CBC
+                </SelectItem>
+                <SelectItem value="LFT">
+                  LFT
+                </SelectItem>
+                <SelectItem value="PK">
+                  PK
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </td>
+
+          <td className="border p-2">
+            <button
+              type="button"
+              onClick={() => removeVisitRow(index)}
+              className="text-red-600"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <button
+    type="button"
+    onClick={addVisitRow}
+    className="mt-3 px-3 py-2 bg-blue-600 text-white rounded"
+  >
+    + Add Visit
+  </button>
 </div>
 </FormWrapper>
   );
