@@ -183,6 +183,17 @@ const handleSubmit = async () => {
     </Select>
   </div>
 
+<div className="space-y-2 col-span-3">
+    <Label>Study Description <span className="text-red-500">*</span></Label>
+    <textarea      className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      value={formData.studyDescription}
+      onChange={(e) =>
+        handleChange("studyDescription", e.target.value)
+      }
+      disabled={isViewMode}
+    />
+  </div>
+  
   <div className="space-y-2">
     <Label>Study Phase <span className="text-red-500">*</span></Label>
     <Select
@@ -291,16 +302,6 @@ const handleSubmit = async () => {
     </Select>
   </div>
   
-  <div className="space-y-2 col-span-3">
-    <Label>Study Description <span className="text-red-500">*</span></Label>
-    <textarea      className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-      value={formData.studyDescription}
-      onChange={(e) =>
-        handleChange("studyDescription", e.target.value)
-      }
-      disabled={isViewMode}
-    />
-  </div>
   <div className="space-y-2">
     <Label>Start Date <span className="text-red-500">*</span></Label>
     <Input
