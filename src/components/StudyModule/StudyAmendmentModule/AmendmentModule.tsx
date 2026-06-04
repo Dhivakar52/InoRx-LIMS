@@ -160,7 +160,7 @@ const AmendmentModule = () => {
   const [data, setData] = useState<StudyVersion[]>(initialData);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [_openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   
   // Panel state
   const [panelMode, setPanelMode] = useState<PanelMode>(null);
@@ -274,12 +274,14 @@ const AmendmentModule = () => {
               onView={handleView}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              openMenuId={openMenuId}
+               setOpenMenuId={setOpenMenuId}
             />
           );
         },
       },
     ],
-    [handleView, handleEdit, handleDelete]
+    [handleView, handleEdit, handleDelete, openMenuId]
   );
 
   // ✅ PAGINATION

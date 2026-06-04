@@ -128,8 +128,8 @@ const FinalQCApprovalTable = () => {
     });
     return initialLogs;
   });
-
-  const [globalFilter, setGlobalFilter] = useState("");
+    const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+    const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
   const [panelMode, setPanelMode] = useState<PanelMode>(null);
   const [selectedItem, setSelectedItem] = useState<QCApproval | null>(null);
@@ -251,8 +251,8 @@ const FinalQCApprovalTable = () => {
     { accessorKey: "observedValue", header: "Observed" },
     { accessorKey: "deviation", header: "Deviation", cell: ({ getValue }) => { const value = getValue<string>(); return <span className={getDeviationStatus(value)}>{value}</span>; } },
     { accessorKey: "status", header: "Status", cell: ({ getValue }) => { const value = getValue<QCApproval["status"]>(); return <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(value)}`}>{value}</span>; } },
-    { id: "actions", header: "Actions", cell: ({ row }) => (<ActionMenu<QCApproval> item={row.original} onView={handleView} onEdit={handleEdit} onDelete={handleDelete} onAuditLog={handleAuditLog} />) },
-  ], [handleView, handleEdit, handleDelete, handleAuditLog]);
+    { id: "actions", header: "Actions", cell: ({ row }) => (<ActionMenu<QCApproval> item={row.original} onView={handleView} onEdit={handleEdit} onDelete={handleDelete} onAuditLog={handleAuditLog} openMenuId={openMenuId} setOpenMenuId={setOpenMenuId} />) },
+  ], [handleView, handleEdit, handleDelete, handleAuditLog, openMenuId]);
 
   const table = useReactTable({
     data, columns, state: { globalFilter, columnVisibility, pagination },

@@ -287,6 +287,8 @@ const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
              onEdit={handleEdit}
              onDelete={handleDelete}
              onAuditLog={handleAuditLog}
+              openMenuId={openMenuId}
+              setOpenMenuId={setOpenMenuId}
            />
          ),
        },

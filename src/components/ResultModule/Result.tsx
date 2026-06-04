@@ -121,7 +121,8 @@ const Result = () => {
   const [data, setData] = useState<TestOrder[]>(initialData);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
-  
+    const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+
   // Panel state
   const [panelMode, setPanelMode] = useState<PanelMode>(null);
   const [selectedItem, setSelectedItem] = useState<TestOrder | null>(null);
@@ -251,12 +252,14 @@ const Result = () => {
               onView={handleView}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              openMenuId={openMenuId}
+              setOpenMenuId={setOpenMenuId}
             />
           );
         },
       },
     ],
-    [handleView, handleEdit, handleDelete]
+    [handleView, handleEdit, handleDelete, openMenuId]
   );
 
   // ✅ Pagination state

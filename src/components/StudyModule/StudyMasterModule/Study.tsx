@@ -1,5 +1,5 @@
-import { useMemo, useState, useEffect, useCallback } from "react";
-import Swal from "sweetalert2";
+import { useMemo, useState, useEffect } from "react";
+// import Swal from "sweetalert2";
 import {
   useReactTable,
   getCoreRowModel,
@@ -16,9 +16,10 @@ import ColumnToggle from "../../../common/ColumnToggle";
 import { ActionMenu } from "../../../common/ActionMenu";
 import NavigateButton from "../../../common/NavigateButton";
 import { Plus } from "lucide-react";
-import CustomPanel from "../../../common/CustomPanel";
+import { useNavigate } from "react-router-dom";
+// import axios from "axios";
 
-// ✅ TYPE
+// TYPE
 type StudyVersion = {
   id: number;
   study: string;
@@ -28,204 +29,244 @@ type StudyVersion = {
   newStatus: string;
 };
 
+
 // Panel modes
-type PanelMode = "view" | "edit" | null;
+// type PanelMode = "view" | "edit" | null;
 
 const StudyVersionTable = () => {
-  const [data, setData] = useState<StudyVersion[]>(
-    useMemo(
-      () => [
-        {
-          id: 1,
-          study: "ST001",
-          code: "v1.0",
-          oldVersion: "v0.9",
-          versionDate: "01-Jan-26",
-          newStatus: "Active",
-        },
-        {
-          id: 2,
-          study: "ST002",
-          code: "v1.1",
-          oldVersion: "v1.0",
-          versionDate: "03-Jan-26",
-          newStatus: "Draft",
-        },
-        {
-          id: 3,
-          study: "ST003",
-          code: "v2.0",
-          oldVersion: "v1.5",
-          versionDate: "05-Jan-26",
-          newStatus: "Active",
-        },
-        {
-          id: 4,
-          study: "ST004",
-          code: "v2.1",
-          oldVersion: "v2.0",
-          versionDate: "07-Jan-26",
-          newStatus: "Inactive",
-        },
-        {
-          id: 5,
-          study: "ST005",
-          code: "v3.0",
-          oldVersion: "v2.5",
-          versionDate: "09-Jan-26",
-          newStatus: "Draft",
-        },
-        {
-          id: 6,
-          study: "ST006",
-          code: "v3.1",
-          oldVersion: "v3.0",
-          versionDate: "11-Jan-26",
-          newStatus: "Active",
-        },
-        {
-          id: 7,
-          study: "ST007",
-          code: "v4.0",
-          oldVersion: "v3.5",
-          versionDate: "13-Jan-26",
-          newStatus: "Draft",
-        },
-        {
-          id: 8,
-          study: "ST008",
-          code: "v4.1",
-          oldVersion: "v4.0",
-          versionDate: "15-Jan-26",
-          newStatus: "Active",
-        },
-        {
-          id: 9,
-          study: "ST009",
-          code: "v5.0",
-          oldVersion: "v4.5",
-          versionDate: "17-Jan-26",
-          newStatus: "Inactive",
-        },
-        {
-          id: 10,
-          study: "ST010",
-          code: "v5.1",
-          oldVersion: "v5.0",
-          versionDate: "19-Jan-26",
-          newStatus: "Active",
-        },
-        {
-          id: 11,
-          study: "ST011",
-          code: "v6.0",
-          oldVersion: "v5.5",
-          versionDate: "21-Jan-26",
-          newStatus: "Draft",
-        },
-        {
-          id: 12,
-          study: "ST012",
-          code: "v6.1",
-          oldVersion: "v6.0",
-          versionDate: "23-Jan-26",
-          newStatus: "Active",
-        },
-        {
-          id: 13,
-          study: "ST013",
-          code: "v7.0",
-          oldVersion: "v6.5",
-          versionDate: "25-Jan-26",
-          newStatus: "Inactive",
-        },
-        {
-          id: 14,
-          study: "ST014",
-          code: "v7.1",
-          oldVersion: "v7.0",
-          versionDate: "27-Jan-26",
-          newStatus: "Draft",
-        },
-        {
-          id: 15,
-          study: "ST015",
-          code: "v8.0",
-          oldVersion: "v7.5",
-          versionDate: "29-Jan-26",
-          newStatus: "Active",
-        },
-      ],
-      []
-    )
-  );
+ const [data, _setData] = useState<StudyVersion[]>(
+  useMemo(
+    () => [
+      {
+        id: 1,
+        study: "ST-2026-001",
+        code: "PROT-ONC-101",
+        oldVersion: "Interventional",
+        versionDate: "ABC Pharma",
+        newStatus: "Draft",
+      },
+      {
+        id: 2,
+        study: "ST-2026-002",
+        code: "PROT-CARD-205",
+        oldVersion: "Observational",
+        versionDate: "MedLife Sciences",
+        newStatus: "Active",
+      },
+      {
+        id: 3,
+        study: "ST-2026-003",
+        code: "PROT-DIAB-310",
+        oldVersion: "Interventional",
+        versionDate: "Global Biotech",
+        newStatus: "Approved",
+      },
+      {
+        id: 4,
+        study: "ST-2026-004",
+        code: "PROT-NEUR-115",
+        oldVersion: "Observational",
+        versionDate: "Nova Healthcare",
+        newStatus: "Draft",
+      },
+      {
+        id: 5,
+        study: "ST-2026-005",
+        code: "PROT-ONC-450",
+        oldVersion: "Interventional",
+        versionDate: "Zenith Pharma",
+        newStatus: "Active",
+      },
+      {
+        id: 6,
+        study: "ST-2026-006",
+        code: "PROT-RESP-122",
+        oldVersion: "Observational",
+        versionDate: "BioCore Labs",
+        newStatus: "Submitted",
+      },
+      {
+        id: 7,
+        study: "ST-2026-007",
+        code: "PROT-GAST-330",
+        oldVersion: "Interventional",
+        versionDate: "WellCare Pharma",
+        newStatus: "Draft",
+      },
+      {
+        id: 8,
+        study: "ST-2026-008",
+        code: "PROT-ORTH-411",
+        oldVersion: "Observational",
+        versionDate: "Apex Therapeutics",
+        newStatus: "Active",
+      },
+      {
+        id: 9,
+        study: "ST-2026-009",
+        code: "PROT-CARD-522",
+        oldVersion: "Interventional",
+        versionDate: "LifeGen Research",
+        newStatus: "Draft",
+      },
+      {
+        id: 10,
+        study: "ST-2026-010",
+        code: "PROT-ONC-611",
+        oldVersion: "Observational",
+        versionDate: "CureNova Pharma",
+        newStatus: "Active",
+      },
+      {
+        id: 11,
+        study: "ST-2026-011",
+        code: "PROT-IMM-720",
+        oldVersion: "Interventional",
+        versionDate: "Trinity Biotech",
+        newStatus: "Draft",
+      },
+      {
+        id: 12,
+        study: "ST-2026-012",
+        code: "PROT-NEPH-144",
+        oldVersion: "Observational",
+        versionDate: "FutureMed Labs",
+        newStatus: "Active",
+      },
+      {
+        id: 13,
+        study: "ST-2026-013",
+        code: "PROT-ENDO-299",
+        oldVersion: "Interventional",
+        versionDate: "Prime Clinicals",
+        newStatus: "Active",
+      },
+      {
+        id: 14,
+        study: "ST-2026-014",
+        code: "PROT-DERM-366",
+        oldVersion: "Observational",
+        versionDate: "Alpha Bio Research",
+        newStatus: "Draft",
+      },
+      {
+        id: 15,
+        study: "ST-2026-015",
+        code: "PROT-HEMO-488",
+        oldVersion: "Interventional",
+        versionDate: "GreenCross Pharma",
+        newStatus: "Active",
+      },
+    ],
+    []
+  )
+);
 
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [_openMenuId, setOpenMenuId] = useState<number | null>(null);
-  
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const statusColors: Record<string, string> = {
+  Draft: "bg-gray-100 text-gray-700",
+  Submitted: "bg-blue-100 text-blue-700",
+  Returned: "bg-orange-100 text-orange-700",
+  Approved: "bg-emerald-100 text-emerald-700",
+  Active: "bg-green-100 text-green-700",
+  Suspended: "bg-red-100 text-red-700",
+  Closed: "bg-slate-200 text-slate-700",
+};
   // Panel state
-  const [panelMode, setPanelMode] = useState<PanelMode>(null);
-  const [selectedItem, setSelectedItem] = useState<StudyVersion | null>(null);
-  const [editFormData, setEditFormData] = useState<Partial<StudyVersion>>({});
+  // const [panelMode, setPanelMode] = useState<PanelMode>(null);
+  // const [selectedItem, setSelectedItem] = useState<StudyVersion | null>(null);
+  // const [editFormData, setEditFormData] = useState<Partial<StudyVersion>>({});
+  const navigate = useNavigate();
+//   const handleView = useCallback((item: StudyVersion) => {
+//     console.log("View:", item);
+//     setSelectedItem(item);
+//     setPanelMode("view");
+//     setOpenMenuId(null);
+//   }, []);
 
-  
+//   const handleEdit = useCallback((item: StudyVersion) => {
+//     console.log("Edit:", item);
+//     setSelectedItem(item);
+//     setEditFormData({ ...item });
+//     setPanelMode("edit");
+//     setOpenMenuId(null);
+//   }, []);
 
-  const handleView = useCallback((item: StudyVersion) => {
-    console.log("View:", item);
-    setSelectedItem(item);
-    setPanelMode("view");
-    setOpenMenuId(null);
-  }, []);
+//  const handleDelete = useCallback((item: StudyVersion) => {
+//   Swal.fire({
+//     title: "Are you sure?",
+//     text: `Delete ${item.study}?`,
+//     icon: "warning",
+//     showCancelButton: true,
+//     confirmButtonColor: "#d33",
+//     cancelButtonColor: "#3085d6",
+//     confirmButtonText: "Yes, delete it!",
+//   }).then((result) => {
+//     if (result.isConfirmed) {
+//       setData((prev) => prev.filter((d) => d.id !== item.id));
 
-  const handleEdit = useCallback((item: StudyVersion) => {
-    console.log("Edit:", item);
-    setSelectedItem(item);
-    setEditFormData({ ...item });
-    setPanelMode("edit");
-    setOpenMenuId(null);
-  }, []);
+//       Swal.fire("Deleted!", "Study has been removed.", "success");
+//     }
+//   });
+// }, []);
 
- const handleDelete = useCallback((item: StudyVersion) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: `Delete ${item.study}?`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Yes, delete it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      setData((prev) => prev.filter((d) => d.id !== item.id));
-
-      Swal.fire("Deleted!", "Study has been removed.", "success");
-    }
-  });
-}, []);
-
-  // ✅ Save edited data
-  const handleSaveEdit = useCallback(() => {
-    if (selectedItem && editFormData) {
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.id === selectedItem.id ? { ...item, ...editFormData } : item
-        )
-      );
-      console.log("Saved:", { ...selectedItem, ...editFormData });
-      setPanelMode(null);
-      setSelectedItem(null);
-      setEditFormData({});
-    }
-  }, [selectedItem, editFormData]);
+  // // ✅ Save edited data
+  // const handleSaveEdit = useCallback(() => {
+  //   if (selectedItem && editFormData) {
+  //     setData((prevData) =>
+  //       prevData.map((item) =>
+  //         item.id === selectedItem.id ? { ...item, ...editFormData } : item
+  //       )
+  //     );
+  //     console.log("Saved:", { ...selectedItem, ...editFormData });
+  //     setPanelMode(null);
+  //     setSelectedItem(null);
+  //     setEditFormData({});
+  //   }
+  // }, [selectedItem, editFormData]);
 
   // ✅ Close panel
-  const handleClosePanel = useCallback(() => {
-    setPanelMode(null);
-    setSelectedItem(null);
-    setEditFormData({});
-  }, []);
+  // const handleClosePanel = useCallback(() => {
+  //   setPanelMode(null);
+  //   setSelectedItem(null);
+  //   setEditFormData({});
+  // }, []);
 
+//   const handleSubmitStudy = async (item: StudyVersion) => {
+//   Swal.fire({
+//     title: "Are you sure you want to submit the study?",
+//     text: "Once submitted, it cannot be edited.",
+//     icon: "question",
+//     showCancelButton: true,
+//   }).then(async (result) => {
+//     if (result.isConfirmed) {
+//       await axios.put(
+//         `/api/study/${item.id}/submit`
+//       );
+
+//       //loadData();
+//     }
+//   });
+// };
+
+//   const handleApproveStudy = async (item: StudyVersion) => {
+//   Swal.fire({
+//     title: "Are you sure you want to change the status of the study to Active?",
+//     // text: "Once approved, it cannot be edited.",
+//     icon: "question",
+//     showCancelButton: true,
+//   }).then(async (result) => {
+//     if (result.isConfirmed) {
+//       await axios.put(
+//         `/api/study/${item.id}/approve`
+//       );
+
+//       //loadData();
+//     }
+//   });
+// };
   // ✅ CLOSE DROPDOWN WHEN CLICKING OUTSIDE
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -242,27 +283,24 @@ const StudyVersionTable = () => {
   // ✅ COLUMNS (memoized)
   const columns: ColumnDef<StudyVersion>[] = useMemo(
     () => [
-      { accessorKey: "study", header: "Study" },
-      { accessorKey: "code", header: "Code" },
-      { accessorKey: "oldVersion", header: "Old Version" },
-      { accessorKey: "versionDate", header: "Version Date" },
+      { accessorKey: "study", header: "StudyCode" },
+      { accessorKey: "code", header: "protocol number" },
+      { accessorKey: "oldVersion", header: "studyType" },
+      { accessorKey: "versionDate", header: "Sponsor Name" },
       {
         accessorKey: "newStatus",
-        header: "Status",
+        header: "Study Status",
         cell: ({ getValue }) => {
           const value = getValue<string>();
           return (
-            <span
-              className={`px-2 py-1 rounded text-xs font-medium ${
-                value === "Active"
-                  ? "bg-green-100 text-green-700"
-                  : value === "Draft"
-                  ? "bg-yellow-100 text-yellow-700"
-                  : "bg-red-100 text-red-700"
-              }`}
-            >
-              {value}
-            </span>
+                <span
+                  className={`px-2 py-1 rounded text-xs font-medium ${
+                    statusColors[value] ||
+                    "bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  {value}
+                </span>
           );
         },
       },
@@ -274,15 +312,16 @@ const StudyVersionTable = () => {
           return (
             <ActionMenu
               item={item}
-              onView={handleView}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
+               openMenuId={openMenuId}
+               setOpenMenuId={setOpenMenuId}
+              onView={() => navigate(`/study/master/new-add/${item.id}?mode=view&status=${item.newStatus.toLowerCase()}`)}
+              onEdit={() => navigate(`/study/master/new-add/${item.id}?mode=edit&status=${item.newStatus.toLowerCase()}`)}
             />
           );
         },
       },
     ],
-    [handleView, handleEdit, handleDelete]
+    [navigate,openMenuId]
   );
 
   // ✅ PAGINATION
@@ -311,7 +350,7 @@ const StudyVersionTable = () => {
   });
 
   // ✅ Panel title based on mode
-  const panelTitle = panelMode === "view" ? "View Study Version" : "Edit Study Version";
+  // const panelTitle = panelMode === "view" ? "View Study Version" : "Edit Study Version";
 
   return (
     <div className="p-6">
@@ -341,147 +380,7 @@ const StudyVersionTable = () => {
         />
       </div>
 
-      {/* CUSTOM PANEL - View Mode */}
-      <CustomPanel
-        isOpen={panelMode === "view"}
-        title={panelTitle}
-        onClose={handleClosePanel}
-        onSave={() => {}} // No save action for view mode, or you can make it close
-        saveLabel="Close"
-      >
-        {selectedItem && (
-         <div className="grid grid-cols-2 gap-4">
-  
-  <div className="border-b pb-3">
-    <label className="block text-sm font-medium text-gray-600">Study</label>
-    <p className="mt-1 text-gray-900">{selectedItem.study}</p>
-  </div>
-
-  <div className="border-b pb-3">
-    <label className="block text-sm font-medium text-gray-600">Code</label>
-    <p className="mt-1 text-gray-900">{selectedItem.code}</p>
-  </div>
-
-  <div className="border-b pb-3">
-    <label className="block text-sm font-medium text-gray-600">Old Version</label>
-    <p className="mt-1 text-gray-900">{selectedItem.oldVersion}</p>
-  </div>
-
-  <div className="border-b pb-3">
-    <label className="block text-sm font-medium text-gray-600">Version Date</label>
-    <p className="mt-1 text-gray-900">{selectedItem.versionDate}</p>
-  </div>
-
-  <div className="border-b pb-3 col-span-2">
-    <label className="block text-sm font-medium text-gray-600">Status</label>
-    <p className="mt-1">
-      <span
-        className={`px-2 py-1 rounded text-xs font-medium ${
-          selectedItem.newStatus === "Active"
-            ? "bg-green-100 text-green-700"
-            : selectedItem.newStatus === "Draft"
-            ? "bg-yellow-100 text-yellow-700"
-            : "bg-gray-100 text-gray-700"
-        }`}
-      >
-        {selectedItem.newStatus}
-      </span>
-    </p>
-  </div>
-
-</div>
-        )}
-      </CustomPanel>
-
-      {/* CUSTOM PANEL - Edit Mode */}
-      <CustomPanel
-        isOpen={panelMode === "edit"}
-        title={panelTitle}
-        onClose={handleClosePanel}
-        onSave={handleSaveEdit}
-        saveLabel="Save Changes"
-      >
-        {selectedItem && (
-          <div className="grid grid-cols-2 gap-4">
-
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      Study
-    </label>
-    <input
-      type="text"
-      value={editFormData.study || ""}
-      onChange={(e) =>
-        setEditFormData({ ...editFormData, study: e.target.value })
-      }
-      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    />
-  </div>
-
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      Code
-    </label>
-    <input
-      type="text"
-      value={editFormData.code || ""}
-      onChange={(e) =>
-        setEditFormData({ ...editFormData, code: e.target.value })
-      }
-      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    />
-  </div>
-
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      Old Version
-    </label>
-    <input
-      type="text"
-      value={editFormData.oldVersion || ""}
-      onChange={(e) =>
-        setEditFormData({ ...editFormData, oldVersion: e.target.value })
-      }
-      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    />
-  </div>
-
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      Version Date
-    </label>
-    <input
-      type="text"
-      value={editFormData.versionDate || ""}
-      onChange={(e) =>
-        setEditFormData({ ...editFormData, versionDate: e.target.value })
-      }
-      placeholder="DD-MMM-YY"
-      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    />
-  </div>
-
-  {/* Full width field */}
-  <div className="col-span-2">
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      Status
-    </label>
-    <select
-      value={editFormData.newStatus || ""}
-      onChange={(e) =>
-        setEditFormData({ ...editFormData, newStatus: e.target.value })
-      }
-      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    >
-      <option value="Active">Active</option>
-      <option value="Draft">Draft</option>
-      <option value="Inactive">Inactive</option>
-    </select>
-  </div>
-
-</div>
-        )}
-      </CustomPanel>
+      
     </div>
   );
 };

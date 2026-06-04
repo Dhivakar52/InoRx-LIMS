@@ -41,6 +41,7 @@ const RegistrationTable = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 const [panelMode, setPanelMode] = useState<"view" | "edit">("view");
 const [selectedRow, setSelectedRow] = useState<Registration | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
  const data = useMemo<Registration[]>(
   () => [
@@ -227,12 +228,14 @@ const [selectedRow, setSelectedRow] = useState<Registration | null>(null);
             }}
               onAuditLog={(data) => console.log("Audit Log:", data)}
               onDelete={(data) => console.log("Delete:", data)}
+              openMenuId={openMenuId}
+              setOpenMenuId={setOpenMenuId}
             />
           );
         },
       },
     ],
-    []
+    [openMenuId]
   );
 
   const table = useReactTable({

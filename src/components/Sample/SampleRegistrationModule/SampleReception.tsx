@@ -146,7 +146,7 @@ const SampleReception = () => {
     pageSize: 10,
   });
   const navigate = useNavigate();
-  const [_openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
   useEffect(() => {
     const close = (e: MouseEvent) => {
@@ -266,11 +266,13 @@ const handleDelete = (
             onView={handleView}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            openMenuId={openMenuId}
+            setOpenMenuId={setOpenMenuId}
           />
         ),
       },
     ],
-    []
+    [openMenuId]
   );
 
   const table = useReactTable({

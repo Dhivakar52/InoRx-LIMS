@@ -10,13 +10,16 @@ export default function FormWrapper({
   children,
   onSubmit,
   onCancel,
+  saveText,
+  cancelText,
   columns = 3,
 }: {
-  title: string;
+  title?: string;
   children: ReactNode;
-  onSubmit: () => void;
+  onSubmit?: () => void;
   onCancel?: () => void;
-  isValid?: boolean;
+  saveText?: string;
+  cancelText?: string;
   columns?: number;
 }) {
   return (
@@ -42,6 +45,8 @@ export default function FormWrapper({
           <FormActions
             onSave={onSubmit}
             onCancel={onCancel || (() => console.log("Cancelled"))}
+            saveText={saveText}
+            cancelText={cancelText}
           />
         </div>
       </div>

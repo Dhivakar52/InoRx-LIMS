@@ -282,6 +282,8 @@ const InventoryForm = () => {
             onEdit={handleEdit}
             onDelete={handleDelete}
             onAuditLog={handleAuditLog}
+            openMenuId={openMenuId}
+            setOpenMenuId={setOpenMenuId} 
           />
         ),
       },

@@ -1,8 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import {useEffect, useRef } from "react";
 import { Menu } from "lucide-react";
 
 type ActionMenuProps<T> = {
   item: T;
+  openMenuId: number | null;
+  setOpenMenuId: React.Dispatch<
+    React.SetStateAction<number | null>
+  >;
   onView?: (item: T) => void;
   onEdit?: (item: T) => void;
   onDelete?: (item: T) => void;
@@ -15,9 +19,9 @@ export function ActionMenu<T>({
   onEdit,
   onDelete,
   onAuditLog,
+  openMenuId,
+  setOpenMenuId
 }: ActionMenuProps<T>) {
-  const [open, setOpen] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -25,34 +29,35 @@ export function ActionMenu<T>({
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (!menuRef.current?.contains(e.target as Node)) {
-        setOpen(false);
+        setOpenMenuId(null);
       }
     };
 
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
+  }, [setOpenMenuId]);
 
-  const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+  const handleToggle = (
+  e: React.MouseEvent<HTMLButtonElement>
+) => {
+  e.stopPropagation();
 
-    const rect = e.currentTarget.getBoundingClientRect();
+  const rowId = (item as any).id;
 
-    setPosition({
-      top: rect.bottom + 5,
-      left: rect.right - 140,
-    });
+  setOpenMenuId(
+    openMenuId === rowId ? null : rowId
+  );
+};
 
-    setOpen((prev) => !prev);
-  };
 
   const handleAction = (cb?: (item: T) => void) => {
     cb?.(item);
-    setOpen(false);
+    setOpenMenuId(null);
   };
 
   return (
-    <div ref={menuRef} className="menu-container">
+    <div ref={menuRef} className="menu-container relative inline-block"
+>
       {/* BUTTON */}
       <button
         onClick={handleToggle}
@@ -62,14 +67,9 @@ export function ActionMenu<T>({
       </button>
 
       {/* DROPDOWN */}
-      {open && (
-        <div
-          className="fixed w-36 bg-white border border-blue-500/20 rounded-lg shadow-lg z-[9999]"
-          style={{
-            top: position.top,
-            left: position.left,
-          }}
-        >
+      {openMenuId === (item as any).id && (
+        <div className="absolute right-0 top-full mt-1 w-36 bg-white border border-blue-500/20 rounded-lg shadow-lg z-50"
+          >
           {onView && (
             <button
               onClick={() => handleAction(onView)}
@@ -103,7 +103,7 @@ export function ActionMenu<T>({
             >
               Delete
             </button>
-          )}
+          )}  
         </div>
       )}
     </div>

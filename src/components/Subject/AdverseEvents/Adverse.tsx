@@ -437,7 +437,7 @@ const initialData = useMemo<AE[]>(
 
   const navigate = useNavigate();
 
-  const [_openMenuId, setOpenMenuId] =
+  const [openMenuId, setOpenMenuId] =
     useState<number | null>(null);
 
   useEffect(() => {
@@ -560,6 +560,8 @@ const initialData = useMemo<AE[]>(
             onView={handleView}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            openMenuId={openMenuId}
+            setOpenMenuId={setOpenMenuId}
           />
         ),
       },

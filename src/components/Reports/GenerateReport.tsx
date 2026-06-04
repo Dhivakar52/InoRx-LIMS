@@ -103,6 +103,7 @@ const GenerateReport = () => {
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [panelMode, setPanelMode] = useState<"view" | "edit">("view");
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
   const [_selectedRow, setSelectedRow] = useState<Report | null>(null);
   const [editRow, setEditRow] = useState<Report | null>(null);
@@ -156,12 +157,14 @@ const GenerateReport = () => {
               }}
               onAuditLog={(data) => console.log("Audit Log:", data)}
               onDelete={(data) => console.log("Delete:", data)}
+              openMenuId={openMenuId}
+              setOpenMenuId={setOpenMenuId}
             />
           );
         },
       },
     ],
-    []
+    [openMenuId]
   );
 
   const table = useReactTable({

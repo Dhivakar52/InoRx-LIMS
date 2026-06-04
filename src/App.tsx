@@ -354,6 +354,10 @@ console.log("allowedRoles:", allowedRoles);
   element={<StudyMasterStepper />}
 />
 <Route
+  path="/study/master/new-add/:id"
+  element={<StudyMasterStepper />}
+/>
+<Route
   path="/study/amendment/new-add"
   element={<AmendmentForm />}
 />

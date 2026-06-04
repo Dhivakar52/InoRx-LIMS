@@ -75,6 +75,8 @@ const headerTitleMap: Record<string, string> = {
       // Study Module Routes
       case "/study/master":
         return "Study Master";
+      case "/study/master/new-add":
+        return "Add New Study";
       case "/study/amendment":
         return "Study Amendment";
       case "/study/site":
@@ -168,6 +170,20 @@ const headerTitleMap: Record<string, string> = {
         return "Sample Registration Module"
       default:
         // Check for dynamic routes with parameters
+        const mode = new URLSearchParams(location.search).get("mode");
+
+          if (
+            location.pathname.startsWith("/study/master/new-add/")
+          ) {
+            if (mode === "view") {
+              return "View Study";
+            }
+
+            if (mode === "edit") {
+              return "Edit Study";
+            }
+          }
+
         if (location.pathname.match(/\/my-nominations\/\d+/)) {
           return "Nomination Details";
         }

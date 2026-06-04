@@ -144,7 +144,7 @@ const SiteModule = () => {
   const [data, setData] = useState<SiteRegistration[]>(initialData);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [_openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [loading, _setLoading] = useState(false);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
   
@@ -282,12 +282,14 @@ const SiteModule = () => {
               onView={handleView}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              openMenuId={openMenuId}
+              setOpenMenuId={setOpenMenuId}
             />
           );
         },
       },
     ],
-    [handleView, handleEdit, handleDelete]
+    [handleView, handleEdit, handleDelete, openMenuId]
   );
 
   // ✅ PAGINATION

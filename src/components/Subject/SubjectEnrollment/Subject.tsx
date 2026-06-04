@@ -58,7 +58,7 @@ const Subject = () => {
   });
 
   // close menu (optional keep)
-  const [_openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
   useEffect(() => {
     const close = (e: MouseEvent) => {
@@ -113,11 +113,13 @@ const Subject = () => {
             onView={(data) => console.log("View:", data)}
             onEdit={(data) => console.log("Edit:", data)}
             onDelete={(data) => console.log("Delete:", data)}
+            openMenuId={openMenuId}
+            setOpenMenuId={setOpenMenuId}
           />
         ),
       },
     ],
-    []
+    [openMenuId]
   );
 
   const table = useReactTable({

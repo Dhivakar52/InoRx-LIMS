@@ -125,6 +125,7 @@ const VisitTable = () => {
   const [selectedAuditLogs, setSelectedAuditLogs] = useState<AuditLog[]>([]);
   const [editFormData, setEditFormData] = useState<Partial<Visit>>({});
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
   const addAuditLog = useCallback((
     action: AuditLog["action"],
@@ -253,11 +254,13 @@ const VisitTable = () => {
             onEdit={handleEdit}
             onDelete={handleDelete}
             onAuditLog={handleAuditLog}
+            openMenuId={openMenuId}
+            setOpenMenuId={setOpenMenuId}
           />
         ),
       },
     ],
-    [handleView, handleEdit, handleDelete, handleAuditLog]
+    [handleView, handleEdit, handleDelete, handleAuditLog, openMenuId]
   );
 
   const table = useReactTable({
