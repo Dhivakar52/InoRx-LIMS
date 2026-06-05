@@ -56,7 +56,7 @@ export default function AmendmentMetadata({
 
         <div>
           <label className="text-sm font-medium">
-            Amendment Code *
+            Amendment Code <span className="text-red-500">*</span>
           </label>
 
           <input
@@ -79,7 +79,7 @@ export default function AmendmentMetadata({
 
         <div>
           <label className="text-sm font-medium">
-            Amendment Title *
+            Amendment Title <span className="text-red-500">*</span>
           </label>
 
           <input
@@ -92,6 +92,11 @@ export default function AmendmentMetadata({
             }
             className="w-full border rounded-md h-10 px-3 mt-1"
           />
+          {errors.amendmentTitle && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.amendmentTitle}
+            </p>
+          )}
         </div>
 
         <div>
@@ -108,7 +113,7 @@ export default function AmendmentMetadata({
 
         <div>
           <label className="text-sm font-medium">
-            Reason Category *
+            Reason Category <span className="text-red-500">*</span>
           </label>
 
           <select
@@ -133,11 +138,16 @@ export default function AmendmentMetadata({
               </option>
             ))}
           </select>
+          {errors.amendmentReasonCategory && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.amendmentReasonCategory}
+            </p>
+          )}
         </div>
 
         <div>
           <label className="text-sm font-medium">
-            Release Date *
+            Release Date <span className="text-red-500">*</span>
           </label>
 
           <input
@@ -151,11 +161,16 @@ export default function AmendmentMetadata({
             }
             className="w-full border rounded-md h-10 px-3 mt-1"
           />
+          {errors.releaseDate && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.releaseDate}
+            </p>
+          )}
         </div>
 
         <div>
           <label className="text-sm font-medium">
-            Effective Date *
+            Effective Date  <span className="text-red-500">*</span>
           </label>
 
           <input
@@ -247,7 +262,7 @@ export default function AmendmentMetadata({
 
         <div className="col-span-1">
           <label className="text-sm font-medium">
-            Reason For Change *
+            Reason For Change <span className="text-red-500">*</span>
           </label>
 
           <textarea
@@ -271,7 +286,7 @@ export default function AmendmentMetadata({
 
         <div className="col-span-1">
           <label className="text-sm font-medium">
-            Root Cause *
+            Root Cause <span className="text-red-500">*</span>
           </label>
 
           <textarea
@@ -285,10 +300,15 @@ export default function AmendmentMetadata({
             }
             className="w-full border rounded-md px-3 py-2 mt-1"
           />
+          {errors.rootCause && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.rootCause}
+            </p>
+          )}
         </div>
         <div className="col-span-1">
           <Label className="text-sm font-medium block mb-1">
-            Consent Document *
+            Consent Document 
           </Label>
 
           <div className="relative">
@@ -350,11 +370,11 @@ export default function AmendmentMetadata({
             </label>
           </div>
 
-          {errors.consentDocument && (
+          {/* {errors.consentDocument && (
             <p className="text-red-500 text-xs mt-1">
               {errors.consentDocument}
             </p>
-          )}
+          )} */}
         </div>
       </div>
     </div>
