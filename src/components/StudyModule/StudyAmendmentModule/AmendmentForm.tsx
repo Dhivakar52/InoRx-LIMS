@@ -189,6 +189,15 @@ mfaVerified:false
   if (!form.amendmentCode?.trim()) {
     newErrors.amendmentCode = "Amendment Code is required";
   }
+   if (!form.amendmentTitle?.trim()) {
+    newErrors.amendmentTitle = "Amendment Title is required";
+  }
+  if (!form.amendmentReasonCategory?.trim()) {
+    newErrors.amendmentReasonCategory = "Reason Category is required";
+  }
+  if (!form.releaseDate) {
+    newErrors.releaseDate = "Release Date is required";
+  }
 
   if (!form.reasonForChange?.trim()) {
     newErrors.reasonForChange = "Reason For Change is required";
@@ -197,31 +206,33 @@ mfaVerified:false
   if (!form.effectiveDate) {
     newErrors.effectiveDate = "Effective Date is required";
   }
-
-  if (!form.consentDocument) {
-    newErrors.consentDocument =
-      "Consent Document is required";
-  } else {
-    const allowedTypes = [
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
-
-    const file = form.consentDocument as File | null;
-
-    if (file) {
-      if (!allowedTypes.includes(file.type)) {
-        newErrors.consentDocument =
-          "Only PDF, DOC, DOCX files are allowed";
-      }
-
-      if (file.size > 10 * 1024 * 1024) {
-        newErrors.consentDocument =
-          "File size should not exceed 10 MB";
-      }
-}
+if (!form.rootCause?.trim()) {
+    newErrors.rootCause = "Root Cause is required";
   }
+//   if (!form.consentDocument) {
+//     newErrors.consentDocument =
+//       "Consent Document is required";
+//   } else {
+//     const allowedTypes = [
+//       "application/pdf",
+//       "application/msword",
+//       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+//     ];
+
+//     const file = form.consentDocument as File | null;
+
+//     if (file) {
+//       if (!allowedTypes.includes(file.type)) {
+//         newErrors.consentDocument =
+//           "Only PDF, DOC, DOCX files are allowed";
+//       }
+
+//       if (file.size > 10 * 1024 * 1024) {
+//         newErrors.consentDocument =
+//           "File size should not exceed 10 MB";
+//       }
+// }
+//   }
 
   setErrors(newErrors);
 
@@ -287,54 +298,46 @@ async()=>{
       case 0:
         return (
           <ActiveStudySummary
-            form={form}
-            onInitiateAmendment={() =>
-              setCurrentStep(1)
-            }
+            {...({ form, onInitiateAmendment: () => setCurrentStep(1) } as any)}
           />
         );
 
       case 1:
         return (
           <AmendmentMetadata
-            form={form}
-            setForm={setForm}
-            errors={errors}
+            {...({ form, setForm, errors } as any)}
           />
         );
-       case 2:
+         case 2:
         return (
-            <ConfigurationTabs
-            form={form}
-            setForm={setForm}
-            />
+          <ConfigurationTabs
+          {...({ form, setForm } as any)}
+          />
         );
       case 3:
         return (
         <DeltaReport
-            form={form}
+            {...({ form } as any)}
         />
         );
       case 4:
         return (
           <SubjectMigration
-              form={form}
-              setForm={setForm}
+              {...({ form, setForm } as any)}
           />
         );
 
         case 5:
         return (
           <SiteActivation
-              form={form}
-              setForm={setForm}
+              {...({ form, setForm } as any)}
           />
         );
 
         case 6:
         return (
           <KitReconciliation
-              form={form}
+              {...({ form } as any)}
           />
         );
       default:
@@ -395,28 +398,33 @@ async()=>{
         </div>
 
         {renderStep()}
-
-        <div className="flex justify-between mt-8">
+        <div className="flex justify-between items-center mt-8">
           <button
             onClick={prevStep}
             disabled={currentStep === 0}
-            className="px-5 py-2 rounded-md bg-gray-100">
-
+            className="px-5 py-2 rounded-md bg-gray-100"
+          >
             Previous
           </button>
-          <button
-            onClick={nextStep}
-            className="px-5 py-2 rounded-md bg-[#00458F] text-white">
 
-            Save Draft
-          </button>
-          <button
-            onClick={nextStep}
-            className="px-5 py-2 rounded-md bg-[#00458F] text-white">
+          <div className="flex gap-3">
+            <button
+              onClick={nextStep}
+              className="px-5 py-2 rounded-md bg-gray-500 text-white"
+            >
+              Save Draft
+            </button>
 
-            Submit
-          </button>
+            <button
+              onClick={nextStep}
+              className="px-5 py-2 rounded-md bg-[#00458F] text-white">
+
+              Submit
+            </button>
+          </div>
         </div>
+
+       
       </div>
     </div>
   );
