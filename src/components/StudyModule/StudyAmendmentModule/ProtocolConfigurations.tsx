@@ -4,17 +4,16 @@ import { useState } from "react";
 import {
   Plus,
   Trash2,
-  FilePenLine,
 } from "lucide-react";
 
 export default function ProtocolConfigurations() {
-  const [arms, setArms] = useState([
+  const [arms] = useState([
     { code: "ARM-A", name: "Cohort A", target: 120 },
     { code: "ARM-B", name: "Cohort B", target: 180 },
     { code: "ARM-C", name: "Cohort C", target: 150 },
   ]);
 
-  const [visits, setVisits] = useState([
+  const [visits] = useState([
     {
       name: "Screening",
       day: "Day -14 to -1",

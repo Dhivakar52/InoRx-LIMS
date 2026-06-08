@@ -57,20 +57,8 @@ const isViewMode = mode === "view";  const [formData, setFormData] = useState<an
     console.log("Subject Enrollment Data 👉", formData);
   };
 
-  const requiredFields = [
-    "studyCode",
-    "subjectId",
-    "dob",
-    "gender",
-    "arm",
-    "enrollmentStatus",
-    "consentVersion",
-    "consentTimestamp",
-    "consentTakenBy",
-    "eligibilityValidated",
-  ];
 
-  const isFormValid = requiredFields.every((f) => formData[f]);
+ 
 
   return (
 
@@ -87,7 +75,6 @@ const isViewMode = mode === "view";  const [formData, setFormData] = useState<an
             : "Add Subject Enrollment"
         }
         onSubmit={handleSubmit}
-        isValid={isFormValid}
         // hideSubmit={isViewMode}
         >
       <div className="col-span-3 font-semibold text-lg mt-2 text-[#00458F] pb-2">

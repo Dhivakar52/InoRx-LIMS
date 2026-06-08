@@ -2,7 +2,6 @@
 
 import {
   Plus,
-  Pencil,
   Trash2,
 } from "lucide-react";
 

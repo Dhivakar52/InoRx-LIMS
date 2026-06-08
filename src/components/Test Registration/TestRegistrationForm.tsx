@@ -29,24 +29,12 @@ export default function TestRegistrationForm() {
     console.log("Test Registration Data 👉", formData);
   };
 
-  const requiredFields = [
-    "studyCode",
-    "subjectId",
-    "visitName",
-    "testName",
-    "scheduledDate",
-    "status",
-  ];
 
-  const isFormValid = requiredFields.every(
-    (field) => formData[field]
-  );
 
   return (
     <FormWrapper
       title="Test Registration Form"
       onSubmit={handleSubmit}
-      isValid={isFormValid}
     >
       {/* Study Code */}
       <div className="space-y-2">

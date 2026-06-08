@@ -89,9 +89,9 @@ export default function DeltaReport() {
       </div>
 
       {/* Footer Note */}
-      <div className="text-xs text-gray-500 border-t pt-3 mt-2">
+      {/* <div className="text-xs text-gray-500 border-t pt-3 mt-2">
         Delta comparison shows configuration differences between Version 1.0 (Active) and Version 2.0 (Draft).
-      </div>
+      </div> */}
     </div>
   );
 }

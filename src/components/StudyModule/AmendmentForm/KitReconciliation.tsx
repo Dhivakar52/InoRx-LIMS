@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileSpreadsheet, Printer, AlertTriangle, Trash2, FileText } from "lucide-react";
+import { Printer, Trash2, FileText } from "lucide-react";
 
 interface ObsoleteKit {
   id: string;
@@ -14,7 +14,7 @@ interface ObsoleteKit {
 }
 
 export default function KitReconciliation() {
-  const [obsoleteKits, setObsoleteKits] = useState<ObsoleteKit[]>([
+  const [obsoleteKits] = useState<ObsoleteKit[]>([
     {
       id: "1",
       kitBatchId: "KIT-BATCH-104A",
@@ -44,7 +44,7 @@ export default function KitReconciliation() {
     },
   ]);
 
-  const [showPrintDialog, setShowPrintDialog] = useState(false);
+  const [] = useState(false);
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -143,26 +143,6 @@ export default function KitReconciliation() {
     }
   };
 
-  const handleExport = () => {
-    const headers = ["Kit Batch ID", "Site Location", "Visit Target", "Deprecated Specimen Tube", "Action Required", "Status"];
-    const csvData = obsoleteKits.map(kit => [
-      kit.kitBatchId,
-      kit.siteLocation,
-      kit.visitTarget,
-      kit.deprecatedSpecimenTube,
-      kit.actionRequired,
-      kit.status
-    ]);
-    
-    const csvContent = [headers, ...csvData].map(row => row.join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "obsolete_kits_report.csv";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
 
   const stats = {
     total: obsoleteKits.length,
@@ -210,10 +190,9 @@ export default function KitReconciliation() {
           </button> */}
         </div>
       </div>
-
       {/* Warning Banner */}
-      <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg flex items-center justify-between">
-        {/* <div className="flex items-center gap-3">
+      {/* <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg flex items-center justify-between">
+        <div className="flex items-center gap-3">
           <AlertTriangle className="text-yellow-600" size={24} />
           <div>
             <p className="text-yellow-800 font-medium">
@@ -223,13 +202,13 @@ export default function KitReconciliation() {
               These kits cannot be used for the amended protocol. Please take appropriate action for each batch.
             </p>
           </div>
-        </div> */}
+        </div>
         <div className="flex gap-2">
           <span className="text-sm font-medium text-yellow-800">
             {stats.pendingReturn} Pending • {stats.quarantined} Quarantined • {stats.reconciled} Reconciled
           </span>
         </div>
-      </div>
+      </div> */}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-4 gap-4">

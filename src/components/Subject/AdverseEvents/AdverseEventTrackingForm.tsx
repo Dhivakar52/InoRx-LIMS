@@ -85,16 +85,16 @@ export default function AdverseEventTrackingForm() {
     console.log("Adverse Event Data 👉", formData);
   };
 
-  const requiredFields = [
-    "studyCode",
-    "subjectId",
-    "adverseEventId",
-    "eventDescription",
-    "onsetDate",
-    "severityLevel",
-  ];
+  // const requiredFields = [
+  //   "studyCode",
+  //   "subjectId",
+  //   "adverseEventId",
+  //   "eventDescription",
+  //   "onsetDate",
+  //   "severityLevel",
+  // ];
 
-  const isFormValid = requiredFields.every((f) => formData[f]);
+  // const isFormValid = requiredFields.every((f) => formData[f]);
 
   return (
     <FormWrapper
@@ -105,8 +105,7 @@ export default function AdverseEventTrackingForm() {
           ? "Edit Adverse Event Tracking"
           : "Add Adverse Event Tracking"
       }
-      onSubmit={handleSubmit}
-      isValid={isFormValid}>
+      onSubmit={handleSubmit}>
       
       <div className="col-span-3 font-semibold text-lg mt-2 text-[#00458F] pb-2">
         Event Information

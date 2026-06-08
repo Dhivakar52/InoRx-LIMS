@@ -15,6 +15,7 @@ import {
 } from "../../ui/select";
 import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
 import axios from "axios";
+import { Textarea } from "../../ui/textarea";
 
 
 export default function StudyMasterStepper() {
@@ -515,6 +516,10 @@ const removeVisitRow = (index:any) => {
     </SelectContent>
   </Select>
 </div>
+  <div className="space-y-2">
+    <Label>Principal Investigator Address</Label>
+    <Textarea disabled={isViewMode} />
+  </div>
   <div className="space-y-2">
     <Label>Study Director</Label>
     <Input disabled={isViewMode} />

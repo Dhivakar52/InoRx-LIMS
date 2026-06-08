@@ -9,10 +9,7 @@ import DeltaReport from "../AmendmentForm/DeltaReport";
 import SubjectMigration from "../AmendmentForm/SubjectMigration";
 import SiteActivation from "../AmendmentForm/SiteActivation";
 import KitReconciliation from "../AmendmentForm/KitReconciliation";
-import {
-  validateBeforeSubmit
-} from "../../validation/useAmendmentValidation";
-import { calculateStatus } from "../../../dataTypes/AmendmentStatusEngine";
+
 
 const steps = [
   "Study Summary",
@@ -224,41 +221,6 @@ mfaVerified:false
       )
     );
   };
-  const handleSubmit=
-async()=>{
-
- const validation=
- validateBeforeSubmit(
-  form
- );
-
- if(
-  !validation.isValid
- ){
-   alert(
-    validation.errors.join(
-      "\n"
-    )
-   );
-   return;
- }
-
- const payload={
-   ...form,
-   currentStatus:
-   calculateStatus(
-     form
-   )
- };
-
-//  await submitAmendment(
-//   payload
-//  );
-
- alert(
-  "Study Amendment Submitted Successfully"
- );
-};
   const prevStep = () => {
     setCurrentStep((prev) =>
       Math.max(prev - 1, 0)
@@ -295,29 +257,29 @@ async()=>{
       case 3:
         return (
         <DeltaReport
-            form={form}
+            // form={form}
         />
         );
       case 4:
         return (
           <SubjectMigration
-              form={form}
-              setForm={setForm}
+              // form={form}
+              // setForm={setForm}
           />
         );
 
         case 5:
         return (
           <SiteActivation
-              form={form}
-              setForm={setForm}
+              // form={form}
+              // setForm={setForm}
           />
         );
 
         case 6:
         return (
           <KitReconciliation
-              form={form}
+              // form={form}
           />
         );
       default:

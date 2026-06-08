@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@base-ui/react";
+// import { Input } from "@base-ui/react";
 import { Label } from "../../ui/label";
 
 interface Props {
@@ -32,13 +32,6 @@ export default function AmendmentMetadata({
     "Typographical/Administrative Correction",
     "Endpoint/Test Panel Selection Update",
   ];
-  const handleFileChange = (
-  e: React.ChangeEvent<HTMLInputElement>
-) => {
-  const file = e.target.files?.[0] || null;
-
-  updateField("consentDocument", file);
-};
   return (
     <div className="space-y-6">
       <div className="border-b pb-4">

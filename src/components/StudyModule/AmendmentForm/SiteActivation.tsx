@@ -82,54 +82,7 @@ export default function SiteActivation() {
     return "⚠️";
   };
 
-  const getActionButton = (status: string, rowIndex: number) => {
-    if (status === "Activated") {
-      return (
-        <button className="bg-green-600 text-white px-3 py-1 rounded-md text-sm flex items-center gap-1">
-          ✅ Deploy Version
-        </button>
-      );
-    }
-    if (status === "Approved (Pending Activation)") {
-      return (
-        <button 
-          onClick={() => updateRow(rowIndex, "siteStatus", "Activated")}
-          className="bg-[#00458F] text-white px-3 py-1 rounded-md text-sm flex items-center gap-1"
-        >
-          ✅Deploy Version
-        </button>
-      );
-    }
-    if (status === "Pending IRB Details") {
-      return (
-        <button className="bg-yellow-600 text-white px-3 py-1 rounded-md text-sm flex items-center gap-1">
-          📋 Log IRB
-        </button>
-      );
-    }
-    return null;
-  };
 
-  const exportMatrix = () => {
-    const headers = ["Site Name", "Principal Investigator", "Local IRB Approval Number", "Local IRB Approval Date", "Effective Date", "Site Status"];
-    const csvData = sites.map(site => [
-      site.siteName,
-      site.principalInvestigator,
-      site.localIrbApprovalNumber,
-      site.localIrbApprovalDate,
-      site.effectiveDate,
-      site.siteStatus
-    ]);
-    
-    const csvContent = [headers, ...csvData].map(row => row.join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "site_activation_matrix.csv";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
 
   const stats = {
     total: sites.length,
@@ -209,7 +162,7 @@ export default function SiteActivation() {
             </tr>
           </thead>
           <tbody>
-            {filteredSites.map((row, index) => {
+            {filteredSites.map((row) => {
               const originalIndex = sites.findIndex(s => s.siteId === row.siteId);
               return (
                 <tr key={row.siteId} className="border-t hover:bg-gray-50">
@@ -259,8 +212,50 @@ export default function SiteActivation() {
                       </select>
                     </div>
                   </td>
-                  <td className="p-3">
+                  {/* <td className="p-3">
                     {getActionButton(row.siteStatus, originalIndex)}
+                  </td> */}
+                   <td className="p-3">
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={row.siteStatus === "Activated"}
+                        onChange={(e) =>
+                          updateRow(
+                            originalIndex,
+                            "siteStatus",
+                            e.target.checked
+                              ? "Activated"
+                              : "Approved (Pending Activation)"
+                          )
+                        }
+                      />
+                      <div
+                        className="
+                          w-8 h-4
+                          bg-gray-300
+                          rounded-full
+                          peer
+                          peer-checked:bg-green-500
+                          transition-colors
+
+                          after:content-['']
+                          after:absolute
+                          after:top-[2px]
+                          after:left-[2px]
+                          after:bg-white
+                          after:rounded-full
+                          after:h-3
+                          after:w-3
+                          after:transition-transform
+
+                          peer-checked:after:translate-x-4
+                        "
+                      />
+
+                    </label>
                   </td>
                 </tr>
               );

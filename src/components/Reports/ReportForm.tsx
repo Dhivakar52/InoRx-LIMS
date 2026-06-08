@@ -31,7 +31,6 @@ export default function ReportForm() {
     <FormWrapper
       title="Sample Tracking Report"
       onSubmit={handleSubmit}
-      isValid={true}
     >
       {/* Study Code */}
       <div className="space-y-2">

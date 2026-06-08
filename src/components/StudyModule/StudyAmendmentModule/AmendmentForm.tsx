@@ -10,10 +10,7 @@ import DeltaReport from "../AmendmentForm/DeltaReport";
 import SubjectMigration from "../AmendmentForm/SubjectMigration";
 import SiteActivation from "../AmendmentForm/SiteActivation";
 import KitReconciliation from "../AmendmentForm/KitReconciliation";
-import {
-  validateBeforeSubmit
-} from "../../validation/useAmendmentValidation";
-import { calculateStatus } from "../../../dataTypes/AmendmentStatusEngine";
+
 
 const steps = [
   "Study Summary",
@@ -252,41 +249,6 @@ if (!form.rootCause?.trim()) {
       )
     );
   };
-  const handleSubmit=
-async()=>{
-
- const validation=
- validateBeforeSubmit(
-  form
- );
-
- if(
-  !validation.isValid
- ){
-   alert(
-    validation.errors.join(
-      "\n"
-    )
-   );
-   return;
- }
-
- const payload={
-   ...form,
-   currentStatus:
-   calculateStatus(
-     form
-   )
- };
-
-//  await submitAmendment(
-//   payload
-//  );
-
- alert(
-  "Study Amendment Submitted Successfully"
- );
-};
   const prevStep = () => {
     setCurrentStep((prev) =>
       Math.max(prev - 1, 0)
