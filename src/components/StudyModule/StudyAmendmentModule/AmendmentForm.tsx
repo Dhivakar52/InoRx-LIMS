@@ -235,24 +235,62 @@ if (!form.rootCause?.trim()) {
 
   return Object.keys(newErrors).length === 0;
 };
+const validateCurrentStep = () => {
+  switch (currentStep) {
+    case 1:
+      return validateMetadata();
+
+    // case 4:
+    //   return validateMigration();
+
+    // case 5:
+    //   return validateSites(form.siteActivations);
+
+    default:
+      return true;
+  }
+};
   const nextStep = () => {
-    if (currentStep === 1) {
-      if (!validateMetadata()) {
-        return;
-      }
-    }
+    const isValid = validateCurrentStep();
+
+    if (!isValid) return;
 
     setCurrentStep((prev) =>
-      Math.min(
-        prev + 1,
-        steps.length - 1
-      )
+      Math.min(prev + 1, steps.length - 1)
     );
   };
+  // const nextStep = () => {
+  //   if (currentStep === 1) {
+  //     if (!validateMetadata()) {
+  //       return;
+  //     }
+  //   }
+
+  //   setCurrentStep((prev) =>
+  //     Math.min(
+  //       prev + 1,
+  //       steps.length - 1
+  //     )
+  //   );
+  // };
   const prevStep = () => {
     setCurrentStep((prev) =>
       Math.max(prev - 1, 0)
     );
+  };
+  const handleStepClick = (targetStep: number) => {
+
+    if (targetStep <= currentStep) {
+      setCurrentStep(targetStep);
+      return;
+    }
+
+    const isValid =
+      validateCurrentStep();
+
+    if (!isValid) return;
+
+    setCurrentStep(targetStep);
   };
 
   const renderStep = () => {
@@ -316,11 +354,16 @@ if (!form.rootCause?.trim()) {
       <div className="bg-white rounded-xl shadow-md p-6">
 
         <div className="flex items-center justify-between mb-8 overflow-x-auto">
-          {steps.map(
-            (step, index) => (
-              <div
+          {/* {steps.map(
+            (step, index) => ( */}
+            {steps.map((step, index) => (
+            <div
+              key={step}
+              className="flex items-center w-full cursor-pointer"
+              onClick={() => handleStepClick(index)}>
+              {/* <div
                 key={step}
-                className="flex items-center w-full">
+                className="flex items-center w-full"> */}
 
                 <div className="flex flex-col items-center">
 

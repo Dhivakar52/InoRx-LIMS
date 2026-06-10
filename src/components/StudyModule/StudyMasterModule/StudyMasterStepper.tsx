@@ -35,30 +35,34 @@ const isApproved = status === "approved";
 const isSubmitted = status === "submitted";
 const isActive = status === "active";
 
-// const isAddMode = !mode;
-  const [formData, setFormData] = useState({
-    studyCode: "Auto Generated",
-    studyTitle: "",
-    studyDescription: "",
-    studyType: "",
-    studyPhase: "",
-    studyStatus: "Draft",
-    startDate: "",
-    endDate: "",
 
-    protocolNumber: "",
-    protocolVersion: "",
-    protocolDate: "",
-    amendmentAllowed: "Yes",
+const initialFormData = {
+  studyCode: "Auto Generated",
+  studyTitle: "",
+  studyDescription: "",
+  studyType: "",
+  studyPhase: "",
+  studyStatus: "Draft",
+  startDate: "",
+  endDate: "",
 
-    sponsorName: "",
-    croName: "",
-    principalInvestigator: "",
-    studyCoordinator: "",
-    
-  });
+  protocolNumber: "",
+  protocolTitle: "",
+  protocolVersion: "",
+  protocolDate: "",
+  irbApprovalDate: "",
+  amendmentAllowed: "Yes",
 
-  const [visitTemplates, setVisitTemplates] = useState([
+  sponsorName: "",
+  croName: "",
+  principalInvestigator: "",
+  studyCoordinator: "",
+
+  country: "",
+  region: "",
+  classification: "",
+};
+const initialVisitTemplate = [
   {
     visitName: "",
     visitType: "",
@@ -68,8 +72,28 @@ const isActive = status === "active";
     specimens: [],
     testCodes: [],
   },
-]);
+];
 
+const initialCohort = [
+  {
+    cohortCode: "",
+    cohortName: "",
+    armAssociation: "",
+    description: "",
+    eligibilityCriteria: "",
+    enrollmentTarget: "",
+    doseLevel: "",
+    status: "Active",
+  },
+];
+
+const [formData, setFormData] = useState(initialFormData);
+
+const [visitTemplates, setVisitTemplates] = useState(initialVisitTemplate);
+
+const [cohorts, setCohorts] = useState(initialCohort);
+
+const [errors, setErrors] = useState<any>({});
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -93,6 +117,73 @@ const isActive = status === "active";
   }
 };
 
+const studyMetaData = () => {
+    const validationErrors: any = {};
+
+   if (!formData.studyCode)
+    validationErrors.studyCode =
+      "Study Code Required";
+
+  if (!formData.studyTitle)
+    validationErrors.studyTitle =
+      "Study Title Required";
+
+  if (!formData.studyType)
+    validationErrors.studyType =
+      "Study Type Required";
+
+    if (!formData.studyPhase)
+    validationErrors.studyPhase =
+      "Study Phase Required";
+
+  if (
+    !formData.studyDescription ||
+    formData.studyDescription.trim().length < 20
+  ) {
+    validationErrors.studyDescription =
+      "Study Description required";
+  }
+
+
+  if (
+    formData.startDate &&
+    new Date(formData.endDate) <
+      new Date(formData.startDate)
+  ) {
+    validationErrors.startDate =
+      "Start Date must be before End Date";
+  }
+  if (!formData.sponsorName)
+    validationErrors.sponsorName =
+      "Sponsor Name Required";
+  if (!formData.principalInvestigator)
+    validationErrors.principalInvestigator =
+      "Principal Investigator Required";
+  if (!formData.studyCoordinator)
+    validationErrors.studyCoordinator =
+      "Study Coordinator Required";
+  if(!formData.protocolNumber)
+    validationErrors.protocolNumber =
+      "Protocol Number Required";
+  if(!formData.protocolTitle)
+    validationErrors.protocolTitle =
+      "Protocol Title Required";
+  if(!formData.protocolVersion)
+    validationErrors.protocolVersion =
+      "Protocol Version Required";
+  if(!formData.protocolDate)
+    validationErrors.protocolDate =
+      "Protocol Date Required";
+    if(!formData.irbApprovalDate)
+    validationErrors.irbApprovalDate =
+      "IRB Approval Date Required";
+    setErrors(validationErrors);
+
+    return (
+      Object.keys(validationErrors)
+        .length === 0
+    );
+  };
 useEffect(() => {
   if (!id) return;
 
@@ -100,6 +191,8 @@ useEffect(() => {
 }, [id]);
 const handleSubmit = async () => {
   try {
+    debugger;
+    studyMetaData();
     const payload = {
       ...formData,
       studyStatus: "Draft",
@@ -144,12 +237,54 @@ const removeVisitRow = (index:any) => {
   );
 };
 
+const addCohortRow = () => {
+  setCohorts([
+    ...cohorts,
+    {
+      cohortCode: "",
+      cohortName: "",
+      armAssociation: "",
+      description: "",
+      eligibilityCriteria: "",
+      enrollmentTarget: "",
+      doseLevel: "",
+      status: "Active",
+    },
+  ]);
+};
+
+const removeCohortRow = (index: number) => {
+  setCohorts(cohorts.filter((_, i) => i !== index));
+};
+
+const updateCohort = (
+  index: number,
+  field: string,
+  value: string
+) => {
+  const updated = [...cohorts];
+  updated[index] = {
+    ...updated[index],
+    [field]: value,
+  };
+  setCohorts(updated);
+};
+
+const handleClearForm = () => {
+  setFormData(initialFormData);
+
+  setAmendmentAllowed("Yes");
+
+  setVisitTemplates(initialVisitTemplate);
+
+  setCohorts(initialCohort);
+};
   return (
     <FormWrapper
   onSubmit={handleSubmit}
-  onCancel={() => window.history.back()}
+  onCancel={handleClearForm}
   saveText= {isDraft ? "Submit Study":(isSubmitted? "Approve Study": (isApproved? "Activate Study" :(isActive ? "Suspend Study" : (isEditMode ? "Update Study" : "Save as Draft"))))}
-  cancelText={isSubmitted ? "Return Study" : (isActive ? "Close Study" : "Cancel")}
+  cancelText={isSubmitted ? "Return Study" : (isActive ? "Close Study" : "Clear")}
 >
   {/* Study Information Header */}
   <div className="col-span-3 font-semibold text-lg mt-2 text-[#00458F] pb-2">
@@ -158,7 +293,14 @@ const removeVisitRow = (index:any) => {
 
   <div className="space-y-2">
     <Label>Study Code <span className="text-red-500">*</span></Label>
-    <Input value={formData.studyCode} disabled={isViewMode} />
+    <Input value={formData.studyCode}
+     readOnly
+     disabled={isViewMode} />
+     {errors.studyCode && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.studyCode}
+            </p>
+          )}
   </div>
 
   <div className="space-y-2">
@@ -170,6 +312,11 @@ const removeVisitRow = (index:any) => {
       }
       disabled={isViewMode}
     />
+    {errors.studyTitle && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.studyTitle}
+            </p>
+          )}
   </div>
 
   <div className="space-y-2">
@@ -216,6 +363,11 @@ const removeVisitRow = (index:any) => {
         </SelectItem>
       </SelectContent>
     </Select>
+    {errors.studyType && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.studyType}
+            </p>
+          )}
   </div>
 
 <div className="space-y-2 col-span-3">
@@ -227,6 +379,11 @@ const removeVisitRow = (index:any) => {
       }
       disabled={isViewMode}
     />
+    {errors.studyDescription && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.studyDescription}
+            </p>
+          )}
   </div>
 
   <div className="space-y-2">
@@ -261,6 +418,11 @@ const removeVisitRow = (index:any) => {
         </SelectItem>
       </SelectContent>
     </Select>
+    {errors.studyPhase && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.studyPhase}
+            </p>
+          )}
   </div>
       
 
@@ -300,13 +462,10 @@ const removeVisitRow = (index:any) => {
         <SelectItem value="India">
           India
         </SelectItem>
-        <SelectItem value="United States">
-          United States
+        <SelectItem value="USA">
+          USA
         </SelectItem>
-        <SelectItem value="Japan">
-          Japan
-        </SelectItem>
-        
+              
       </SelectContent>
     </Select>
   </div>
@@ -347,6 +506,11 @@ const removeVisitRow = (index:any) => {
       }
       disabled={isViewMode}
     />
+    {errors.startDate && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.startDate}
+            </p>
+          )}
   </div>
 
   <div className="space-y-2">
@@ -359,6 +523,11 @@ const removeVisitRow = (index:any) => {
       }
       disabled={isViewMode}
     />
+    {errors.endDate && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.endDate}
+            </p>
+          )}
   </div>
 
   {/* Protocol Information Header */}
@@ -369,18 +538,38 @@ const removeVisitRow = (index:any) => {
   <div className="space-y-2">
     <Label>Protocol Number <span className="text-red-500">*</span></Label>
     <Input disabled={isViewMode} />
+    {errors.protocolNumber && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.protocolNumber}
+            </p>
+          )}
   </div>
   <div className="space-y-2">
     <Label>Protocol Title <span className="text-red-500">*</span></Label>
     <Input disabled={isViewMode} />
+    {errors.protocolTitle && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.protocolTitle}
+            </p>
+          )}
   </div>
   <div className="space-y-2">
     <Label>Protocol Version <span className="text-red-500">*</span></Label>
     <Input disabled={isViewMode} />
+    {errors.protocolVersion && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.protocolVersion}
+            </p>
+          )}
   </div>
   <div className="space-y-2">
     <Label>Protocol Date <span className="text-red-500">*</span></Label>
     <Input type="date" disabled={isViewMode} />
+    {errors.protocolDate && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.protocolDate}
+            </p>
+          )}
   </div>
 
 <div className="space-y-2">
@@ -404,8 +593,18 @@ const removeVisitRow = (index:any) => {
        </SelectContent>
     </Select>
   </div>
+
+    <div className="space-y-2">
+    <Label>IRB Approval Date <span className="text-red-500">*</span></Label>
+    <Input type="date" disabled={isViewMode} />
+    {errors.irbApprovalDate && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.irbApprovalDate}
+            </p>
+          )}
+  </div>
   <div className="space-y-2">
-  <Label>Amendment Allowed *</Label>
+  <Label>Amendment Allowed</Label>
 
   <RadioGroup
     value={amendmentAllowed}
@@ -446,7 +645,7 @@ const removeVisitRow = (index:any) => {
 
 {/* Sponsor Name */}
 <div className="space-y-2">
-  <Label>Sponsor Name *</Label>
+  <Label>Sponsor Name<span className="text-red-500">*</span></Label>
   <Select
     value={formData.sponsorName}
     onValueChange={(v) => handleChange("sponsorName", v)}
@@ -461,6 +660,11 @@ const removeVisitRow = (index:any) => {
       <SelectItem value="Global Biotech">Global Biotech</SelectItem>
     </SelectContent>
   </Select>
+  {errors.sponsorName && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.sponsorName}
+            </p>
+          )}
 </div>
     <div className="space-y-2">
     <Label>Sponsor Contact</Label>
@@ -492,7 +696,7 @@ const removeVisitRow = (index:any) => {
   </div>
 {/* Principal Investigator */}
 <div className="space-y-2">
-  <Label>Principal Investigator *</Label>
+  <Label>Principal Investigator <span className="text-red-500">*</span></Label>
   <Select
     value={formData.principalInvestigator}
     onValueChange={(v) =>
@@ -515,6 +719,11 @@ const removeVisitRow = (index:any) => {
       </SelectItem>
     </SelectContent>
   </Select>
+  {errors.principalInvestigator && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.principalInvestigator}
+            </p>
+          )}
 </div>
   <div className="space-y-2">
     <Label>Principal Investigator Address</Label>
@@ -557,6 +766,11 @@ const removeVisitRow = (index:any) => {
       </SelectItem>
     </SelectContent>
   </Select>
+  {errors.studyCoordinator && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.studyCoordinator}
+            </p>
+          )}
 </div>
 
 <div className="col-span-3 font-semibold text-lg mt-4 text-[#00458F] pb-2">
@@ -567,13 +781,15 @@ const removeVisitRow = (index:any) => {
   <table className="w-full border">
     <thead>
       <tr className="bg-gray-100">
-        <th className="border p-2">Visit Name *</th>
+        <th className="border p-2">Visit Code <span className="text-red-500">*</span></th>
+        <th className="border p-2">Visit Name </th>
         <th className="border p-2">Visit Type</th>
-        <th className="border p-2">Target Day *</th>
-        <th className="border p-2">Window - *</th>
-        <th className="border p-2">Window + *</th>
-        <th className="border p-2">Required Specimen *</th>
-        <th className="border p-2">Test Codes *</th>
+        <th className="border p-2">Target Day </th>
+        <th className="border p-2">Window - </th>
+        <th className="border p-2">Window +</th>
+        <th className="border p-2">Required Specimen </th>
+        <th className="border p-2">Test Codes </th>
+        <th className="border p-2">Status</th>
         <th className="border p-2">Action</th>
       </tr>
     </thead>
@@ -581,6 +797,9 @@ const removeVisitRow = (index:any) => {
     <tbody>
       {visitTemplates.map((_visit: any, index: number) => (
         <tr key={index}>
+          <td className="border p-2">
+            <Input />
+          </td>
           <td className="border p-2">
             <Input />
           </td>
@@ -658,6 +877,22 @@ const removeVisitRow = (index:any) => {
           </td>
 
           <td className="border p-2">
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Active">
+                  Active
+                </SelectItem>
+                <SelectItem value="Inactive">
+                  Inactive
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </td>
+
+          <td className="border p-2">
             <button
               type="button"
               onClick={() => removeVisitRow(index)}
@@ -677,6 +912,182 @@ const removeVisitRow = (index:any) => {
     className="mt-3 px-3 py-2 bg-blue-600 text-white rounded"
   >
     + Add Visit
+  </button>
+</div>
+
+<div className="col-span-3 font-semibold text-lg mt-4 text-[#00458F] pb-2">
+  Cohort Configuration
+</div>
+
+<div className="col-span-3 overflow-x-auto">
+  <table className="w-full border">
+    <thead>
+      <tr className="bg-gray-100">
+        <th className="border p-2">Cohort Code<span className="text-red-500">*</span></th>
+        <th className="border p-2">Cohort Name</th>
+        <th className="border p-2">Arm Association</th>
+        <th className="border p-2">Description</th>
+        <th className="border p-2">Eligibility Criteria</th>
+        <th className="border p-2">Enrollment Target</th>
+        <th className="border p-2">Dose Level</th>
+        <th className="border p-2">Status</th>
+        <th className="border p-2">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {cohorts.map((cohort, index) => (
+        <tr key={index}>
+          <td className="border p-2">
+            <Input
+              value={cohort.cohortCode}
+              onChange={(e) =>
+                updateCohort(
+                  index,
+                  "cohortCode",
+                  e.target.value
+                )
+              }
+            />
+          </td>
+
+          <td className="border p-2">
+            <Input
+              value={cohort.cohortName}
+              onChange={(e) =>
+                updateCohort(
+                  index,
+                  "cohortName",
+                  e.target.value
+                )
+              }
+            />
+          </td>
+
+          <td className="border p-2">
+            <Select
+              value={cohort.armAssociation}
+              onValueChange={(value) =>
+                updateCohort(
+                  index,
+                  "armAssociation",
+                  value
+                )
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Arm" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Arm A">
+                  Arm A
+                </SelectItem>
+                <SelectItem value="Arm B">
+                  Arm B
+                </SelectItem>
+                <SelectItem value="Arm C">
+                  Arm C
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </td>
+
+          <td className="border p-2">
+            <textarea
+              className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              value={cohort.description}
+              onChange={(e) =>
+                updateCohort(
+                  index,
+                  "description",
+                  e.target.value
+                )
+              }
+            />
+          </td>
+
+          <td className="border p-2">
+            <textarea             
+             className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              value={cohort.eligibilityCriteria}
+              onChange={(e) =>
+                updateCohort(
+                  index,
+                  "eligibilityCriteria",
+                  e.target.value
+                )
+              }
+            />
+          </td>
+
+          <td className="border p-2">
+            <Input
+              type="number"
+              value={cohort.enrollmentTarget}
+              onChange={(e) =>
+                updateCohort(
+                  index,
+                  "enrollmentTarget",
+                  e.target.value
+                )
+              }
+            />
+          </td>
+
+          <td className="border p-2">
+            <Input
+              value={cohort.doseLevel}
+              onChange={(e) =>
+                updateCohort(
+                  index,
+                  "doseLevel",
+                  e.target.value
+                )
+              }
+            />
+          </td>
+
+          <td className="border p-2">
+            <Select
+              value={cohort.status}
+              onValueChange={(value) =>
+                updateCohort(index, "status", value)
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Active">
+                  Active
+                </SelectItem>
+                <SelectItem value="Inactive">
+                  Inactive
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </td>
+
+          <td className="border p-2">
+            <button
+              type="button"
+              onClick={() => removeCohortRow(index)}
+              className="text-red-600"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <button
+    type="button"
+    onClick={addCohortRow}
+    className="mt-3 px-3 py-2 bg-blue-600 text-white rounded"
+  >
+    + Add Cohort
   </button>
 </div>
 </FormWrapper>
