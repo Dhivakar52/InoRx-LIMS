@@ -17,8 +17,9 @@ import { ActionMenu } from "../../../common/ActionMenu";
 import NavigateButton from "../../../common/NavigateButton";
 import { Plus } from "lucide-react";
 import CustomPanel from "../../../common/CustomPanel";
+import { useNavigate } from "react-router-dom";
 
-// ✅ TYPE
+
 type SiteRegistration = {
   id: number;
   site: string;
@@ -147,7 +148,8 @@ const SiteModule = () => {
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [loading, _setLoading] = useState(false);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
-  
+  const navigate = useNavigate();
+
   // Panel state
   const [panelMode, setPanelMode] = useState<PanelMode>(null);
   const [selectedItem, setSelectedItem] = useState<SiteRegistration | null>(null);
@@ -167,20 +169,12 @@ const SiteModule = () => {
   }, []);
 
   // ✅ ACTIONS (memoized to prevent unnecessary re-renders)
-  const handleView = useCallback((row: SiteRegistration) => {
-    console.log("View:", row);
-    setSelectedItem(row);
-    setPanelMode("view");
-    setOpenMenuId(null);
-  }, []);
-
-  const handleEdit = useCallback((row: SiteRegistration) => {
-    console.log("Edit:", row);
-    setSelectedItem(row);
-    setEditFormData({ ...row });
-    setPanelMode("edit");
-    setOpenMenuId(null);
-  }, []);
+  const handleView = () => {
+    navigate("/study/site/new-add");
+  };
+  const handleEdit = () => {
+    navigate("/study/site/new-add");
+  };
 
   const handleDelete = useCallback((row: SiteRegistration) => {
     Swal.fire({

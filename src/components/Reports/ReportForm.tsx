@@ -40,6 +40,7 @@ export default function ReportForm() {
           onChange={(e) =>
             handleChange("studyCode", e.target.value)
           }
+          
         />
       </div>
 

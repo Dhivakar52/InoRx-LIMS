@@ -1,602 +1,551 @@
-// "use client";
-
-// import { useState } from "react";
-// import FormWrapper from "../../../common/FormWrapper";
-// import { Input } from "../../ui/input";
-// import { Label } from "../../ui/label";
-// import {
-//   Select,
-//   SelectTrigger,
-//   SelectValue,
-//   SelectContent,
-//   SelectItem,
-// } from "../../ui/select";
-
-// export default function VisitForm() {
-//   const [formData, setFormData] = useState<any>({});
-
-//   const handleChange = (name: string, value: string) => {
-//     setFormData((prev: any) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handleSubmit = () => {
-//     console.log("Visit Data 👉", formData);
-//   };
-
-//   return (
-//     <FormWrapper
-//       title="Add Site Registration"
-//       onSubmit={handleSubmit}
-//     >
-    
-
-//             {/* Study Code */}
-//             <div className="space-y-2">
-//               <Label>Study Code *</Label>
-//               <Select
-//                 value={formData.studyCode || ""}
-//                 onValueChange={(v) => handleChange("studyCode", v)}
-//               >
-//                 <SelectTrigger className="w-full bg-white border">
-//                   <SelectValue placeholder="Select Study Code" />
-//                 </SelectTrigger>
-
-//                 <SelectContent
-//                   position="popper"
-//                   sideOffset={4}
-//                   className="bg-white border z-50"
-//                 >
-//                   <SelectItem value="SC001">SC001</SelectItem>
-//                   <SelectItem value="SC002">SC002</SelectItem>
-//                 </SelectContent>
-//               </Select>
-//             </div>
-
-//             {/* Site Code */}
-//             <div className="space-y-2">
-//               <Label>Site Code *</Label>
-//               <Input
-//                 onChange={(e) =>
-//                   handleChange("siteCode", e.target.value)
-//                 }
-//               />
-//             </div>
-
-//             {/* Site Type */}
-//             <div className="space-y-2">
-//               <Label>Site Type *</Label>
-//               <Select
-//                 value={formData.siteType || ""}
-//                 onValueChange={(v) => handleChange("siteType", v)}
-//               >
-//                 <SelectTrigger className="w-full bg-white border">
-//                   <SelectValue placeholder="Select Site Type" />
-//                 </SelectTrigger>
-
-//                 <SelectContent
-//                   position="popper"
-//                   sideOffset={4}
-//                   className="bg-white border z-50"
-//                 >
-//                   <SelectItem value="clinical">Clinical</SelectItem>
-//                   <SelectItem value="hospital">Hospital</SelectItem>
-//                   <SelectItem value="research">Research</SelectItem>
-//                 </SelectContent>
-//               </Select>
-//             </div>
-
-//             {/* Site Name */}
-//             <div className="space-y-2">
-//               <Label>Site Name *</Label>
-//               <Input
-//                 onChange={(e) =>
-//                   handleChange("siteName", e.target.value)
-//                 }
-//               />
-//             </div>
-
-//             {/* Site Address */}
-//             <div className="space-y-2">
-//               <Label>Site Address *</Label>
-//               <Input
-//                 onChange={(e) =>
-//                   handleChange("siteAddress", e.target.value)
-//                 }
-//               />
-//             </div>
-
-//             {/* Investigator */}
-//             <div className="space-y-2">
-//               <Label>Investigator *</Label>
-//               <Input
-//                 onChange={(e) =>
-//                   handleChange("investigator", e.target.value)
-//                 }
-//               />
-//             </div>
-
-         
-//     </FormWrapper>
-//   );
-// }
 "use client";
 
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import DemographicsTab from "./DemographicsTab";
+import AddressShippingTab from "./AddressShippingTab";
+import IRBAccreditationTab from "./IRBAccreditationTab";
+import StaffRoleMappingTab from "./StaffRoleMappingTab";
+import StudySiteMappingTab from "./StudySiteMappingTab";
 
-import FormWrapper from "../../../common/FormWrapper";
-import { Input } from "../../ui/input";
-import { Label } from "../../ui/label";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "../../ui/select";
-
-export default function SiteRegistrationForm() {
+export default function SiteForm() {
   const location = useLocation();
 
-  const mode = location.state?.mode || "add";
-  const initialData = location.state?.data;
 
-  const isViewMode = mode === "view";
+  const initialData =
+    location.state?.data;
 
+  const steps = [
+    "Demographics",
+    "Address & Shipping",
+    "IRB & Accreditation",
+    "Staff & Role Mapping",
+    "Study Mapping"
+  ];
+  const [currentStep, setCurrentStep] =
+  useState(0);
+
+  const [successMsg, setSuccessMsg] = useState("");
+  const [errors, setErrors] = useState<any>({});
   const [formData, setFormData] = useState<any>({});
-
+  
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
     }
   }, [initialData]);
+  const validateDemographics = () => {
+  const newErrors: any = {};
 
-  const handleChange = (name: string, value: string) => {
-    setFormData((prev: any) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  if (!formData.siteCode?.trim()) {
+    newErrors.siteCode =
+      "Site Code is required";
+  }
 
-  const handleSubmit = () => {
-    console.log("Site Registration Data 👉", formData);
-  };
+  if (!formData.siteName?.trim()) {
+    newErrors.siteName =
+      "Site Name is required";
+  }
 
-  const requiredFields = [
-    "studyCode",
-    "siteCode",
-    "siteName",
-    "siteType",
-    "siteStatus",
-    "country",
-    "principalInvestigator",
-    "contactNumber",
-    "email",
-  ];
+  if (!formData.siteType?.trim()) {
+    newErrors.siteType =
+      "Site Type is required";
+  }
 
-  const isFormValid = requiredFields.every(
-    (field) => formData[field]
-  );
+  // if (!formData.siteStatus?.trim()) {
+  //   newErrors.siteStatus =
+  //     "Site Status is required";
+  // }
+
+  setErrors(newErrors);
 
   return (
-    <FormWrapper
-      title={
-        mode === "view"
-          ? "View Site Registration"
-          : mode === "edit"
-          ? "Edit Site Registration"
-          : "Add Site Registration"
-      }
-      onSubmit={handleSubmit}
-      isValid={isFormValid}
-    >
-      {/* Site Information */}
-
-      <div className="col-span-3 font-semibold text-lg mt-2 text-[#00458F] pb-2">
-        Site Information
-      </div>
-
-      <div className="space-y-2">
-        <Label>Study Code *</Label>
-        <Select
-          value={formData.studyCode || ""}
-          onValueChange={(v) =>
-            handleChange("studyCode", v)
-          }
-          disabled={isViewMode}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select Study Code" />
-          </SelectTrigger>
-
-          <SelectContent>
-            <SelectItem value="ST001">ST001</SelectItem>
-            <SelectItem value="ST002">ST002</SelectItem>
-            <SelectItem value="ST003">ST003</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="space-y-2">
-        <Label>Site Code *</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.siteCode || ""}
-          onChange={(e) =>
-            handleChange("siteCode", e.target.value)
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Site Name *</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.siteName || ""}
-          onChange={(e) =>
-            handleChange("siteName", e.target.value)
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Site Type *</Label>
-        <Select
-          disabled={isViewMode}
-          value={formData.siteType || ""}
-          onValueChange={(v) =>
-            handleChange("siteType", v)
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select Site Type" />
-          </SelectTrigger>
-
-          <SelectContent>
-            <SelectItem value="Hospital">
-              Hospital
-            </SelectItem>
-            <SelectItem value="Research Center">
-              Research Center
-            </SelectItem>
-            <SelectItem value="Clinic">
-              Clinic
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="space-y-2">
-        <Label>Site Status *</Label>
-        <Select
-          disabled={isViewMode}
-          value={formData.siteStatus || ""}
-          onValueChange={(v) =>
-            handleChange("siteStatus", v)
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select Status" />
-          </SelectTrigger>
-
-          <SelectContent>
-            <SelectItem value="Active">
-              Active
-            </SelectItem>
-            <SelectItem value="Pending">
-              Pending
-            </SelectItem>
-            <SelectItem value="Inactive">
-              Inactive
-            </SelectItem>
-            <SelectItem value="Closed">
-              Closed
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="space-y-2">
-        <Label>Site Activation Date</Label>
-        <Input
-          type="date"
-          disabled={isViewMode}
-          value={formData.activationDate || ""}
-          onChange={(e) =>
-            handleChange(
-              "activationDate",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      {/* Address Information */}
-
-      <div className="col-span-3 font-semibold text-lg mt-4 text-[#00458F] pb-2">
-        Address Information
-      </div>
-
-      <div className="space-y-2 col-span-3">
-        <Label>Site Address *</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.siteAddress || ""}
-          onChange={(e) =>
-            handleChange(
-              "siteAddress",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>City</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.city || ""}
-          onChange={(e) =>
-            handleChange("city", e.target.value)
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>State</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.state || ""}
-          onChange={(e) =>
-            handleChange("state", e.target.value)
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Country *</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.country || ""}
-          onChange={(e) =>
-            handleChange("country", e.target.value)
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Postal Code</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.postalCode || ""}
-          onChange={(e) =>
-            handleChange(
-              "postalCode",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      {/* Principal Investigator */}
-
-      <div className="col-span-3 font-semibold text-lg mt-4 text-[#00458F] pb-2">
-        Principal Investigator Information
-      </div>
-
-      <div className="space-y-2">
-        <Label>Principal Investigator *</Label>
-        <Input
-          disabled={isViewMode}
-          value={
-            formData.principalInvestigator || ""
-          }
-          onChange={(e) =>
-            handleChange(
-              "principalInvestigator",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Investigator License No</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.licenseNo || ""}
-          onChange={(e) =>
-            handleChange(
-              "licenseNo",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Specialization</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.specialization || ""}
-          onChange={(e) =>
-            handleChange(
-              "specialization",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      {/* Contact Information */}
-
-      <div className="col-span-3 font-semibold text-lg mt-4 text-[#00458F] pb-2">
-        Contact Information
-      </div>
-
-      <div className="space-y-2">
-        <Label>Contact Number *</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.contactNumber || ""}
-          onChange={(e) =>
-            handleChange(
-              "contactNumber",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Alternate Number</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.alternateNumber || ""}
-          onChange={(e) =>
-            handleChange(
-              "alternateNumber",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Email *</Label>
-        <Input
-          type="email"
-          disabled={isViewMode}
-          value={formData.email || ""}
-          onChange={(e) =>
-            handleChange("email", e.target.value)
-          }
-        />
-      </div>
-
-      {/* Regulatory Information */}
-
-      <div className="col-span-3 font-semibold text-lg mt-4 text-[#00458F] pb-2">
-        Regulatory Information
-      </div>
-
-      <div className="space-y-2">
-        <Label>IRB / IEC Number</Label>
-        <Input
-          disabled={isViewMode}
-          value={formData.irbNumber || ""}
-          onChange={(e) =>
-            handleChange(
-              "irbNumber",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Approval Date</Label>
-        <Input
-          type="date"
-          disabled={isViewMode}
-          value={formData.approvalDate || ""}
-          onChange={(e) =>
-            handleChange(
-              "approvalDate",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Approval Expiry Date</Label>
-        <Input
-          type="date"
-          disabled={isViewMode}
-          value={formData.expiryDate || ""}
-          onChange={(e) =>
-            handleChange(
-              "expiryDate",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      {/* Site Capacity */}
-
-      <div className="col-span-3 font-semibold text-lg mt-4 text-[#00458F] pb-2">
-        Site Capacity Information
-      </div>
-
-      <div className="space-y-2">
-        <Label>Target Enrollment</Label>
-        <Input
-          type="number"
-          disabled={isViewMode}
-          value={formData.targetEnrollment || ""}
-          onChange={(e) =>
-            handleChange(
-              "targetEnrollment",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Current Enrollment</Label>
-        <Input
-          type="number"
-          disabled={isViewMode}
-          value={formData.currentEnrollment || ""}
-          onChange={(e) =>
-            handleChange(
-              "currentEnrollment",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Available Study Coordinators</Label>
-        <Input
-          type="number"
-          disabled={isViewMode}
-          value={formData.coordinatorCount || ""}
-          onChange={(e) =>
-            handleChange(
-              "coordinatorCount",
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      {/* Remarks */}
-
-      <div className="col-span-3 font-semibold text-lg mt-4 text-[#00458F] pb-2">
-        Additional Remarks
-      </div>
-
-      <div className="space-y-2 col-span-3">
-        <Label>Remarks</Label>
-        <textarea
-          rows={4}
-          disabled={isViewMode}
-          value={formData.remarks || ""}
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring resize-none"
-          onChange={(e) =>
-            handleChange("remarks", e.target.value)
-          }
-          placeholder="Enter remarks"
-        />
-      </div>
-    </FormWrapper>
+    Object.keys(newErrors)
+      .length === 0
   );
+};
+const validateAddress = () => {
+  const newErrors: any = {};
+
+  if (!formData.siteAddress?.trim()) {
+    newErrors.siteAddress =
+      "Street Address is required";
+  }
+
+  if (!formData.city?.trim()) {
+    newErrors.city =
+      "City is required";
+  }
+
+  if (!formData.country?.trim()) {
+    newErrors.country =
+      "Country is required";
+  }
+
+  if (!formData.postalCode?.trim()) {
+    newErrors.postalCode =
+      "Postal Code is required";
+  }
+
+  if (!formData.phoneNumber?.trim()) {
+    newErrors.phoneNumber =
+      "Phone Number is required";
+  } else {
+    const phoneRegex =
+      /^\+?[1-9]\d{1,14}$/;
+
+    if (
+      !phoneRegex.test(
+        formData.phoneNumber
+      )
+    ) {
+      newErrors.phoneNumber =
+        "Invalid phone number";
+    }
+  }
+
+  if (!formData.contactEmail?.trim()) {
+    newErrors.contactEmail =
+      "Email is required";
+  } else {
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (
+      !emailRegex.test(
+        formData.contactEmail
+      )
+    ) {
+      newErrors.contactEmail =
+        "Invalid email address";
+    }
+  }
+
+  if (!formData.timeZone?.trim()) {
+    newErrors.timeZone =
+      "Time Zone is required";
+  }
+
+  setErrors(newErrors);
+
+  return (
+    Object.keys(newErrors)
+      .length === 0
+  );
+};
+
+const validateIRB = () => {
+  const newErrors: any = {};
+
+  if (
+    !formData.localIRBName?.trim()
+  ) {
+    newErrors.localIRBName =
+      "Local IRB Name is required";
+  }
+
+  if (
+    !formData.irbRegistrationNumber?.trim()
+  ) {
+    newErrors.irbRegistrationNumber =
+      "IRB Registration Number is required";
+  }
+
+  if (
+    formData.accreditationTypes?.length >
+      0 &&
+    !formData.accreditationExpiry
+  ) {
+    newErrors.accreditationExpiry =
+      "Accreditation Expiry is required";
+  }
+
+  if (
+    formData.accreditationExpiry
+  ) {
+    const selectedDate =
+      new Date(
+        formData.accreditationExpiry
+      );
+
+    const today = new Date();
+
+    today.setHours(0,0,0,0);
+
+    if (
+      selectedDate <= today
+    ) {
+      newErrors.accreditationExpiry =
+        "Expiry date must be future date";
+    }
+  }
+
+  const file =
+    formData.gcpCertificate;
+
+  if (file) {
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+
+    if (
+      !allowedTypes.includes(
+        file.type
+      )
+    ) {
+      newErrors.gcpCertificate =
+        "Only PDF, DOC, DOCX files allowed";
+    }
+
+    if (
+      file.size >
+      5 * 1024 * 1024
+    ) {
+      newErrors.gcpCertificate =
+        "File size should not exceed 5 MB";
+    }
+  }
+
+  setErrors(newErrors);
+
+  return (
+    Object.keys(newErrors)
+      .length === 0
+  );
+};
+const validateStaff = () => {
+  const newErrors: any = {};
+
+  if (!formData.leadPI) {
+    newErrors.leadPI =
+      "Lead PI is required";
+  }
+
+  if (!formData.siteCoordinator) {
+    newErrors.siteCoordinator =
+      "Site Coordinator is required";
+  }
+
+  // If study is blinded
+  if (
+    formData.studyType ===
+      "BLINDED" &&
+    !formData.unblindedPharmacist
+  ) {
+    newErrors.unblindedPharmacist =
+      "Unblinded Pharmacist is required";
+  }
+
+  setErrors(newErrors);
+
+  return (
+    Object.keys(newErrors)
+      .length === 0
+  );
+};
+const validateStudyMapping = () => {
+  const newErrors: any = {};
+
+  if (!formData.studyId?.trim()) {
+    newErrors.studyId =
+      "Study Selection is required";
+  }
+
+  if (
+    formData.localIrbReference &&
+    !formData.localIrbApprovalDate
+  ) {
+    newErrors.localIrbApprovalDate =
+      "Approval Date is required";
+  }
+
+  if (!formData.siteEffectiveDate) {
+    newErrors.siteEffectiveDate =
+      "Site Effective Date is required";
+  }
+
+  setErrors(newErrors);
+
+  return (
+    Object.keys(newErrors).length === 0
+  );
+};
+const validateCurrentStep = () => {
+  switch (currentStep) {
+    case 0:
+      return validateDemographics();
+
+    case 1:
+      return validateAddress();
+
+    case 2:
+      return validateIRB();
+
+    case 3:
+      return validateStaff();
+    case 4:
+      return validateStudyMapping();
+
+    default:
+      return true;
+  }
+};
+const nextStep = () => {
+  const isValid =
+    validateCurrentStep();
+
+  if (!isValid) return;
+
+  setCurrentStep((prev) =>
+    Math.min(
+      prev + 1,
+      steps.length - 1
+    )
+  );
+};
+const prevStep = () => {
+  setCurrentStep((prev) =>
+    Math.max(prev - 1, 0)
+  );
+};
+const handleStepClick = (
+  targetStep: number
+) => {
+  if (
+    targetStep <= currentStep
+  ) {
+    setCurrentStep(targetStep);
+    return;
+  }
+
+  const isValid =
+    validateCurrentStep();
+
+  if (!isValid) return;
+
+  setCurrentStep(targetStep);
+};
+const handleSubmit = () => {
+  const isValid =
+    validateCurrentStep();
+
+  if (!isValid) return;
+
+  console.log(formData);
+
+  alert(
+    "Site Registration Submitted Successfully"
+  );
+};
+const handleSaveDraft = () => {
+  const isValid =
+    validateCurrentStep();
+
+  if (!isValid) return;
+
+  setCurrentStep((prev) =>
+    Math.min(
+      prev + 1,
+      steps.length - 1
+    )
+  );
+  setSuccessMsg(
+    "Draft saved successfully"
+  );
+
+  setTimeout(() => {
+    setSuccessMsg("");
+  }, 3000);
+};
+const renderStep = () => {
+  switch (currentStep) {
+    case 0:
+      return (
+        <DemographicsTab
+          formData={formData}
+          handleChange={handleChange}
+          isViewMode={false}
+          errors={errors}
+        />
+      );
+
+    case 1:
+      return (
+        <AddressShippingTab
+          formData={formData}
+          handleChange={handleChange}
+          isViewMode={false}
+          errors={errors}
+        />
+      );
+
+    case 2:
+      return (
+        <IRBAccreditationTab
+          formData={formData}
+          handleChange={handleChange}
+          isViewMode={false}
+          errors={errors}
+        />
+      );
+
+    case 3:
+      return (
+        <StaffRoleMappingTab
+          formData={formData}
+          handleChange={handleChange}
+          isViewMode={false}
+          errors={errors}
+        />
+      );
+     case 4:
+      return (
+        <StudySiteMappingTab
+          formData={formData}
+          handleChange={handleChange}
+          isViewMode={false}
+          errors={errors}
+        />
+      );
+
+    default:
+      return null;
+  }
+};
+
+  // const handleChange = (
+  //   name: string,
+  //   value: string
+  // ) => {
+  //   setFormData((prev: any) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
+const handleChange = (
+  name: string,
+  value: string
+) => {
+  setFormData((prev: any) => ({
+    ...prev,
+    [name]: value,
+  }));
+
+  setErrors((prev: any) => ({
+    ...prev,
+    [name]: "",
+  }));
+};
+
+  return (
+  <div className="p-6">
+    {successMsg && (
+        <div className="fixed top-5 right-5 z-[9999] bg-green-600 text-white px-5 py-3
+            rounded-lg shadow-xl text-sm font-medium animate-slide-in">
+            {successMsg}
+            </div>
+          )}
+    <div className="bg-white rounded-xl shadow-md p-6">
+
+      {/* <div className="flex items-center justify-between mb-8 overflow-x-auto"> */}
+      <div className="flex items-center justify-between mb-8 overflow-visible">
+        {steps.map(
+          (step, index) => (
+            <div
+              key={step}
+              className="flex items-center w-full cursor-pointer"
+              onClick={() =>
+                handleStepClick(
+                  index
+                )
+              }
+            >
+              <div className="flex flex-col items-center">
+
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold
+                  ${
+                    // index <=
+                    // currentStep
+                    //   ? "bg-[#00458F] text-white"
+                    //   : "bg-gray-200"
+                  index < currentStep
+                  ? "bg-green-600 text-white"
+                  : index === currentStep
+                  ? "bg-[#00458F] text-white ring-4 ring-blue-100"
+                  : "bg-gray-200 text-gray-500" 
+                  }`}
+                >
+                  {index + 1}
+                </div>
+
+                <span className="text-xs mt-2 whitespace-nowrap">
+                  {step}
+                </span>
+              </div>
+
+              {index !==
+                steps.length -
+                  1 && (
+                <div
+                  className={`flex-1 h-1 mx-2 rounded
+                  ${
+                    index <
+                    currentStep
+                      // ? "bg-[#00458F]"
+                      // : "bg-gray-200"
+                      ? "bg-green-600": "bg-gray-200"
+                  }`}
+                />
+              )}
+            </div>
+          )
+        )}
+      </div>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-[#00458F]">
+          Step {currentStep + 1} of {steps.length}: {steps[currentStep]}
+        </h2>
+      </div>
+      {renderStep()}
+
+      <div className="flex justify-between items-center mt-8">
+        {currentStep > 0 ? (
+          <button
+            onClick={prevStep}
+            className="px-5 py-2 rounded-md bg-gray-100">
+            Previous
+          </button>
+        ) : (
+          <div />
+        )}
+        <div className="flex gap-3">
+          <button onClick={handleSaveDraft}
+            className="px-5 py-2 rounded-md bg-gray-500 text-white">
+            Save Draft
+          </button>
+
+          {currentStep <
+          steps.length - 1 ? (
+            <button
+              onClick={
+                nextStep
+              }
+              className="px-5 py-2 rounded-md bg-[#00458F] text-white">
+              Next
+            </button>
+          ) : (
+            <button
+              onClick={handleSubmit}
+              className="px-5 py-2 rounded-md bg-green-600 text-white">
+              Submit
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+);
 }

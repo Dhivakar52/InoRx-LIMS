@@ -154,7 +154,7 @@ const Subject = () => {
           />
           <ColumnToggle table={table} />
           <NavigateButton
-            label="Add Subject"
+            label="Add Subject Enrollment "
             path="/subject/master/sub-add"
             icon={<Plus size={18} />}
           />
