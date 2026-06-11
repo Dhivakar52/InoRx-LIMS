@@ -2,6 +2,7 @@
 
 import { Label } from "./../../ui/label";
 import { Input } from "./../../ui/input";
+import Select from "react-select";
 
 interface Props {
   formData: any;
@@ -12,84 +13,59 @@ interface Props {
   ) => void;
   isViewMode: boolean;
 }
-
+const studyOptions = [
+  {
+    value: "ST001",
+    label:
+      "ST001 - Cardiology Clinical Trial"
+  },
+  {
+    value: "ST002",
+    label:
+      "ST002 - Diabetes Research Study"
+  },
+  {
+    value: "ST003",
+    label:
+      "ST003 - Oncology Phase III Trial"
+  }
+];
 export default function StudySiteMappingTab({
   formData,
   errors,
   handleChange,
   isViewMode,
 }: Props) {
-  const studies = [
-    {
-      id: "ST001",
-      name:
-        "Cardiology Clinical Trial",
-    },
-    {
-      id: "ST002",
-      name:
-        "Diabetes Research Study",
-    },
-    {
-      id: "ST003",
-      name:
-        "Oncology Phase III Trial",
-    },
-  ];
-
   return (
     <div className="grid grid-cols-2 gap-5">
-
-      <div>
+      <div className="space-y-2">
         <Label>
           Study Selection
-          <span className="text-red-500">
-            *
-          </span>
+          <span className="text-red-500">*</span>
         </Label>
-
-        <select
-          disabled={isViewMode}
+        <Select
+          isDisabled={isViewMode}
+          placeholder="Select Study"
+          options={studyOptions}
           value={
-            formData.studyId || ""
+            studyOptions.find(
+              x => x.value === formData.studyId
+            ) || null
           }
-          onChange={(e) =>
+          onChange={(selected) =>
             handleChange(
               "studyId",
-              e.target.value
+              selected?.value || ""
             )
-          }
-          className="w-full border rounded-md h-10 px-3 mt-1"
-        >
-          <option value="">
-            Select Study
-          </option>
-
-          {studies.map(
-            (study) => (
-              <option
-                key={study.id}
-                value={study.id}
-              >
-                {study.id} -{" "}
-                {study.name}
-              </option>
-            )
-          )}
-        </select>
-
+          }/>
         {errors.studyId && (
-          <p className="text-red-500 text-xs mt-1">
+          <p className="text-red-500 text-xs">
             {errors.studyId}
           </p>
         )}
       </div>
-
-      <div>
-        <Label>
-          Local IRB Reference
-        </Label>
-
+      <div className="space-y-2">
+        <Label> Local IRB Reference </Label>
         <Input
           disabled={isViewMode}
           value={
@@ -103,15 +79,10 @@ export default function StudySiteMappingTab({
             )
           }
           className="w-full border rounded-md h-10 px-3 mt-1"
-          maxLength={50}
-        />
+          maxLength={50}/>
       </div>
-
-      <div>
-        <Label>
-          Local IRB Approval Date
-        </Label>
-
+      <div className="space-y-2">
+        <Label>  Local IRB Approval Date</Label>
         <Input
           type="date"
           disabled={isViewMode}
@@ -125,9 +96,7 @@ export default function StudySiteMappingTab({
               e.target.value
             )
           }
-          className="w-full border rounded-md h-10 px-3 mt-1"
-        />
-
+          className="w-full border rounded-md h-10 px-3 mt-1"/>
         {errors.localIrbApprovalDate && (
           <p className="text-red-500 text-xs mt-1">
             {
@@ -136,15 +105,8 @@ export default function StudySiteMappingTab({
           </p>
         )}
       </div>
-
-      <div>
-        <Label>
-          Site Effective Date
-          <span className="text-red-500">
-            *
-          </span>
-        </Label>
-
+      <div className="space-y-2">
+        <Label> Site Effective Date <span className="text-red-500"> *</span></Label>
         <Input
           type="date"
           disabled={isViewMode}
@@ -158,9 +120,7 @@ export default function StudySiteMappingTab({
               e.target.value
             )
           }
-          className="w-full border rounded-md h-10 px-3 mt-1"
-        />
-
+          className="w-full border rounded-md h-10 px-3 mt-1" />
         {errors.siteEffectiveDate && (
           <p className="text-red-500 text-xs mt-1">
             {
@@ -169,12 +129,8 @@ export default function StudySiteMappingTab({
           </p>
         )}
       </div>
-      
-        <div>
-        <Label>
-          Mapping Status
-        </Label>
-
+        <div className="space-y-2">
+        <Label> Mapping Status</Label>
         <select
           disabled={isViewMode}
           value={
@@ -187,12 +143,10 @@ export default function StudySiteMappingTab({
               e.target.value
             )
           }
-          className="w-full border rounded-md h-10 px-3 mt-1"
-        >
+          className="w-full border rounded-md h-10 px-3 mt-1">
           <option value="ACTIVE">
             ACTIVE
           </option>
-
           <option value="INACTIVE">
             INACTIVE
           </option>

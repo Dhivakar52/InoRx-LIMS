@@ -7,12 +7,14 @@ interface Props {
    formData: any;
     setFormData: any;
     errors: any;
+    setErrors:any;
 }
 
 export default function GeneralInfo({
     formData,
     setFormData,
     errors,
+    setErrors
 }: Props) {
 
     // const { id } = useParams();
@@ -23,10 +25,6 @@ const mode = searchParams.get("mode");
 // const status= searchParams.get("status");
 
     const isViewMode = mode === "view";
-// const isEditMode = mode === "edit";
-// const isDraft = status === "draft";
-// const isApproved = status === "approved";
-// const isSubmitted = status === "submitted";
 // const isActive = status === "active";
 
  const handleChange = (field: string, value: string) => {
@@ -34,6 +32,43 @@ const mode = searchParams.get("mode");
       ...prev,
       [field]: value,
     }));
+
+  if (field === "studyTitle") {
+    let error = "";
+
+    if (value.trim() && !/^[A-Za-z\s]+$/.test(value)) {
+  error = "Only alphabets are allowed";
+}
+    setErrors((prev: any) => ({
+      ...prev,
+      studyTitle: error,
+    }));
+  }
+  if (field === "studyDescription") {
+    let error = "";
+
+   if (value.trim() && !/^[A-Za-z\s]+$/.test(value)) {
+  error = "Only alphabets are allowed";
+}
+
+    setErrors((prev: any) => ({
+      ...prev,
+      studyTitle: error,
+    }));
+  }
+   if (field === "studyTitle") {
+    let error = "";
+
+   if (value.trim() && !/^[A-Za-z\s]+$/.test(value)) {
+  error = "Only alphabets are allowed";
+}
+
+    setErrors((prev: any) => ({
+      ...prev,
+      studyTitle: error,
+    }));
+  }
+  
   };
   return (
     <div className="space-y-6">
@@ -44,12 +79,13 @@ const mode = searchParams.get("mode");
       </div>
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-         {/* Study Code */}
+      {/* Study Code */}
     <div className="space-y-2">
     <Label>Study Code <span className="text-red-500">*</span></Label>
-    <Input value={formData.studyCode}
-     readOnly
-     disabled={isViewMode} />
+     <Input disabled={isViewMode} 
+        value={formData.studyCode}
+        onChange={(e) => handleChange("studyCode", e.target.value)}
+        maxLength={30}/>
      {errors.studyCode && (
             <p className="text-red-500 text-xs mt-1">
               {errors.studyCode}
@@ -142,7 +178,7 @@ const mode = searchParams.get("mode");
         </SelectItem>
       </SelectContent>
     </Select>
-    {errors.studyPhase && (
+        {errors.studyPhase && (
             <p className="text-red-500 text-xs mt-1">
               {errors.studyPhase}
             </p>
@@ -161,6 +197,7 @@ const mode = searchParams.get("mode");
         handleChange("studyTitle", e.target.value)
       }
       disabled={isViewMode}
+      maxLength={500}
     />
     {errors.studyTitle && (
             <p className="text-red-500 text-xs mt-1">
@@ -180,6 +217,7 @@ const mode = searchParams.get("mode");
         handleChange("studyDescription", e.target.value)
       }
       disabled={isViewMode}
+      maxLength={1000}
     />
     {errors.studyDescription && (
             <p className="text-red-500 text-xs mt-1">

@@ -1,7 +1,7 @@
 "use client";
 
 import { Label } from "./../../ui/label";
-
+import Select from "react-select";
 interface Props {
   formData: any;
   errors: any;
@@ -11,7 +11,50 @@ interface Props {
   ) => void;
   isViewMode: boolean;
 }
+const leadPIOptions = [
+  {
+    value: "USR001",
+    label: "Dr. John Smith"
+  },
+  {
+    value: "USR002",
+    label: "Dr. David Kumar"
+  },
+  {
+    value: "USR003",
+    label: "Dr. Sarah Wilson"
+  }
+];
 
+const coordinatorOptions = [
+  {
+    value: "USR101",
+    label: "Priya Raj"
+  },
+  {
+    value: "USR102",
+    label: "Anitha Kumar"
+  },
+  {
+    value: "USR103",
+    label: "John Peter"
+  }
+];
+
+const pharmacistOptions = [
+  {
+    value: "USR201",
+    label: "Michael Brown"
+  },
+  {
+    value: "USR202",
+    label: "Ravi Kumar"
+  },
+  {
+    value: "USR203",
+    label: "Emily Watson"
+  }
+];
 export default function StaffRoleMappingTab({
   formData,
   handleChange,
@@ -20,43 +63,27 @@ export default function StaffRoleMappingTab({
 }: Props) {
   return (
     <div className="grid grid-cols-2 gap-4">
-
-      {/* Lead PI */}
-
       <div className="space-y-2">
         <Label>
-          Lead PI
-          <span className="text-red-500 ml-1">*</span>
+          Lead PI <span className="text-red-500 ml-1">*</span>
         </Label>
-
-        <select
-          disabled={isViewMode}
-          value={formData.leadPI || ""}
-          onChange={(e) =>
-            handleChange(
-              "leadPI",
-              e.target.value
-            )
-          }
-           className="w-full border rounded-md h-10 px-3 mt-1"
-        >
-          <option value="">
-            Select Lead PI
-          </option>
-
-          <option value="USR001">
-            Dr. John Smith
-          </option>
-
-          <option value="USR002">
-            Dr. David Kumar
-          </option>
-
-          <option value="USR003">
-            Dr. Sarah Wilson
-          </option>
-        </select>
-
+         <Select isDisabled={isViewMode}
+            placeholder="Select Lead PI"
+            options={leadPIOptions}
+            value={
+              leadPIOptions.find(
+                x =>
+                  x.value ===
+                  formData.leadPI
+              ) || null
+            }
+            onChange={(selected) =>
+              handleChange(
+                "leadPI",
+                selected?.value || ""
+              )
+            }
+          />
         {errors.leadPI && (
           <p className="text-red-500 text-xs">
             {errors.leadPI}
@@ -64,89 +91,52 @@ export default function StaffRoleMappingTab({
         )}
       </div>
 
-      {/* Site Coordinator */}
-
       <div className="space-y-2">
         <Label>
-          Site Coordinator
-          <span className="text-red-500 ml-1">*</span>
+          Site Coordinator<span className="text-red-500 ml-1">*</span>
         </Label>
-
-        <select
-          disabled={isViewMode}
-          value={
-            formData.siteCoordinator || ""
-          }
-          onChange={(e) =>
-            handleChange(
-              "siteCoordinator",
-              e.target.value
-            )
-          }
-           className="w-full border rounded-md h-10 px-3 mt-1"
-        >
-          <option value="">
-            Select Site Coordinator
-          </option>
-
-          <option value="USR101">
-            Priya Raj
-          </option>
-
-          <option value="USR102">
-            Anitha Kumar
-          </option>
-
-          <option value="USR103">
-            John Peter
-          </option>
-        </select>
-
+         <Select isDisabled={isViewMode}
+            placeholder="Select Site Coordinator"
+            options={coordinatorOptions}
+            value={
+              coordinatorOptions.find(
+                x =>
+                  x.value ===
+                  formData.siteCoordinator
+              ) || null
+            }
+            onChange={(selected) =>
+              handleChange(
+                "siteCoordinator",
+                selected?.value || ""
+              )
+            }
+          />
         {errors.siteCoordinator && (
           <p className="text-red-500 text-xs">
             {errors.siteCoordinator}
           </p>
         )}
       </div>
-
-      {/* Unblinded Pharmacist */}
-
       <div className="space-y-2">
-        <Label>
-          Unblinded Pharmacist
-        </Label>
-
-        <select
-          disabled={isViewMode}
+        <Label> Unblinded Pharmacist</Label>
+        <Select isDisabled={isViewMode}
+          placeholder="Select Pharmacist"
+          options={pharmacistOptions}
           value={
-            formData.unblindedPharmacist ||
-            ""
+            pharmacistOptions.find(
+              x =>
+                x.value ===
+                formData.unblindedPharmacist
+            ) || null
           }
-          onChange={(e) =>
+          onChange={(selected) =>
             handleChange(
               "unblindedPharmacist",
-              e.target.value
+              selected?.value || ""
             )
           }
-           className="w-full border rounded-md h-10 px-3 mt-1"
-        >
-          <option value="">
-            Select Pharmacist
-          </option>
-
-          <option value="USR201">
-            Michael Brown
-          </option>
-
-          <option value="USR202">
-            Ravi Kumar
-          </option>
-
-          <option value="USR203">
-            Emily Watson
-          </option>
-        </select>
-
+        />
         {isViewMode === false && (
           <p className="text-xs text-gray-500">
             Required only for blinded

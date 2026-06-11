@@ -2,6 +2,7 @@
 
 // import { Input } from "@base-ui/react";
 import { Label } from "../../ui/label";
+import { useState } from "react";
 
 interface Props {
   form: any;
@@ -24,14 +25,57 @@ export default function AmendmentMetadata({
     }));
   };
 
-  const amendmentReasons = [
-    "Protocol Amendment",
-    "IRB/IEC Ethics Committee Mandated Condition",
-    "Safety Update / Adverse Event Risk Mitigation",
-    "Operational Schedule Modification",
-    "Typographical/Administrative Correction",
-    "Endpoint/Test Panel Selection Update",
-  ];
+  // const _amendmentReasons = [
+  //   "Protocol Amendment",
+  //   "IRB/IEC Ethics Committee Mandated Condition",
+  //   "Safety Update / Adverse Event Risk Mitigation",
+  //   "Operational Schedule Modification",
+  //   "Typographical/Administrative Correction",
+  //   "Endpoint/Test Panel Selection Update",
+  // ];
+  function handleChange(field: string, value: string): void {
+    const max = 500;
+    const newValue = value?.slice(0, max);
+    updateField(field, newValue);
+  }
+
+  function removeDeviation(dev: string): void {
+    const current: string[] = form?.associatedDeviations || [];
+    const updated = current.filter((d) => d !== dev);
+    updateField("associatedDeviations", updated);
+  }
+
+  // Local UI state for adding/removing deviations and CAPAs
+  const [showDeviationInput, setShowDeviationInput] = useState(false);
+  const [newDeviation, setNewDeviation] = useState("");
+
+  function addDeviation(): void {
+    const val = newDeviation?.trim();
+    if (!val) return;
+    const current: string[] = form?.associatedDeviations || [];
+    updateField("associatedDeviations", [...current, val]);
+    setNewDeviation("");
+    setShowDeviationInput(false);
+  }
+
+  function removeCAPA(capa: string): void {
+    const current: string[] = form?.associatedCAPAs || [];
+    const updated = current.filter((c) => c !== capa);
+    updateField("associatedCAPAs", updated);
+  }
+
+  const [showCAPAInput, setShowCAPAInput] = useState(false);
+  const [newCAPA, setNewCAPA] = useState("");
+
+  function addCAPA(): void {
+    const val = newCAPA?.trim();
+    if (!val) return;
+    const current: string[] = form?.associatedCAPAs || [];
+    updateField("associatedCAPAs", [...current, val]);
+    setNewCAPA("");
+    setShowCAPAInput(false);
+  }
+
   return (
     <div className="space-y-6">
       <div className="border-b pb-4">
@@ -91,8 +135,31 @@ export default function AmendmentMetadata({
             </p>
           )}
         </div>
-
-        <div>
+ <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Amendment Description</label>
+        <textarea
+          rows={3}
+          value={form.amendmentDescription}
+          onChange={(e) => handleChange("amendmentDescription", e.target.value)}
+          className="w-full border border-gray-300 rounded-md px-3 py-2 resize-none focus:ring-2 focus:ring-blue-500"
+          placeholder="(Max 500 characters)"
+        />
+        <div className="flex justify-end mt-1">
+          <span className="text-xs text-gray-500">{form.amendmentDescription?.length || 0}/500</span>
+        </div>
+      </div>
+           <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Version Increment Type</label>
+        <select
+          value={form.versionIncrementType}
+          onChange={(e) => handleChange("versionIncrementType", e.target.value)}
+          className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="Minor">Minor (e.g., V1.0 to V1.1)</option>
+          <option value="Major">Major (e.g., V1.0 to V2.0)</option>
+        </select>
+      </div>
+        {/* <div>
           <label className="text-sm font-medium">
             Target Version
           </label>
@@ -102,9 +169,9 @@ export default function AmendmentMetadata({
             disabled
             className="w-full border rounded-md h-10 px-3 mt-1 bg-gray-50"
           />
-        </div>
+        </div> */}
 
-        <div>
+        {/* <div>
           <label className="text-sm font-medium">
             Reason Category <span className="text-red-500">*</span>
           </label>
@@ -136,7 +203,7 @@ export default function AmendmentMetadata({
               {errors.amendmentReasonCategory}
             </p>
           )}
-        </div>
+        </div> */}
 
         <div>
           <label className="text-sm font-medium">
@@ -163,7 +230,7 @@ export default function AmendmentMetadata({
 
         <div>
           <label className="text-sm font-medium">
-            Effective Date  <span className="text-red-500">*</span>
+          Proposal  Effective Date  <span className="text-red-500">*</span>
           </label>
 
           <input
@@ -219,8 +286,70 @@ export default function AmendmentMetadata({
             className="w-full border rounded-md h-10 px-3 mt-1"
           />
         </div>
-
+  <div className="grid grid-cols-2 gap-6">
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Associated Deviations</label>
+          <div className="border border-gray-300 rounded-md p-3 min-h-[42px] bg-gray-50">
+            <div className="flex flex-wrap gap-2 items-center">
+              {form.associatedDeviations?.map((dev: string, idx: number) => (
+                <span key={idx} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-md text-sm flex items-center gap-1">
+                  {dev}
+                  <button type="button" onClick={() => removeDeviation(dev)} className="ml-1 text-blue-600 hover:text-blue-800">×</button>
+                </span>
+              ))}
+              {showDeviationInput ? (
+                <div className="inline-flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={newDeviation}
+                    onChange={(e) => setNewDeviation(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && addDeviation()}
+                    className="border border-gray-300 rounded-md px-2 py-1 text-sm w-32 focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., DEV-ONC-014"
+                    autoFocus
+                  />
+                  <button onClick={addDeviation} className="text-green-600 hover:text-green-800">✓</button>
+                  <button onClick={() => { setShowDeviationInput(false); setNewDeviation(""); }} className="text-red-600 hover:text-red-800">✗</button>
+                </div>
+              ) : (
+                <button onClick={() => setShowDeviationInput(true)} className="text-blue-600 text-sm hover:text-blue-800">+ Add</button>
+              )}
+            </div>
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Associated CAPAs</label>
+          <div className="border border-gray-300 rounded-md p-3 min-h-[42px] bg-gray-50">
+            <div className="flex flex-wrap gap-2 items-center">
+              {form.associatedCAPAs?.map((capa: string, idx: number) => (
+                <span key={idx} className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-md text-sm flex items-center gap-1">
+                  {capa}
+                  <button type="button" onClick={() => removeCAPA(capa)} className="ml-1 text-yellow-600 hover:text-yellow-800">×</button>
+                </span>
+              ))}
+              {showCAPAInput ? (
+                <div className="inline-flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={newCAPA}
+                    onChange={(e) => setNewCAPA(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && addCAPA()}
+                    className="border border-gray-300 rounded-md px-2 py-1 text-sm w-32 focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., CAPA-2026-008"
+                    autoFocus
+                  />
+                  <button onClick={addCAPA} className="text-green-600 hover:text-green-800">✓</button>
+                  <button onClick={() => { setShowCAPAInput(false); setNewCAPA(""); }} className="text-red-600 hover:text-red-800">✗</button>
+                </div>
+              ) : (
+                <button onClick={() => setShowCAPAInput(true)} className="text-blue-600 text-sm hover:text-blue-800">+ Link</button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+        {/* <div>
           <label className="text-sm font-medium">
             Migration Policy
           </label>
@@ -275,11 +404,11 @@ export default function AmendmentMetadata({
               {errors.reasonForChange}
             </p>
           )}
-        </div>
+        </div> */}
 
         <div className="col-span-1">
           <label className="text-sm font-medium">
-            Root Cause <span className="text-red-500">*</span>
+            Root Cause Analysis <span className="text-red-500">*</span>
           </label>
 
           <textarea
@@ -299,9 +428,33 @@ export default function AmendmentMetadata({
             </p>
           )}
         </div>
+
+              <div className="col-span-1">
+          <label className="text-sm font-medium">
+            Reason For Amendment <span className="text-red-500">*</span>
+          </label>
+
+          <textarea
+            rows={4}
+            value={form.reasonForAmendment}
+            onChange={(e) =>
+              updateField(
+                "reasonForAmendment",
+                e.target.value
+              )
+            }
+            className="w-full border rounded-md px-3 py-2 mt-1"
+          />
+
+          {errors.reasonForAmendment && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.reasonForAmendment}
+            </p>
+          )}
+        </div> 
         <div className="col-span-1">
           <Label className="text-sm font-medium block mb-1">
-            Consent Document 
+            Consent Document <span className="text-red-500">*</span>
           </Label>
 
           <div className="relative">
@@ -363,11 +516,11 @@ export default function AmendmentMetadata({
             </label>
           </div>
 
-          {/* {errors.consentDocument && (
+           {errors.consentDocument && (
             <p className="text-red-500 text-xs mt-1">
               {errors.consentDocument}
             </p>
-          )} */}
+          )} 
         </div>
       </div>
     </div>

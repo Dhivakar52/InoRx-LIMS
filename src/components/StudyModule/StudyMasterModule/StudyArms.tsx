@@ -1,22 +1,31 @@
 import { Input } from "../../ui/input";
-import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import type { StudyArmData } from "./StudyMasterStepper";
+
+interface Props {
+  arm: StudyArmData[];
+  setArm: React.Dispatch<React.SetStateAction<StudyArmData[]>>;
+  errors: any;
+  setErrors: any;
+}
+
+export default function StudyArms({
+  arm,
+  setArm,
+  errors,
+  setErrors
+}: Props) {
 
 
-const initialArm = [
-  {
-    armCode: "",
-    armName: ""
-  },
-];
-export default function StudyArms() {
-
-const [arm, setArm] = useState(initialArm);
+const [searchParams] = useSearchParams();
+const mode = searchParams.get("mode");
+const isViewMode = mode === "view";
 
 
-  const addArmRow = () => {
-  setArm([
-    ...arm,
+const addArmRow = () => {
+  setArm((prev) => [
+    ...prev,
     {
       armCode: "",
       armName: "",
@@ -25,20 +34,39 @@ const [arm, setArm] = useState(initialArm);
 };
 
 const removeArmRow = (index: number) => {
-  setArm(arm.filter((_, i) => i !== index));
+  setArm((prev) =>
+    prev.filter((_, i) => i !== index)
+  );
 };
 
 const updateArm = (
   index: number,
-  field: string,
+  field: keyof StudyArmData,
   value: string
 ) => {
-  const updated = [...arm];
-  updated[index] = {
-    ...updated[index],
-    [field]: value,
-  };
-  setArm(updated);
+  let error = "";
+
+  if (field === "armCode") {
+    if (
+      value &&
+      !/^[a-zA-Z0-9]+$/.test(value)
+    ) {
+      error = "Only alphanumeric characters allowed";
+    }
+
+    setErrors((prev: any) => ({
+      ...prev,
+      [`armCode_${index}`]: error,
+    }));
+  }
+
+  setArm((prev) =>
+    prev.map((item, i) =>
+      i === index
+        ? { ...item, [field]: value }
+        : item
+    )
+  );
 };
   return (
     <div className="space-y-6">
@@ -74,6 +102,7 @@ const updateArm = (
           <td className="border p-2">
             <Input
               value={arm.armCode}
+              maxLength={15}
               onChange={(e) =>
                 updateArm(
                   index,
@@ -81,12 +110,19 @@ const updateArm = (
                   e.target.value
                 )
               }
+              disabled={isViewMode}
             />
+             {errors[`armCode_${index}`] && (
+             <p className="text-red-500 text-xs mt-1">
+              {errors[`armCode_${index}`]}
+            </p>
+             )}
           </td>
 
           <td className="border p-2">
             <Input
               value={arm.armName}
+              maxLength={100}
               onChange={(e) =>
                 updateArm(
                   index,
@@ -94,7 +130,13 @@ const updateArm = (
                   e.target.value
                 )
               }
+              disabled={isViewMode}
             />
+            {errors[`armName_${index}`]  && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors[`armName_${index}`]}
+            </p>
+          )}
           </td>
 
           <td className="border p-2 text-center align-middle">

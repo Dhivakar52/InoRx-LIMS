@@ -167,7 +167,7 @@ const StudyVersionTable = () => {
         code: "PROT-HEMO-488",
         oldVersion: "Interventional",
         versionDate: "GreenCross Pharma",
-        newStatus: "Active",
+        newStatus: "Approved",
       },
     ],
     []

@@ -8,12 +8,14 @@ interface Props {
    formData: any;
     setFormData: any;
     errors: any;
+    setErrors:any;
 }
 
 export default function SponsorAndCRO({
     formData,
     setFormData,
     errors,
+    setErrors
 }: Props) {
 
     // const { id } = useParams();
@@ -35,6 +37,18 @@ const mode = searchParams.get("mode");
       ...prev,
       [field]: value,
     }));
+
+    if (field === "sponsorContact") {
+    let error = "";
+    if (value.trim() && !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(value)) {
+    error = "Please enter a valid email address";
+    }
+
+    setErrors((prev: any) => ({
+      ...prev,
+      studyTitle: error,
+    }));
+  }
   };
   return (
     <div className="space-y-6">
@@ -70,8 +84,16 @@ const mode = searchParams.get("mode");
                 {/* Sponsor Contact */}
                 <div className="space-y-2">
                     <Label>Sponsor Contact</Label>
-                    <Input disabled={isViewMode} />
+                    <Input disabled={isViewMode}
+                     onChange={(e) => handleChange("sponsorContact", e.target.value)} 
+                     maxLength={100}/>
+                     {errors.sponsorContact && (
+                        <p className="text-red-500 text-xs mt-1">
+                        {errors.sponsorContact}
+                        </p>
+                    )}
                 </div>
+
 
                 {/* CRO Name */}
                 <div className="space-y-2">
@@ -96,7 +118,14 @@ const mode = searchParams.get("mode");
                 {/* CRO Contact */}
                 <div className="space-y-2">
                     <Label>CRO Contact</Label>
-                    <Input disabled={isViewMode} />
+                    <Input disabled={isViewMode}
+                     onChange={(e) => handleChange("croContact", e.target.value)} 
+                     maxLength={100} />
+                     {errors.croContact && (
+                        <p className="text-red-500 text-xs mt-1">
+                        {errors.croContact}
+                        </p>
+                    )}
                 </div>
                 
                 {/* Principal Investigator */}
@@ -132,23 +161,32 @@ const mode = searchParams.get("mode");
                 </div>
                 <div className="space-y-2">
                     <Label>Principal Investigator Address</Label>
-                    <Textarea disabled={isViewMode} />
+                    <Textarea disabled={isViewMode}
+                     onChange={(e) => handleChange("principalInvestigatorAddress", e.target.value)} 
+                     maxLength={250}  />
                 </div>
                 <div className="space-y-2">
                     <Label>Study Director</Label>
-                    <Input disabled={isViewMode} />
+                    <Input disabled={isViewMode}
+                     onChange={(e) => handleChange("studyDirector", e.target.value)} 
+                     maxLength={100}
+                      />
                 </div>
                 <div className="space-y-2">
                     <Label>Medical Monitor</Label>
-                    <Input disabled={isViewMode} />
+                    <Input disabled={isViewMode} 
+                     onChange={(e) => handleChange("medicalMonitor", e.target.value)} 
+                     maxLength={100}/>
                 </div>
                 <div className="space-y-2">
                     <Label>Regulatory Contact</Label>
-                    <Input disabled={isViewMode} />
+                    <Input disabled={isViewMode} 
+                     onChange={(e) => handleChange("regulatoryContact", e.target.value)} 
+                     maxLength={100}/>
                 </div>
                 {/* Coordinator Name */}
                 <div className="space-y-2">
-                <Label>StudyCoordinator</Label>
+                <Label>Study Coordinator</Label>
                 <Select
                     value={formData.studyCoordinator}
                     onValueChange={(v) =>

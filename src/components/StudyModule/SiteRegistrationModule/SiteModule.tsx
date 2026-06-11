@@ -326,7 +326,7 @@ const SiteModule = () => {
           />
           <ColumnToggle table={table} />
           <NavigateButton
-            label="Add Site"
+            label="Add Site Registration"
             path="/study/site/new-add"
             icon={<Plus size={18} />}
           />

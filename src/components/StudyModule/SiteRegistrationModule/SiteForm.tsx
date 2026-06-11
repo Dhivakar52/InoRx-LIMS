@@ -22,18 +22,68 @@ export default function SiteForm() {
     "Staff & Role Mapping",
     "Study Mapping"
   ];
+  const [formData, setFormData] =
+  useState<any>({
+    siteStatus: "DRAFT",
+    mappingStatus: "ACTIVE",
+  });
   const [currentStep, setCurrentStep] =
   useState(0);
 
   const [successMsg, setSuccessMsg] = useState("");
   const [errors, setErrors] = useState<any>({});
-  const [formData, setFormData] = useState<any>({});
-  
+  // const [formData, setFormData] = useState<any>({});
+  const [showReasonModal, setShowReasonModal] = useState(false);
+  const [actionType, setActionType] = useState("");
+  const [reasonForChange, setReasonForChange] = useState("");
+
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
     }
   }, [initialData]);
+  const openActivateModal = () => {
+    setActionType("ACTIVATE");
+    setReasonForChange("");
+    setShowReasonModal(true);
+  };
+
+const openSuspendModal = () => {
+  setActionType("SUSPEND");
+  setReasonForChange("");
+  setShowReasonModal(true);
+};
+const handleConfirmAction = () => {
+  if (!reasonForChange.trim()) {
+    alert("Reason For Change is required");
+    return;
+  }
+
+  const updatedStatus =
+    actionType === "ACTIVATE"
+      ? "ACTIVE"
+      : "SUSPENDED";
+
+  setFormData((prev: any) => ({
+    ...prev,
+    siteStatus: updatedStatus,
+  }));
+
+  console.log({
+    action: actionType,
+    reason: reasonForChange,
+  });
+
+  setShowReasonModal(false);
+
+  setSuccessMsg(
+    `Site ${updatedStatus} successfully`
+  );
+
+  setTimeout(() => {
+    setSuccessMsg("");
+  }, 3000);
+};
   const validateDemographics = () => {
   const newErrors: any = {};
 
@@ -41,11 +91,26 @@ export default function SiteForm() {
     newErrors.siteCode =
       "Site Code is required";
   }
-
+  const siteCodeRegex = /^[A-Z0-9-]+$/;
+    if (
+    !siteCodeRegex.test(
+    formData.siteCode
+    )
+    ){
+    newErrors.siteCode =
+    "Only uppercase letters, numbers and hyphen allowed";
+    }
   if (!formData.siteName?.trim()) {
     newErrors.siteName =
       "Site Name is required";
   }
+  if(
+    formData.siteName &&
+    formData.siteName.length > 150
+    ){
+    newErrors.siteName =
+    "Maximum 150 characters";
+    }
 
   if (!formData.siteType?.trim()) {
     newErrors.siteType =
@@ -260,12 +325,30 @@ const validateStudyMapping = () => {
     newErrors.localIrbApprovalDate =
       "Approval Date is required";
   }
+  if( formData.localIrbReference && formData.localIrbApprovalDate && formData.siteEffectiveDate ){
+    if(
+    new Date(
+    formData.localIrbApprovalDate
+    ) >
+    new Date(
+    formData.siteEffectiveDate
+    )
+    ){
+      newErrors.localIrbApprovalDate =
+      "Approval Date cannot be after Effective Date";
+    }
+    }
 
   if (!formData.siteEffectiveDate) {
     newErrors.siteEffectiveDate =
       "Site Effective Date is required";
   }
+  // const studyStartDate = selectedStudy.startDate;
 
+  //   if(new Date(formData.siteEffectiveDate) <
+  //   new Date(studyStartDate)
+  //   ){
+  //   newErrors.siteEffectiveDate = "Must be after Study Start Date";}
   setErrors(newErrors);
 
   return (
@@ -340,17 +423,17 @@ const handleSubmit = () => {
   );
 };
 const handleSaveDraft = () => {
-  const isValid =
-    validateCurrentStep();
+  //const isValid =
+  //   validateCurrentStep();
 
-  if (!isValid) return;
+  // if (!isValid) return;
 
-  setCurrentStep((prev) =>
-    Math.min(
-      prev + 1,
-      steps.length - 1
-    )
-  );
+  // setCurrentStep((prev) =>
+  //   Math.min(
+  //     prev + 1,
+  //     steps.length - 1
+  //   )
+  // );
   setSuccessMsg(
     "Draft saved successfully"
   );
@@ -522,6 +605,45 @@ const handleChange = (
           <div />
         )}
         <div className="flex gap-3">
+          {currentStep < steps.length - 1 ? (
+            <>
+              <button
+                onClick={handleSaveDraft}
+                className="px-5 py-2 rounded-md bg-gray-500 text-white">
+                Save Draft
+              </button>
+              <button
+                onClick={nextStep}
+                className="px-5 py-2 rounded-md bg-[#00458F] text-white">
+                Next
+              </button>
+            </>
+          ) : (
+            <>
+              {formData.siteStatus !== "ACTIVE" ? (
+                <button
+                  type="button"
+                  onClick={openActivateModal}
+                  className="px-5 py-2 rounded-md bg-green-600 text-white">
+                  Activate Site
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={openSuspendModal}
+                  className="px-5 py-2 rounded-md bg-red-600 text-white">
+                  Suspend Site
+                </button>
+              )}
+              <button
+                onClick={handleSubmit}
+                className="px-5 py-2 rounded-md bg-[#00458F] text-white">
+                Submit
+              </button>
+            </>
+          )}
+        </div>
+        {/* <div className="flex gap-3">
           <button onClick={handleSaveDraft}
             className="px-5 py-2 rounded-md bg-gray-500 text-white">
             Save Draft
@@ -543,7 +665,52 @@ const handleChange = (
               Submit
             </button>
           )}
-        </div>
+        </div> */}
+        {showReasonModal && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-xl w-[500px] p-6">
+              <h2 className="text-xl font-semibold mb-4">
+                {actionType === "ACTIVATE"
+                  ? "Activate Site"
+                  : "Suspend Site"}
+              </h2>
+              <label className="block text-sm font-medium mb-2">
+                Reason For Change<span className="text-red-500 ml-1"> *</span>
+              </label>
+              <textarea
+                rows={4}
+                value={reasonForChange}
+                onChange={(e) =>
+                  setReasonForChange(
+                    e.target.value
+                  )
+                }
+                className="w-full border rounded-md p-3"
+                placeholder="Enter reason..."/>
+              <div className="flex justify-end gap-3 mt-5">
+                <button
+                  onClick={() =>
+                    setShowReasonModal(false)
+                  }
+                  className="px-4 py-2 rounded-md bg-gray-200">
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmAction}
+                  className={`px-4 py-2 rounded-md text-white ${
+                    actionType === "ACTIVATE"
+                      ? "bg-green-600"
+                      : "bg-red-600"
+                  }`}>
+                  Confirm
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+        )}
       </div>
     </div>
   </div>

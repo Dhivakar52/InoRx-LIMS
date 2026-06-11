@@ -19,8 +19,7 @@ const steps = [
   "Migration",
   "Site Activation",
   "Kit Reconciliation",
-  "Version History",
-  "Review & Approval",
+  
 ];
 
 export default function StudyAmendmentStepper() {

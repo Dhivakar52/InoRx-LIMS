@@ -76,14 +76,10 @@ useEffect(() => {
 }, []);
   return (
     <div className="grid grid-cols-2 gap-4">
-
-
       <div className="space-y-2">
         <Label>
-          Local IRB Name
-          <span className="text-red-500 ml-1">*</span>
+          Local IRB Name<span className="text-red-500 ml-1">*</span>
         </Label>
-
         <Input
           disabled={isViewMode}
           maxLength={150}
@@ -97,20 +93,16 @@ useEffect(() => {
             )
           }
          className="w-full border rounded-md h-10 px-3 mt-1"/>
-
         {errors.localIRBName && (
           <p className="text-red-500 text-xs">
             {errors.localIRBName}
           </p>
         )}
       </div>
-
       <div className="space-y-2">
         <Label>
-          IRB Registration Number
-          <span className="text-red-500 ml-1">*</span>
+          IRB Registration Number <span className="text-red-500 ml-1">*</span>
         </Label>
-
         <Input
           disabled={isViewMode}
           maxLength={50}
@@ -134,16 +126,11 @@ useEffect(() => {
           </p>
         )}
       </div>
-
       <div className="space-y-2">
         <Label>
-          Accreditation Expiry
-          <span className="text-red-500 ml-1">*</span>
+          Accreditation Expiry <span className="text-red-500 ml-1">*</span>
         </Label>
-
-        <Input
-          type="date"
-          disabled={isViewMode}
+        <Input  type="date" disabled={isViewMode}
           value={
             formData.accreditationExpiry ||
             ""
@@ -155,7 +142,6 @@ useEffect(() => {
             )
           }
          className="w-full border rounded-md h-10 px-3 mt-1" />
-
         {errors.accreditationExpiry && (
           <p className="text-red-500 text-xs">
             {
@@ -164,10 +150,8 @@ useEffect(() => {
           </p>
         )}
       </div>
-      <div className="space-y-2 relative"
-          ref={dropdownRef}>
+      <div className="space-y-2 relative" ref={dropdownRef}>
           <Label>Accreditation Type</Label>
-
           <div
             onClick={() =>
               !isViewMode &&
@@ -236,7 +220,6 @@ useEffect(() => {
               }`}
             />
           </div>
-
           {isOpen && (
             <div
               className="
@@ -286,23 +269,16 @@ useEffect(() => {
               )}
             </div>
           )}
-
           {errors.accreditationTypes && (
             <p className="text-red-500 text-xs">
               {errors.accreditationTypes}
             </p>
           )}
         </div>
-     
       <div className="space-y-2 col-span-2">
-        <Label>
-          GCP Certificate Upload
-        </Label>
-
+        <Label> GCP Certificate Upload</Label>
          <div className="relative">
-            <input
-              id="gcpCertificate"
-              type="file"
+            <input id="gcpCertificate" type="file"
               // onChange={handleFileChange}
               accept=".pdf,,.docx"
               onChange={(e) =>
@@ -311,11 +287,8 @@ useEffect(() => {
                   e.target.files?.[0] || null
                 )
               }
-              className="hidden"
-            />
-
-            <label
-              htmlFor="gcpCertificate"
+              className="hidden" />
+            <label htmlFor="gcpCertificate"
               className={`
                 flex flex-col items-center justify-center
                 w-full min-h-[120px]
@@ -336,35 +309,29 @@ useEffect(() => {
                 className="h-8 w-8 text-gray-400 mb-2"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+                stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                />
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
               </svg>
-
               <span className="text-sm font-medium text-gray-700">
                 {formData.gcpCertificate
                   ? formData.gcpCertificate.name
                   : "Choose File or Drag & Drop"}
               </span>
-
               <span className="text-xs text-gray-500 mt-1">
                 PDF, DOCX (Max 5 MB)
               </span>
             </label>
           </div>
-
         {errors.gcpCertificate && (
           <p className="text-red-500 text-xs">
             {errors.gcpCertificate}
           </p>
         )}
       </div>
-
     </div>
   );
 }

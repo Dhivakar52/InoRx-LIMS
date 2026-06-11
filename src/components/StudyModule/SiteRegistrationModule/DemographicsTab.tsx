@@ -38,7 +38,6 @@ export default function DemographicsTab({
             </p>
           )}
       </div>
-
       <div className="space-y-2">
         <Label>Site Name <span className="text-red-500">*</span></Label>
         <Input
@@ -57,12 +56,9 @@ export default function DemographicsTab({
             </p>
           )}
       </div>
-
       <div>
         <label className="text-sm font-medium">
-            Site Type <span className="text-red-500">*</span>
-          </label>
-
+            Site Type <span className="text-red-500">*</span></label>
           <select
             value={formData.siteType}
             onChange={(e) =>
@@ -72,23 +68,18 @@ export default function DemographicsTab({
               )
             }
             className="w-full border rounded-md h-10 px-3 mt-1">
-
             <option value="">
               Select Type
             </option>
-
             <option value="NEW_ONLY">
               Investigative Site
             </option>
-
             <option value="GLOBAL">
               Satelite Clinic
             </option>
-
             <option value="CUSTOM">
               Central Lab
             </option>
-
             <option value="CUSTOM">
               Depot
             </option>
@@ -100,10 +91,7 @@ export default function DemographicsTab({
           )}
         </div>
         <div>
-        <label className="text-sm font-medium">
-            Site Status
-        </label>
-
+        <label className="text-sm font-medium"> Site Status</label>
         <select
             value={formData.siteStatus || "DRAFT"}
             disabled

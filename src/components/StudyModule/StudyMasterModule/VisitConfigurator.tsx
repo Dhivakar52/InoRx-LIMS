@@ -1,57 +1,79 @@
 import { Input } from "../../ui/input";
-import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
+import { useSearchParams } from "react-router-dom";
+import type { StudyVisitData } from "./StudyMasterStepper";
 
+interface Props {
+    visit: StudyVisitData[];
+    setVisit: React.Dispatch<React.SetStateAction<StudyVisitData[]>>;
+    errors: any;
+    setErrors:any;
+}
 
-const initialVisitTemplate = [
-  {
-    visitName: "",
-    visitType: "",
-    targetDay: "",
-    windowMinus: "",
-    windowPlus: "",
-    specimens: [],
-    testCodes: [],
-  },
-];
-export default function VisitConfigurator() {
+export default function VisitConfigurator({
+    visit,
+    setVisit,
+    errors,
+    setErrors
+}: Props) {
 
-const [visitTemplates, setVisitTemplates] = useState(initialVisitTemplate);
-
+const [searchParams] = useSearchParams();
+const mode = searchParams.get("mode");
+const isViewMode = mode === "view";
 
   const addVisitRow = () => {
-  setVisitTemplates([
-    ...visitTemplates,
+  setVisit([
+    ...visit,
     {
+      visitCode:"",
       visitName: "",
       visitType: "",
       targetDay: "",
       windowMinus: "",
       windowPlus: "",
-      specimens: [],
-      testCodes: [],
+      specimen: "",
+      mappedTests: "",
     },
   ]);
 };
 
 const removeVisitRow = (index:any) => {
-  setVisitTemplates(
-    visitTemplates.filter((_, i) => i !== index)
+  setVisit(
+    visit.filter((_, i) => i !== index)
   );
 };
-// const updateArm = (
-//   index: number,
-//   field: string,
-//   value: string
-// ) => {
-//   const updated = [...arm];
-//   updated[index] = {
-//     ...updated[index],
-//     [field]: value,
-//   };
-//   setArm(updated);
-// };
+
+const updateVisit = (
+  index: number,
+  field: string,
+  value: string
+) => {
+let error = "";
+
+  if (field === "visitCode") {
+    if (
+      value &&
+      !/^[a-zA-Z0-9]+$/.test(value)
+    ) {
+      error = "Only alphanumeric characters allowed";
+    }
+
+    setErrors((prev: any) => ({
+      ...prev,
+      [`visitCode_${index}`]: error,
+    }));
+  }
+
+  setVisit((prev) =>
+    prev.map((item, i) =>
+      i === index
+        ? { ...item, [field]: value }
+        : item
+    )
+  );
+};
+
   return (
     <div className="space-y-6">
       <div className="border-b pb-4">
@@ -88,17 +110,42 @@ const removeVisitRow = (index:any) => {
     </thead>
 
     <tbody>
-      {visitTemplates.map((_visit: any, index: number) => (
+      {visit.map((_visit: any, index: number) => (
         <tr key={index}>
           <td className="border p-2">
-            <Input />
+            <Input onChange={(e) =>
+                updateVisit(
+                  index,
+                  "visitCode",
+                  e.target.value
+                )
+              }
+              maxLength={15}/>
+              {errors[`visitCode_${index}`]  && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors[`visitCode_${index}`]}
+            </p>
+          )}
           </td>
           <td className="border p-2">
-            <Input />
+            <Input onChange={(e) =>
+                updateVisit(
+                  index,
+                  "visitName",
+                  e.target.value
+                )
+              }
+              maxLength={100}/>
+              {errors[`visitName_${index}`]  && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors[`visitName_${index}`]}
+            </p>
+          )}
           </td>
 
           <td className="border p-2">
-            <Select>
+            <Select 
+            disabled={isViewMode}>
               <SelectTrigger>
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
@@ -123,15 +170,51 @@ const removeVisitRow = (index:any) => {
           </td>
 
           <td className="border p-2">
-            <Input type="number" />
+            <Input type="number" onChange={(e) =>
+                updateVisit(
+                  index,
+                  "targetDay",
+                  e.target.value
+                )
+              }  />
+
+              {errors[`targetDay_${index}`]  && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors[`targetDay_${index}`]}
+            </p>
+          )}
           </td>
 
           <td className="border p-2">
-            <Input type="number" min="0" />
+            <Input type="number" min="0" 
+            onChange={(e) =>
+                updateVisit(
+                  index,
+                  "windowMinus",
+                  e.target.value
+                )
+              }/>
+              {errors[`windowMinus_${index}`]  && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors[`windowMinus_${index}`]}
+            </p>
+          )}
           </td>
 
           <td className="border p-2">
-            <Input type="number" min="0" />
+            <Input type="number" min="0" 
+            onChange={(e) =>
+                updateVisit(
+                  index,
+                  "windowPlus",
+                  e.target.value
+                )
+              }/>
+              {errors[`windowPlus_${index}`]  && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors[`windowPlus_${index}`]}
+            </p>
+          )}
           </td>
 
           <td className="border p-2">
@@ -151,6 +234,11 @@ const removeVisitRow = (index:any) => {
                 </SelectItem>
               </SelectContent>
             </Select>
+            {errors[`specimen_${index}`]  && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors[`specimen_${index}`]}
+            </p>
+          )}
           </td>
 
           <td className="border p-2">
@@ -170,6 +258,11 @@ const removeVisitRow = (index:any) => {
                 </SelectItem>
               </SelectContent>
             </Select>
+            {errors[`mappedTests_${index}`]  && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors[`mappedTests_${index}`]}
+            </p>
+          )}
           </td>
 
           <td className="border p-2">
