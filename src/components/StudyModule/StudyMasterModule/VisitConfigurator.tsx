@@ -76,10 +76,10 @@ let error = "";
 
   return (
     <div className="space-y-6">
-      <div className="border-b pb-4">
-        <h2 className="text-xl font-semibold text-[#00458F]">
+      <div className="border-b">
+        {/* <h2 className="text-xl font-semibold text-[#00458F]">
           Visit Templates Configurator Grid
-        </h2>
+        </h2> */}
       </div>
 
       <div className="flex justify-end">

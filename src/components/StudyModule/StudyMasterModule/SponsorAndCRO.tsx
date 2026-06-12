@@ -52,10 +52,10 @@ const mode = searchParams.get("mode");
   };
   return (
     <div className="space-y-6">
-      <div className="border-b pb-4">
-        <h2 className="text-xl font-semibold text-[#00458F]">
+      <div className="border-b">
+        {/* <h2 className="text-xl font-semibold text-[#00458F]">
           Sponsor & CRO Details
-        </h2>
+        </h2> */}
       </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
