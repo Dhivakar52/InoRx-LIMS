@@ -195,7 +195,7 @@ export default function AddressShippingTab({
           </p>
         )}
       </div>
-      <div>
+      {/* <div>
         <label className="text-sm font-medium">Site Status </label>
         <select
             value={formData.siteStatus || "DRAFT"}
@@ -214,7 +214,7 @@ export default function AddressShippingTab({
             Inactive
             </option>
         </select>
-        </div>
+        </div> */}
     </div>
   );
 }

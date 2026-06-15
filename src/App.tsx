@@ -27,7 +27,7 @@ import TestRegistrationForm from "./components/Test Registration/TestRegistratio
 import GenerateReport from "./components/Reports/GenerateReport.tsx";
 import ReportForm from "./components/Reports/ReportForm.tsx";
 
-import Sample from './components/Sample/SampleRegistrationModule/SampleReception.tsx';
+import SampleStorage from './components/Sample/SampleRegistrationModule/SampleStorage.tsx';
 import Result from "./components/ResultModule/Result.tsx";
 import ForgotPassword from './pages/auth/Login/ForgotPassword.tsx';
 //import PresidentLevelDetail from './components/PresidentLevel/PresidentLevelDetail.tsx';
@@ -40,8 +40,9 @@ import Dashboard from './components/Dashboard/Dashboard.tsx';
 import StudyMasterStepper from './components/StudyModule/StudyMasterModule/StudyMasterStepper.tsx';
 import SubjectEnrollmentForm from './components/Subject/SubjectEnrollment/SubjectEnrollmentForm.tsx';
 import AdverseEventTrackingForm from './components/Subject/AdverseEvents/AdverseEventTrackingForm.tsx';
-import SampleReceptionForm from './components/Sample/SampleRegistrationModule/SampleReceptionStepper.tsx';
-
+import SampleProcessingForm from './components/Sample/SampleProcessingModule/SampleProcessingForm.tsx';
+import SampleStorageForm from './components/Sample/SampleProcessingModule/SampleStorageForm.tsx';  
+import SampleProcessing from './components/Sample/SampleRegistrationModule/SampleProcessing.tsx';
 // Import all 5 modules
 import VisitForm from './components/VisitSchedulingModule/VisitForm.tsx';
 import AnalyzerIntegrationTable from './components/AnalyzerIntegrationModule/AnalyzerIntegrationTable.tsx';
@@ -58,7 +59,14 @@ import Notifications from './components/Notifications/Notifications.tsx';
 import NotificationIcon from './components/Notifications/NotificationIcon.tsx';
 import UserForm from './components/Settings/UserManagement/UserForm.tsx';
 import AddUserForm from './components/Settings/UserManagement/AddUserForm.tsx';
-
+import SampleTracking from './components/Sample/SampleTrackingModule/SampleTracking.tsx';
+import SampleTrackingList from './components/Sample/SampleTrackingModule/SampleTrackingList.tsx';
+import ResultEntry from './components/ResultEntry/ResultEntry.tsx';
+import ResultEntryList from './components/ResultEntry/ResultEntryList.tsx';
+// Add imports
+import ResultValidationList from './components/ResultEntry/ResultValidationList';
+import ResultValidationReview from './components/ResultEntry/ResultValidationReview';
+import SampleCollection from './components/Sample/SampleCollection.tsx';
 // -------------------------
 // Main page components
 // -------------------------
@@ -83,9 +91,10 @@ const pageComponents: Record<string, React.ReactNode> = {
 
 
   'Result': <Result/>,
-
-  'Sample': <Sample />,
-
+  'ResultEntry': <ResultEntry/>,
+  'ResultValidation': <ResultValidationList/>,
+  'SampleProcessing': <SampleProcessing />,
+  'SampleStorage': <SampleStorage />,
   // 'My Nominations': <NominationPage />,
   
 };
@@ -280,10 +289,18 @@ console.log("allowedRoles:", allowedRoles);
   }
 />
 <Route
-  path="/sample/reception"
+  path="/sample/storage"
   element={
     <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
-      <Sample />
+      <SampleStorage />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/sample/processing"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <SampleProcessing />
     </ProtectedRoute>
   }
 />
@@ -293,6 +310,15 @@ console.log("allowedRoles:", allowedRoles);
          <VisitSchedule />
      </ProtectedRoute>
  } />
+
+ <Route
+  path="/sample/collection"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <SampleCollection />
+    </ProtectedRoute>
+  }
+/>
  <Route path="/visit/new-add" element={
      <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
          <VisitForm />
@@ -385,6 +411,61 @@ console.log("allowedRoles:", allowedRoles);
   element={<AddUserForm />}
 />
 
+
+{/* Result Entry Module */}
+<Route
+  path="/result/entry"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={getAllowedRoles('ResultEntry')}>
+      <ResultEntryList />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/result/entry/new"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={getAllowedRoles('ResultEntry')}>
+      <ResultEntry />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/result/entry/edit"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={getAllowedRoles('ResultEntry')}>
+      <ResultEntry />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/result/entry/view"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={getAllowedRoles('ResultEntry')}>
+      <ResultEntry />
+    </ProtectedRoute>
+  }
+/>
+
+
+
+// Inside Layout routes, add:
+<Route
+  path="/result/validation"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={getAllowedRoles('ResultValidation')}>
+      <ResultValidationList />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/result/validation/review"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={getAllowedRoles('ResultValidation')}>
+      <ResultValidationReview />
+    </ProtectedRoute>
+  }
+/>
+
 <Route
   path="/inventory"
   element={<InventoryForm />}
@@ -401,12 +482,24 @@ console.log("allowedRoles:", allowedRoles);
        <Route path="*" element={<Navigate to="/home" replace />} />
         <Route path="/subject/master/sub-add" element={<SubjectEnrollmentForm />}/>
        <Route path="/subject/master/adv-add" element={<AdverseEventTrackingForm />}/>
-      <Route path="/sample/master/smp-add" element={<SampleReceptionForm />}/>
+      <Route path="/sample/master/smp-add" element={<SampleStorageForm />}/>
+      <Route path="/sample/master/smppro-add" element={<SampleProcessingForm />}/>
+      
+      <Route
+  path="/sample/tracking"
+  element={<SampleTrackingList />}
+/>
+
+<Route
+  path="/sample/tracking/add"
+  element={<SampleTracking />}
+/>
      </Route>
    </Routes>
  </Router>
     </AuthProvider>
   );
+  
 };
 
 export default App;

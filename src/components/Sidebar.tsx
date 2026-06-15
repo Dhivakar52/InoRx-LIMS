@@ -18,7 +18,7 @@ import {
   Building2,
   Users,
   UserPlus,
-  ClipboardList,
+
   TestTube2,
   FileSpreadsheet,
   CalendarDays,
@@ -29,7 +29,9 @@ import {
   ClipboardCheck,
   Settings,
   Warehouse,
-  Bell
+  Bell,
+  Archive,
+  ClipboardList
 
   
 } from "lucide-react";
@@ -59,12 +61,7 @@ const navigationItems: NavigationItem[] = [
   // { icon: Home, label: 'Home', path: '/home', pageKey: 'Home' },
   {
   icon: Home, label: 'Dashboard', path: '/dashboard',pageKey: 'Dashboard'},
- 
- 
-  
-
   { icon: Bell, label: 'Notifications', path: '/notifications', pageKey: 'Notifications' },
-
   // ✅ STUDY
   {
     icon: SquareLibrary,
@@ -76,7 +73,13 @@ const navigationItems: NavigationItem[] = [
       { icon: Building2, label: 'Site Registration', path: '/study/site', pageKey: 'Site Registration' },
     ],
   },
-
+  // ✅ VISIT
+  {
+    icon: CalendarDays,
+    label: 'Visit Schedule',
+    path: '/visit',
+    pageKey: 'Visit',
+  },
   // ✅ SUBJECT
   {
     icon: Users,
@@ -87,15 +90,40 @@ const navigationItems: NavigationItem[] = [
       { icon: AlertTriangle, label: 'Adverse Events', path: '/subject/adverse', pageKey: 'Adverse' },
     ],
   },
+  // Test Registration
+  {
+    icon: FlaskConical,
+    label: 'Test Registration',
+    path: '/testRegistration',
+    pageKey: 'TestRegistration',
+  },
   {
     icon: TestTube2,
     label: 'Sample',
     pageKey: 'Sample',
     children: [
-      { icon: ClipboardList, label: 'Sample Reception', path: '/sample/reception', pageKey: 'Sample' },
+      { icon: ClipboardList, label: 'Sample Collection', path: '/sample/collection', pageKey: 'Sample' },
+      { icon: FlaskConical, label: 'Sample Processing', path: '/sample/processing', pageKey: 'SampleProcessing' },
+      { icon: Archive, label: 'Sample Storage', path: '/sample/storage', pageKey: 'SampleStorage' },
+      { icon: Archive, label: 'Sample tracking', path: '/sample/tracking', pageKey: 'SampleTracking' },
+      
     ],
   },
-  // ✅ VISIT
+  {
+    icon: TestTube2,
+    label: 'Result',
+    pageKey: 'Result',
+    children: [
+      { icon: FileText, label: 'Result Entry', path: '/result/entry', pageKey: 'ResultEntry' },
+    {
+  icon: CheckCircle,
+  label: 'Result Validation',
+  path: '/result/validation',
+  pageKey: 'ResultValidation',
+}
+      
+    ],
+  },
   {
     icon: CalendarDays,
     label: 'Visit Schedule',
@@ -103,6 +131,7 @@ const navigationItems: NavigationItem[] = [
     pageKey: 'Visit',
   },
 
+ 
    // ✅ ANALYZER INTEGRATION - MAIN HEADING ONLY (NO SUBHEADINGS)
   {
     icon: Microscope,
@@ -135,13 +164,6 @@ const navigationItems: NavigationItem[] = [
     pageKey: 'FinalQCApproval',
   },
 
-  // Test Registration
-  {
-    icon: FlaskConical,
-    label: 'Test Registration',
-    path: '/testRegistration',
-    pageKey: 'TestRegistration',
-  },
    //  Reports
   {
     icon: FileBarChart,

@@ -69,6 +69,8 @@ export const ROLE_PAGES: Record<UserRole, string[]> = {
     
     // Sample Module
     'Sample',
+    'SampleProcessing',
+    'SampleStorage',  
   
    'Settings']
 };

@@ -26,7 +26,7 @@ type SiteRegistration = {
   code: string;
   study: string;
   city: string;
-  investigatorType: string;
+  country: string;
   investigatorName: string;
   status: string;
 };
@@ -43,7 +43,7 @@ const SiteModule = () => {
         code: "ST001",
         study: "Apollo",
         city: "Chennai",
-        investigatorType: "Dr",
+        country: "India",
         investigatorName: "Kumar",
         status: "Active",
       },
@@ -53,7 +53,7 @@ const SiteModule = () => {
         code: "ST002",
         study: "SRM",
         city: "Coimbatore",
-        investigatorType: "Dr",
+        country: "India",
         investigatorName: "Raj",
         status: "Draft",
       },
@@ -63,7 +63,7 @@ const SiteModule = () => {
         code: "ST003",
         study: "Fortis",
         city: "Madurai",
-        investigatorType: "Dr",
+        country: "USA",
         investigatorName: "Anitha",
         status: "Active",
       },
@@ -73,7 +73,7 @@ const SiteModule = () => {
         code: "ST004",
         study: "MIOT",
         city: "Chennai",
-        investigatorType: "Dr",
+        country: "UK",
         investigatorName: "Suresh",
         status: "Inactive",
       },
@@ -83,7 +83,7 @@ const SiteModule = () => {
         code: "ST005",
         study: "Vijaya",
         city: "Salem",
-        investigatorType: "Dr",
+        country: "UK",
         investigatorName: "Priya",
         status: "Active",
       },
@@ -93,7 +93,7 @@ const SiteModule = () => {
         code: "ST006",
         study: "Apollo",
         city: "Trichy",
-        investigatorType: "Dr",
+        country: "India",
         investigatorName: "Mohan",
         status: "Draft",
       },
@@ -103,7 +103,7 @@ const SiteModule = () => {
         code: "ST007",
         study: "SRM",
         city: "Vellore",
-        investigatorType: "Dr",
+        country: "Australia",
         investigatorName: "Divya",
         status: "Active",
       },
@@ -113,7 +113,7 @@ const SiteModule = () => {
         code: "ST008",
         study: "Fortis",
         city: "Erode",
-        investigatorType: "Dr",
+        country: "USA",
         investigatorName: "Karthik",
         status: "Inactive",
       },
@@ -123,7 +123,7 @@ const SiteModule = () => {
         code: "ST009",
         study: "MIOT",
         city: "Chennai",
-        investigatorType: "Dr",
+        country: "India",
         investigatorName: "Lakshmi",
         status: "Active",
       },
@@ -133,7 +133,7 @@ const SiteModule = () => {
         code: "ST010",
         study: "Vijaya",
         city: "Madurai",
-        investigatorType: "Dr",
+        country: "India",
         investigatorName: "Arun",
         status: "Draft",
       },
@@ -141,7 +141,6 @@ const SiteModule = () => {
     []
   );
 
-  // ✅ STATES
   const [data, setData] = useState<SiteRegistration[]>(initialData);
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -209,7 +208,6 @@ const SiteModule = () => {
     }
   }, [selectedItem, editFormData]);
 
-  // ✅ Close panel
   const handleClosePanel = useCallback(() => {
     setPanelMode(null);
     setSelectedItem(null);
@@ -218,28 +216,27 @@ const SiteModule = () => {
 
  
 
-  // ✅ COLUMNS (memoized with all dependencies)
   const siteRegistrationColumns: ColumnDef<SiteRegistration>[] = useMemo(
     () => [
       {
         accessorKey: "site",
-        header: "Site",
+        header: "Site Name",
       },
       {
         accessorKey: "code",
-        header: "Code",
+        header: "Site Code",
       },
       {
         accessorKey: "study",
-        header: "Study",
+        header: "Site Type",
       },
       {
         accessorKey: "city",
         header: "City",
       },
       {
-        accessorKey: "investigatorType",
-        header: "Type",
+        accessorKey: "country",
+        header: "Contry",
       },
       {
         accessorKey: "investigatorName",
@@ -286,7 +283,6 @@ const SiteModule = () => {
     [handleView, handleEdit, handleDelete, openMenuId]
   );
 
-  // ✅ PAGINATION
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -311,13 +307,11 @@ const SiteModule = () => {
     globalFilterFn: "includesString",
   });
 
-  // ✅ Panel title based on mode
   const panelTitle = panelMode === "view" ? "View Site Registration" : "Edit Site Registration";
 
   return (
     <div className="p-6">
       <div className="bg-white shadow-md rounded-lg p-6">
-        {/* HEADER */}
         <div className="flex justify-end items-center mb-4 gap-3">
           <TableSearch
             value={globalFilter}
@@ -331,29 +325,22 @@ const SiteModule = () => {
             icon={<Plus size={18} />}
           />
         </div>
-
         <DataTable
           table={table}
           columns={siteRegistrationColumns}
           loading={loading} 
-          tableWrapperRef={tableWrapperRef} 
-        />
-
-        {/* PAGINATION */}
+          tableWrapperRef={tableWrapperRef} />
         <Pagination
           table={table}
           totalCount={table.getFilteredRowModel().rows.length}
         />
       </div>
-
-      {/* CUSTOM PANEL - View Mode */}
       <CustomPanel
         isOpen={panelMode === "view"}
         title={panelTitle}
         onClose={handleClosePanel}
         onSave={handleClosePanel}
-        saveLabel="Close"
-      >
+        saveLabel="Close">
         {selectedItem && (
           <div className="grid grid-cols-2 gap-4">
             <div className="border-b pb-3">
@@ -374,7 +361,7 @@ const SiteModule = () => {
             </div>
             <div className="border-b pb-3">
               <label className="block text-sm font-medium text-gray-600">Investigator Type</label>
-              <p className="mt-1 text-gray-900">{selectedItem.investigatorType}</p>
+              <p className="mt-1 text-gray-900">{selectedItem.country}</p>
             </div>
             <div className="border-b pb-3">
               <label className="block text-sm font-medium text-gray-600">Investigator Name</label>
@@ -390,8 +377,7 @@ const SiteModule = () => {
                       : selectedItem.status === "Draft"
                       ? "bg-yellow-100 text-yellow-700"
                       : "bg-gray-100 text-gray-700"
-                  }`}
-                >
+                  }`}>
                   {selectedItem.status}
                 </span>
               </p>
@@ -399,15 +385,12 @@ const SiteModule = () => {
           </div>
         )}
       </CustomPanel>
-
-      {/* CUSTOM PANEL - Edit Mode */}
       <CustomPanel
         isOpen={panelMode === "edit"}
         title={panelTitle}
         onClose={handleClosePanel}
         onSave={handleSaveEdit}
-        saveLabel="Save Changes"
-      >
+        saveLabel="Save Changes">
         {selectedItem && (
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -468,9 +451,9 @@ const SiteModule = () => {
               </label>
               <input
                 type="text"
-                value={editFormData.investigatorType || ""}
+                value={editFormData.country || ""}
                 onChange={(e) =>
-                  setEditFormData({ ...editFormData, investigatorType: e.target.value })
+                  setEditFormData({ ...editFormData, country: e.target.value })
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
@@ -497,8 +480,7 @@ const SiteModule = () => {
                 onChange={(e) =>
                   setEditFormData({ ...editFormData, status: e.target.value })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 <option value="Active">Active</option>
                 <option value="Draft">Draft</option>
                 <option value="Inactive">Inactive</option>
@@ -510,5 +492,4 @@ const SiteModule = () => {
     </div>
   );
 };
-
 export default SiteModule;

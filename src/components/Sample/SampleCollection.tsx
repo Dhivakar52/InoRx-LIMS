@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "../ui/input";
 import { useNavigate } from "react-router-dom";
 
 const initialTests = [
@@ -106,7 +105,7 @@ const subjectsData = [
   },
 ];
 
-export default function TestRegistrationForm() {
+export default function SampleCollection() {
   const [tests, setTests] = useState(initialTests);
   const [selectedSubjectCode, setSelectedSubjectCode] = useState("");
   const [subjectDetails, setSubjectDetails] = useState<any>(null);
@@ -157,7 +156,7 @@ export default function TestRegistrationForm() {
 <div className="p-6">
       <div className="bg-white rounded-xl shadow-md p-6 space-y-6">
         <h1 className="text-xl font-bold text-[#00458F]">
-          Test Registration
+          Sample Collection
         </h1>
               {/* Subject Lookup Section */}
       <div className="col-span-3 mb-6 p-4 border rounded bg-gray-50">
@@ -247,24 +246,25 @@ export default function TestRegistrationForm() {
       </div>
 
         <h2 className="text-xl font-semibold text-[#00458F]">
-          Available Tests
+          Tests to be conducted
         </h2>
       <div className="col-span-3 overflow-x-auto">
         <table className="w-full border">
           <thead>
             <tr className="bg-gray-100">
+              <th className="border p-2">S.No</th>
+              <th className="border p-2">Exam Name</th>
+              <th className="border p-2">Specimen</th>
+              <th className="border p-2">Department</th>
+              <th className="border p-2">BedSide</th>
+              <th className="border p-2">Repeat Count</th>
               <th className="border p-2">
                 <input
                   type="checkbox"
                   checked={tests.every((x) => x.selected)}
                   onChange={handleSelectAll}
                 />
-              </th>
-              <th className="border p-2">Exam Name</th>
-              <th className="border p-2">Specimen</th>
-              <th className="border p-2">Department</th>
-              <th className="border p-2">BedSide</th>
-              <th className="border p-2">Repeat Count</th>
+              </th>             
             </tr>
           </thead>
 
@@ -272,31 +272,35 @@ export default function TestRegistrationForm() {
             {tests.map((test, index) => (
               <tr key={index}>
                 <td className="border p-2">
+                 {test.id} 
+                </td>
+
+                <td className="border p-2">
+                  {test.examName}
+                </td>
+
+                <td className="border p-2">
+                  {test.specimen}
+                </td>
+
+                <td className="border p-2">
+                  {test.subDepartment} 
+                </td>
+
+                <td className="border p-2">
+                  {test.bedSide}
+                </td>
+
+                <td className="border p-2">
+                  {test.repeatCount}
+                </td>
+
+                <td className="border p-2">
                   <input
                     type="checkbox"
                     checked={test.selected}
                     onChange={() => handleCheckboxChange(test.id)}
                   />
-                </td>
-
-                <td className="border p-2">
-                  <Input value={test.examName} />
-                </td>
-
-                <td className="border p-2">
-                  <Input value={test.specimen} />
-                </td>
-
-                <td className="border p-2">
-                  <Input value={test.subDepartment} />
-                </td>
-
-                <td className="border p-2">
-                  <Input value={test.bedSide} />
-                </td>
-
-                <td className="border p-2">
-                  <Input value={test.repeatCount} />
                 </td>
               </tr>
             ))}

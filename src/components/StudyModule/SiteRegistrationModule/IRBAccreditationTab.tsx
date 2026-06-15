@@ -275,28 +275,43 @@ useEffect(() => {
             </p>
           )}
         </div>
-      <div className="space-y-2 col-span-2">
-        <Label> GCP Certificate Upload</Label>
-         <div className="relative">
-            <input id="gcpCertificate" type="file"
-              // onChange={handleFileChange}
-              accept=".pdf,,.docx"
-              onChange={(e) =>
+      <div className="col-span-2">
+        <Label>GCP Certificate Upload</Label>
+        <div className="grid grid-cols-2 gap-4 mt-2">
+
+          <div>
+            <input
+              id="gcpCertificate"
+              type="file"
+              multiple
+              accept=".pdf,.doc,.docx"
+              className="hidden"
+              onChange={(e) => {
+                const newFiles = Array.from(
+                  e.target.files || []
+                );
+
                 handleChange(
                   "gcpCertificate",
-                  e.target.files?.[0] || null
-                )
-              }
-              className="hidden" />
-            <label htmlFor="gcpCertificate"
+                  [
+                    ...(formData.gcpCertificate || []),
+                    ...newFiles,
+                  ]
+                );
+              }}
+            />
+
+            <label
+              htmlFor="gcpCertificate"
               className={`
                 flex flex-col items-center justify-center
-                w-full min-h-[120px]
+                w-full h-[160px]
                 border-2 border-dashed
                 rounded-lg
                 cursor-pointer
+                bg-gray-50
+                hover:bg-gray-100
                 transition-all
-                bg-gray-50 hover:bg-gray-100
                 ${
                   errors.gcpCertificate
                     ? "border-red-400"
@@ -306,28 +321,95 @@ useEffect(() => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-gray-400 mb-2"
+                className="h-10 w-10 text-gray-400 mb-3"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor">
+                stroke="currentColor"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
               </svg>
-              <span className="text-sm font-medium text-gray-700">
-                {formData.gcpCertificate
-                  ? formData.gcpCertificate.name
-                  : "Choose File or Drag & Drop"}
+
+              <span className="font-medium text-sm">
+                Click to Upload
               </span>
-              <span className="text-xs text-gray-500 mt-1">
-                PDF, DOCX (Max 5 MB)
+
+              <span className="text-xs text-gray-500 mt-2">
+                PDF / DOC / DOCX
+              </span>
+
+              <span className="text-xs text-gray-500">
+                Multiple Files Allowed
               </span>
             </label>
           </div>
+          <div
+            className="rounded-lg min-h-[160px] max-h-[160px] overflow-y-auto p-3 bg-white">
+            {formData.gcpCertificate?.length > 0 ? (
+              <div className="space-y-2">
+                {formData.gcpCertificate.map(
+                  (
+                    file: File,
+                    index: number
+                  ) => (
+                    <div
+                      key={index}
+                      className=" flex  items-center  justify-between border  rounded-md px-3 py-2 ">
+                      <span
+                        className=" text-blue-600 cursor-pointer hover:underline truncate flex-1 "
+                        onClick={() => {
+                          const fileUrl =
+                            URL.createObjectURL(
+                              file
+                            );
+                          window.open(
+                            fileUrl,
+                            "_blank"
+                          );
+                        }}>
+                        {file.name}
+                      </span>
+                      {!isViewMode && (
+                        <button type="button"
+                          onClick={() => {
+                            const updated =
+                              formData.gcpCertificate.filter(
+                                (
+                                  _: File,
+                                  i: number
+                                ) =>
+                                  i !== index
+                              );
+                            handleChange(
+                              "gcpCertificate",
+                              updated
+                            );
+                          }} >
+                          <X
+                            size={16}
+                            className="text-red-500"
+                          />
+                        </button>
+                      )}
+                    </div>
+                  )
+                )}
+              </div>
+            ) : (
+              <div
+                className=" h-full flex items-center justify-center text-sm text-gray-400 ">
+                {/* No files uploaded */}
+              </div>
+            )}
+          </div>
+
+        </div>
         {errors.gcpCertificate && (
-          <p className="text-red-500 text-xs">
+          <p className="text-red-500 text-xs mt-1">
             {errors.gcpCertificate}
           </p>
         )}

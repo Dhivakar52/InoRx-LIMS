@@ -376,10 +376,10 @@ const validateCurrentStep = () => {
   }
 };
 const nextStep = () => {
-  const isValid =
-    validateCurrentStep();
+  // const isValid =
+  //   validateCurrentStep();
 
-  if (!isValid) return;
+  // if (!isValid) return;
 
   setCurrentStep((prev) =>
     Math.min(
@@ -411,10 +411,10 @@ const handleStepClick = (
   setCurrentStep(targetStep);
 };
 const handleSubmit = () => {
-  const isValid =
-    validateCurrentStep();
+  //const isValid =
+  //   validateCurrentStep();
 
-  if (!isValid) return;
+  // if (!isValid) return;
 
   console.log(formData);
 

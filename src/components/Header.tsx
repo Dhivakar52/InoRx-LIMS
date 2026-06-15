@@ -123,8 +123,10 @@ const headerTitleMap: Record<string, string> = {
         return "Analysis Management";
       case "/testRegistration":
         return "Test Registration";
-      case "/sample/reception":
-        return "Sample Reception";
+      case "/sample/storage":
+        return "Sample Storage";
+      case "/sample/processing":
+        return "Sample Processing";
          case "/testRegistration":
         return "Test Registration List";
       case "/testRegistration/new-add":
@@ -168,6 +170,8 @@ const headerTitleMap: Record<string, string> = {
         return "Adverse Event Tracking Module";
       case "/sample/master/smp-add":
         return "Sample Registration Module"
+      case "/sample/master/smppro-add": 
+        return "Sample Processing Module";
       default:
         // Check for dynamic routes with parameters
         const mode = new URLSearchParams(location.search).get("mode");

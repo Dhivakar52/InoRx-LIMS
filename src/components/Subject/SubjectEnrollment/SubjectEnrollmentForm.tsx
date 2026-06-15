@@ -333,10 +333,10 @@ export default function SubjectEnrollmentForm() {
              className="px-5 py-2 rounded-md bg-gray-500 text-white">
               Save Draft
             </button>
-            <button onClick={() => setShowFailureModal(true)}
+            {/* <button onClick={() => setShowFailureModal(true)}
               className="px-5 py-2 rounded-md bg-red-600 text-white">
               Log Screen Failure
-            </button>
+            </button> */}
             <button  onClick={handleConfirmEnrollment}
             className="px-5 py-2 rounded-md bg-[#00458F] text-white">
                Confirm Enrollment

@@ -77,7 +77,6 @@ const Subject = () => {
       { accessorKey: "study", header: "Study" },
       { accessorKey: "code", header: "Code" },
       { accessorKey: "gender", header: "Gender" },
-      { accessorKey: "arm", header: "Arm/Cohort" },
       { accessorKey: "enrollment", header: "Enrollment" },
 
       {
