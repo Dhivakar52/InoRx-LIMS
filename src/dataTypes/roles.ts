@@ -59,6 +59,7 @@ export const ROLE_PAGES: Record<UserRole, string[]> = {
     'Analyzer Integration',
     'AnalyzerIntegration',
     'BiobankManagement',
+     "InventoryManagement",
     'ResultsReview',
     'FinalQCApproval',
     'TestRegistration',

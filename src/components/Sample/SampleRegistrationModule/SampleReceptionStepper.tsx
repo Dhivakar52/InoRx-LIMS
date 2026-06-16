@@ -3,13 +3,13 @@
 import { useState } from "react";
 import SampleLabelingForm from "../SampleProcessingModule/SampleLabelingForm";
 import SampleRegistrationForm from "../SampleProcessingModule/SampleRegistrationForm";
-import StorageAssignmentForm from "../SampleProcessingModule/SampleStorageForm";
+// import StorageAssignmentForm from "../SampleProcessingModule/SampleStorageForm";
 // import TestAssignmentForm from "../SampleProcessingModule/TestAssignmentForm";
 
 const steps = [
   "Sample Registration",
   "Sample Labeling",
-  "Storage Assignment",
+  // "Storage Assignment",
   "Test Assignment",
 ];
 
@@ -36,8 +36,8 @@ export default function SampleReceptionStepper() {
       case 1:
         return <SampleLabelingForm />;
 
-      case 2:
-        return <StorageAssignmentForm />;
+      // case 2:
+      //   return <StorageAssignmentForm />;
 
       // case 3:
       //   return <TestAssignmentForm />;

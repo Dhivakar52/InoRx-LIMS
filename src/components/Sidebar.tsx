@@ -31,7 +31,10 @@ import {
   Warehouse,
   Bell,
   Archive,
-  ClipboardList
+  ClipboardList,
+  ClipboardCheckIcon,
+  ArchiveRestore,
+  Truck
 
   
 } from "lucide-react";
@@ -103,10 +106,11 @@ const navigationItems: NavigationItem[] = [
     pageKey: 'Sample',
     children: [
       { icon: ClipboardList, label: 'Sample Collection', path: '/sample/collection', pageKey: 'Sample' },
-      { icon: ClipboardList, label: 'Sample Acknowledgement', path: '/sample/acknowledgement', pageKey: 'SampleAcknowledgement' },
+      { icon: ClipboardCheckIcon, label: 'Sample Acknowledgement', path: '/sample/acknowledgement', pageKey: 'SampleAcknowledgement' },
       { icon: FlaskConical, label: 'Sample Processing', path: '/sample/processing', pageKey: 'SampleProcessing' },
       { icon: Archive, label: 'Sample Storage', path: '/sample/storage', pageKey: 'SampleStorage' },
-      { icon: Archive, label: 'Sample tracking', path: '/sample/tracking', pageKey: 'SampleTracking' },
+      { icon: ArchiveRestore, label: 'Sample Tracking', path: '/sample/tracking', pageKey: 'SampleTracking' },
+      { icon: Truck, label: 'Sample Shipment', path: '/sample/shipment', pageKey: 'SampleShipment' },
       
     ],
   },
@@ -141,6 +145,8 @@ const navigationItems: NavigationItem[] = [
   path: '/biobank',
   pageKey: 'BiobankManagement', // Make sure this matches exactly with ROLE_PAGES
 },
+ { icon: Warehouse, label: 'Inventory Management',
+ path: '/inventory', pageKey: 'InventoryManagement' },
 
   // ✅ RESULTS REVIEW - MAIN HEADING ONLY (NO SUBHEADINGS)
   {
@@ -184,7 +190,6 @@ const navigationItems: NavigationItem[] = [
     pageKey:'Settings',
     children: [
       { icon: Users, label: 'User Management', path: '/user-form', pageKey: 'User Management' },
-      { icon: Warehouse, label: 'Inventory Management', path: '/inventory', pageKey: 'Inventory Management' },
     ],}
 
   // ✅ ADMIN

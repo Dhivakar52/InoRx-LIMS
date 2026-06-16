@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Barcode from "react-barcode";
 import { useNavigate } from "react-router-dom";
 
   const initialTests = [
@@ -11,6 +10,7 @@ import { useNavigate } from "react-router-dom";
     examName: "CREATININE",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
+    lab:"",
     acknowledgementStatus: "Pending",
     acknowledgementDate: "",
     acknowledgementBy: "",
@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
     examName: "UREA",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
+    lab:"",
     acknowledgementStatus: "Pending",
     acknowledgementDate: "",
     acknowledgementBy: "",
@@ -33,6 +34,7 @@ import { useNavigate } from "react-router-dom";
     examName: "URIC ACID",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
+    lab:"",
     acknowledgementStatus: "Pending",
     acknowledgementDate: "",
     acknowledgementBy: "",
@@ -44,6 +46,7 @@ import { useNavigate } from "react-router-dom";
     examName: "LIPID PROFILE",
     specimen: "Serum",
     subDepartment: "Bacteriology",
+    lab:"",
     acknowledgementStatus: "Pending",
     acknowledgementDate: "",
     acknowledgementBy: "",
@@ -55,6 +58,7 @@ import { useNavigate } from "react-router-dom";
     examName: "LIVER FUNCTION TEST",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
+    lab:"",
     acknowledgementStatus: "Pending",
     acknowledgementDate: "",
     acknowledgementBy: "",
@@ -274,10 +278,11 @@ const handleCollectorChange = (
           <thead>
             <tr className="bg-gray-100">
               <th className="border p-2">S.No</th>
-              <th className="border p-2">Barcode</th>
+              {/* <th className="border p-2">Barcode</th> */}
               <th className="border p-2">Exam Name</th>
               <th className="border p-2">Specimen</th>
               <th className="border p-2">Department</th>
+              <th className="border p-2">Assigned Lab</th>
               <th className="border p-2">Acknowlegment Status</th>
               <th className="border p-2">Acknowleged On</th>
               <th className="border p-2">Acknowleged By</th>
@@ -291,7 +296,7 @@ const handleCollectorChange = (
                 <td className="border p-2">
                  {test.id} 
                 </td>
-                <td className="border p-2">
+                {/* <td className="border p-2">
                   <Barcode
                     value={test.barcode}
                     width={0.8}
@@ -299,7 +304,7 @@ const handleCollectorChange = (
                     fontSize={8}
                     displayValue={false}
                   />
-                </td>
+                </td> */}
 
                 <td className="border p-2">
                   {test.examName}
@@ -312,7 +317,32 @@ const handleCollectorChange = (
                 <td className="border p-2">
                   {test.subDepartment} 
                 </td>
-
+                <td className="border p-2">
+                    <select
+                      value={test.lab}
+                      onChange={(e) =>
+                        handleCollectorChange(
+                          test.id,
+                          e.target.value
+                        )
+                      }
+                      className="border rounded px-2 py-1"
+                    >
+                      <option value="">Select</option>
+                      <option value="Lab1">
+                        Lab 1
+                      </option>
+                      <option value="Lab2">
+                        Lab 2
+                      </option>
+                      <option value="Lab3">
+                        Lab 3
+                      </option>
+                      <option value="Lab4">
+                        Lab 4
+                      </option>
+                    </select>
+                  </td>
                 <td className="border p-2">
                   <span
                     className={`px-2 py-1 rounded text-xs ${

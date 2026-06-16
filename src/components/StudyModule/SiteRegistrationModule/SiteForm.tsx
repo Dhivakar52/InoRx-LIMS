@@ -372,10 +372,10 @@ const validateCurrentStep = () => {
   }
 };
 const nextStep = () => {
-  // const isValid =
-  //   validateCurrentStep();
+  const isValid =
+    validateCurrentStep();
 
-  // if (!isValid) return;
+  if (!isValid) return;
 
   setCurrentStep((prev) =>
     Math.min(

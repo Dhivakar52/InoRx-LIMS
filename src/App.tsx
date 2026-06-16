@@ -27,7 +27,6 @@ import TestRegistrationForm from "./components/Test Registration/TestRegistratio
 import GenerateReport from "./components/Reports/GenerateReport.tsx";
 import ReportForm from "./components/Reports/ReportForm.tsx";
 
-import SampleStorage from './components/Sample/SampleRegistrationModule/SampleStorage.tsx';
 import Result from "./components/ResultModule/Result.tsx";
 import ForgotPassword from './pages/auth/Login/ForgotPassword.tsx';
 //import PresidentLevelDetail from './components/PresidentLevel/PresidentLevelDetail.tsx';
@@ -41,7 +40,6 @@ import StudyMasterStepper from './components/StudyModule/StudyMasterModule/Study
 import SubjectEnrollmentForm from './components/Subject/SubjectEnrollment/SubjectEnrollmentForm.tsx';
 import AdverseEventTrackingForm from './components/Subject/AdverseEvents/AdverseEventTrackingForm.tsx';
 import SampleProcessingForm from './components/Sample/SampleProcessingModule/SampleProcessingForm.tsx';
-import SampleStorageForm from './components/Sample/SampleProcessingModule/SampleStorageForm.tsx';  
 import SampleProcessing from './components/Sample/SampleRegistrationModule/SampleProcessing.tsx';
 // Import all 5 modules
 import VisitForm from './components/VisitSchedulingModule/VisitForm.tsx';
@@ -70,6 +68,10 @@ import SampleReview from './components/Sample/SampleAcknowledgment/SampleReview.
 import SampleCollection from './components/Sample/SampleCollectionModule/SampleCollection.tsx';
 import SampleCollectionGrid from './components/Sample/SampleCollectionModule/SampleCollectionGrid.tsx';
 import SampleReviewGrid from './components/Sample/SampleAcknowledgment/SampleReviewGrid.tsx';
+import SampleStorage from './components/Sample/SampleStorage/SampleStorage.tsx';
+import SampleStorageForm from './components/Sample/SampleStorage/SampleStorageForm.tsx';
+import SampleShipment from './components/Sample/SampleShipment/SampleShipment.tsx';
+import SampleShipmentForm from './components/Sample/SampleShipment/SampleShipmentForm.tsx';
 // -------------------------
 // Main page components
 // -------------------------
@@ -508,7 +510,9 @@ console.log("allowedRoles:", allowedRoles);
        <Route path="*" element={<Navigate to="/home" replace />} />
         <Route path="/subject/master/sub-add" element={<SubjectEnrollmentForm />}/>
        <Route path="/subject/master/adv-add" element={<AdverseEventTrackingForm />}/>
-      <Route path="/sample/master/smp-add" element={<SampleStorageForm />}/>
+      <Route path="/sample/storage/new-add" element={<SampleStorageForm />}/>
+      <Route path="/sample/shipment" element={<SampleShipment />}/>
+      <Route path="/sample/shipment/new-add" element={<SampleShipmentForm />}/>
       <Route path="/sample/master/smppro-add" element={<SampleProcessingForm />}/>
       
       <Route

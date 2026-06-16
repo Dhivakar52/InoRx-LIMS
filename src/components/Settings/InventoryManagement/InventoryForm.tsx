@@ -18,14 +18,14 @@ import NavigateButton from "../../../common/NavigateButton";
 import * as Dialog from "@radix-ui/react-dialog";
 import CustomPanel from "../../../common/CustomPanel";
 
-// ✅ TYPE
 type Inventory = {
   id: number;
   itemName: string;
+  lotNumber: string;
   category: string;
-  quantity:number;
-  supplier:string;
-  status:string;
+  storageLocation: string;
+  expirationDate: string;
+  status: string;
 };
 
 type AuditLog = {
@@ -94,57 +94,116 @@ const InventoryForm = () => {
   ];
 };
 
-  // ✅ DATA
-   const [data, setData] = useState<Inventory[]>([
+ const [data, setData] = useState<Inventory[]>([
   {
     id: 1,
-    itemName: "Blood Collection Tubes",
-    category: "Laboratory",
-    quantity: 120,
-    supplier: "MedSupply Pvt Ltd",
-    status: "Available",
+    itemName: "QIAamp DNA Blood Kit",
+    lotNumber: "LOT-8493021",
+    category: "Extraction",
+    storageLocation: "Boston Gen / Fridge 2",
+    expirationDate: "2027-12-31",
+    status: "QUARANTINED",
   },
   {
     id: 2,
-    itemName: "Syringes 5ml",
-    category: "Medical Consumables",
-    quantity: 45,
-    supplier: "HealthCare Medicals",
-    status: "Low Stock",
+    itemName: "TaqMan PCR Master Mix",
+    lotNumber: "LOT-MM9902",
+    category: "PCR",
+    storageLocation: "Boston Gen / Freezer 5",
+    expirationDate: "2026-08-15",
+    status: "ACTIVE",
   },
   {
     id: 3,
-    itemName: "Glucose Testing Strips",
-    category: "Diagnostics",
-    quantity: 300,
-    supplier: "DiagnoTech",
-    status: "Available",
+    itemName: "Eppendorf Tubes 1.5mL",
+    lotNumber: "LOT-EP441",
+    category: "Consumable",
+    storageLocation: "Boston Gen / Cabinet A",
+    expirationDate: "2030-01-01",
+    status: "ACTIVE",
   },
   {
     id: 4,
-    itemName: "MRI Contrast Dye",
-    category: "Radiology",
-    quantity: 12,
-    supplier: "Radiant Pharma",
-    status: "Low Stock",
+    itemName: "RNA Lysis Buffer",
+    lotNumber: "LOT-RB001",
+    category: "Extraction",
+    storageLocation: "London Lab / Room 2",
+    expirationDate: "2026-07-01",
+    status: "LOW STOCK",
   },
   {
     id: 5,
-    itemName: "Surgical Gloves",
-    category: "Safety",
-    quantity: 500,
-    supplier: "SafeCare Ltd",
-    status: "Available",
+    itemName: "Cryovials 2mL",
+    lotNumber: "LOT-CV887",
+    category: "Storage",
+    storageLocation: "New York Lab / Shelf 3",
+    expirationDate: "2029-05-12",
+    status: "ACTIVE",
   },
   {
     id: 6,
-    itemName: "COVID Test Kits",
-    category: "Virology",
-    quantity: 0,
-    supplier: "BioGen Labs",
-    status: "Out of Stock",
+    itemName: "DNA Stabilization Reagent",
+    lotNumber: "LOT-DS221",
+    category: "Preservation",
+    storageLocation: "Boston Gen / Freezer 1",
+    expirationDate: "2027-10-20",
+    status: "ACTIVE",
+  },
+  {
+    id: 7,
+    itemName: "Proteinase K",
+    lotNumber: "LOT-PK113",
+    category: "Extraction",
+    storageLocation: "London Lab / Fridge 1",
+    expirationDate: "2026-09-30",
+    status: "LOW STOCK",
+  },
+  {
+    id: 8,
+    itemName: "PCR Plate 96 Well",
+    lotNumber: "LOT-PCR777",
+    category: "PCR",
+    storageLocation: "Berlin Lab / Cabinet B",
+    expirationDate: "2028-04-18",
+    status: "ACTIVE",
+  },
+  {
+    id: 9,
+    itemName: "Liquid Nitrogen Tank Refill",
+    lotNumber: "LOT-LN900",
+    category: "Storage",
+    storageLocation: "Boston Gen / Cryo Room",
+    expirationDate: "2026-12-31",
+    status: "ACTIVE",
+  },
+  {
+    id: 10,
+    itemName: "RNase-Free Water",
+    lotNumber: "LOT-RW555",
+    category: "Reagent",
+    storageLocation: "Singapore Lab / Shelf 2",
+    expirationDate: "2026-06-30",
+    status: "EXPIRED",
   },
 ]);
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "ACTIVE":
+      return "bg-green-100 text-green-700";
+
+    case "LOW STOCK":
+      return "bg-yellow-100 text-yellow-700";
+
+    case "QUARANTINED":
+      return "bg-orange-100 text-orange-700";
+
+    case "EXPIRED":
+      return "bg-red-100 text-red-700";
+
+    default:
+      return "bg-gray-100 text-gray-700";
+  }
+};
 
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -162,7 +221,7 @@ const InventoryForm = () => {
   const [panelMode, setPanelMode] = useState<PanelMode>(null);
   const [selectedItem, setSelectedItem] = useState<Inventory | null>(null);
   const [selectedAuditLogs, setSelectedAuditLogs] = useState<AuditLog[]>([]);
-  const [editFormData, setEditFormData] = useState<Partial<Inventory>>({});
+  const [_editFormData, setEditFormData] = useState<Partial<Inventory>>({});
 
   const addAuditLog = useCallback((action: AuditLog["action"], recordId: number, oldData: any | null, newData: any | null) => {
       const newLog: AuditLog = {
@@ -209,22 +268,22 @@ const InventoryForm = () => {
     }, [auditLogs]);
 
 
-  const handleSaveEdit = useCallback(() => {
-    if (selectedItem && editFormData) {
-      const oldData = { ...selectedItem };
-      const newData = { ...selectedItem, ...editFormData };
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.id === selectedItem.id ? newData : item
-        )
-      );
-      addAuditLog("UPDATE", selectedItem.id, oldData, newData);
-      // Swal.fire("Updated!", "Inventory item has been updated.", "success");
-      setPanelMode(null);
-      setSelectedItem(null);
-      setEditFormData({});
-    }
-  }, [selectedItem, editFormData, addAuditLog]);
+  // const handleSaveEdit = useCallback(() => {
+  //   if (selectedItem && editFormData) {
+  //     const oldData = { ...selectedItem };
+  //     const newData = { ...selectedItem, ...editFormData };
+  //     setData((prevData) =>
+  //       prevData.map((item) =>
+  //         item.id === selectedItem.id ? newData : item
+  //       )
+  //     );
+  //     addAuditLog("UPDATE", selectedItem.id, oldData, newData);
+  //     // Swal.fire("Updated!", "Inventory item has been updated.", "success");
+  //     setPanelMode(null);
+  //     setSelectedItem(null);
+  //     setEditFormData({});
+  //   }
+  // }, [selectedItem, editFormData, addAuditLog]);
 
   const handleClosePanel = useCallback(() => {
     setPanelMode(null);
@@ -233,13 +292,13 @@ const InventoryForm = () => {
     setSelectedAuditLogs([]);
   }, []);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Available": return "bg-green-100 text-green-700";
-      case "Out of Stock": return "bg-yellow-100 text-yellow-700";
-      default: return "bg-gray-100 text-gray-700";
-    }
-  };
+  // const getStatusColor = (status: string) => {
+  //   switch (status) {
+  //     case "Available": return "bg-green-100 text-green-700";
+  //     case "Out of Stock": return "bg-yellow-100 text-yellow-700";
+  //     default: return "bg-gray-100 text-gray-700";
+  //   }
+  // };
 
     const getActionBadge = (action: AuditLog["action"]) => {
     const styles = {
@@ -263,33 +322,70 @@ const InventoryForm = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // ✅ COLUMNS (memoized)
   const columns: ColumnDef<Inventory>[] = useMemo(
-    () => [
-      { accessorKey: "itemName", header: "Item" },
-      { accessorKey: "category", header: "Category" },
-      { accessorKey: "quantity", header: "Quantity" },
-      { accessorKey: "supplier", header: "Supplier" },
-      { accessorKey: "status", header: "Status",cell: ({ getValue }) => { const value = getValue<Inventory["status"]>(); return <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(value)}`}>{value}</span>; } },
-      
-       {
-        id: "actions",
-        header: "Actions",
-        cell: ({ row }) => (
-          <ActionMenu<Inventory>
-            item={row.original}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onAuditLog={handleAuditLog}
-            openMenuId={openMenuId}
-            setOpenMenuId={setOpenMenuId} 
-          />
-        ),
+  () => [
+    {
+      accessorKey: "itemName",
+      header: "ITEM NAME",
+    },
+    {
+      accessorKey: "lotNumber",
+      header: "LOT NUMBER",
+    },
+    {
+      accessorKey: "category",
+      header: "CATEGORY",
+    },
+    {
+      accessorKey: "storageLocation",
+      header: "STORAGE LOCATION",
+    },
+    {
+      accessorKey: "expirationDate",
+      header: "EXPIRATION DATE",
+    },
+    {
+      accessorKey: "status",
+      header: "STATUS",
+      cell: ({ getValue }) => {
+        const value = getValue<string>();
+
+        return (
+          <span
+            className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(
+              value
+            )}`}
+          >
+            {value}
+          </span>
+        );
       },
-    ],
-    [openMenuId,handleView, handleEdit, handleDelete, handleAuditLog]
-  );
+    },
+
+    {
+      id: "actions",
+      header: "ACTIONS",
+      cell: ({ row }) => (
+        <ActionMenu<Inventory>
+          item={row.original}
+          onView={handleView}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onAuditLog={handleAuditLog}
+          openMenuId={openMenuId}
+          setOpenMenuId={setOpenMenuId}
+        />
+      ),
+    },
+  ],
+  [
+    openMenuId,
+    handleView,
+    handleEdit,
+    handleDelete,
+    handleAuditLog,
+  ]
+);
 
   // ✅ PAGINATION
   const [pagination, setPagination] = useState({
@@ -350,33 +446,6 @@ const InventoryForm = () => {
         />
 
       </div>
- {/* View Panel */}
-      <CustomPanel isOpen={panelMode === "view"} title="View Inventory" onClose={handleClosePanel} onSave={handleClosePanel} saveLabel="Close">
-        {selectedItem && (
-          <div className="grid grid-cols-2 gap-4">
-            <div className="border-b pb-3"><label className="block text-sm font-medium text-gray-600">ID</label><p className="mt-1 text-gray-900">{selectedItem.id}</p></div>
-            <div className="border-b pb-3"><label className="block text-sm font-medium text-gray-600">Item Name</label><p className="mt-1 text-gray-900">{selectedItem.itemName}</p></div>
-            <div className="border-b pb-3"><label className="block text-sm font-medium text-gray-600">Category</label><p className="mt-1 text-gray-900">{selectedItem.category}</p></div>
-            <div className="border-b pb-3"><label className="block text-sm font-medium text-gray-600">Quantity</label><p className="mt-1 text-gray-900">{selectedItem.quantity}</p></div>
-            <div className="border-b pb-3"><label className="block text-sm font-medium text-gray-600">Supplier</label><p className="mt-1 text-gray-900">{selectedItem.supplier}</p></div>
-            <div className="border-b pb-3 col-span-2"><label className="block text-sm font-medium text-gray-600">Status</label><p className="mt-1"><span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(selectedItem.status)}`}>{selectedItem.status}</span></p></div>
-          </div>
-        )}
-      </CustomPanel>
-
-      {/* Edit Panel */}
-      <CustomPanel isOpen={panelMode === "edit"} title="Edit Inventory" onClose={handleClosePanel} onSave={handleSaveEdit} saveLabel="Save Changes">
-        {selectedItem && (
-          <div className="grid grid-cols-2 gap-4">
-            <div><label className="block text-sm font-medium text-gray-700 mb-1">Item Name</label><input type="text" value={editFormData.itemName || ""} onChange={(e) => setEditFormData({ ...editFormData, itemName: e.target.value })} className="w-full px-3 py-2 border rounded-lg" /></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-1">Category</label><input type="text" value={editFormData.category || ""} onChange={(e) => setEditFormData({ ...editFormData, category: e.target.value })} className="w-full px-3 py-2 border rounded-lg" /></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label><input type="number" value={editFormData.quantity || 0} onChange={(e) => setEditFormData({ ...editFormData, quantity: parseInt(e.target.value) })} className="w-full px-3 py-2 border rounded-lg" /></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-1">Supplier</label><input type="text" value={editFormData.supplier || ""} onChange={(e) => setEditFormData({ ...editFormData, supplier: e.target.value })} className="w-full px-3 py-2 border rounded-lg" /></div>
-            <div className="col-span-2"><label className="block text-sm font-medium text-gray-700 mb-1">Status</label><select value={editFormData.status || ""} onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })} className="w-full px-3 py-2 border rounded-lg"><option value="In Stock">In Stock</option><option value="Low Stock">Low Stock</option><option value="Out of Stock">Out Of Stock</option></select></div>
-          </div>
-        )}
-      </CustomPanel>
-
       {/* Audit Log Panel with Demo Data */}
       <CustomPanel isOpen={panelMode === "audit"} title={`Audit Log - ${selectedItem?.itemName || ""}`} onClose={handleClosePanel} onSave={handleClosePanel} saveLabel="Close">
         {selectedAuditLogs.length === 0 ? (
