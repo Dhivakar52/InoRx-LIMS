@@ -281,46 +281,7 @@ export default function SubjectEnrollmentForm() {
             <ErrorText msg={errors.gender} />
           </div>
         </div>
-        <h2 className="text-lg font-semibold text-[#00458F]">
-          Clinical Allocation & Enrollment Details
-        </h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label>Enrollment Date <Req /></Label>
-            <Input
-              type="date"
-              disabled={isViewMode}
-              value={formData.enrollmentDate}
-              onChange={(e) =>
-                handleChange("enrollmentDate", e.target.value)
-              }
-             className="w-full border rounded-md h-10 px-3 mt-1"/>
-            <ErrorText msg={errors.enrollmentDate} />
-          </div>
-          <div>
-            <Label>Enrollment Status <Req /></Label>
-            <select
-              disabled={isViewMode}
-              value={formData.enrollmentStatus}
-              onChange={(e) =>
-                handleChange("enrollmentStatus", e.target.value)
-              }
-              className="w-full border rounded-md h-10 px-3 mt-1">
-              <option value="">Select Status</option>
-              <option value="ENROLLED">Enrolled</option>
-              <option value="SCREEN FAILURE">Screen Failure</option>
-              <option value="WITHDRAWN">Withdrawn</option>
-            </select>
-            <ErrorText msg={errors.enrollmentStatus} />
-          </div>
-          <div>
-            <Label>Principal Investigator</Label>
-            <input
-              value="Dr. John"
-              disabled
-              className="w-full border rounded-md h-10 px-3 mt-1 bg-gray-50"/>
-          </div>
-        </div>
+
         <div className="flex justify-between pt-6">
           {/* <button onClick={() => navigate(-1)}
       className={`flex items-center gap-2 px-3 py-2 mb-3 border rounded-md bg-gray-100 hover:bg-gray-200 `}> */}
@@ -347,7 +308,7 @@ export default function SubjectEnrollmentForm() {
               Submit
             </button> */}
             
-            <button
+            {/* <button
               onClick={() => {
                 if (!formData.subjectId) {
                       alert("Subject ID required");
@@ -357,7 +318,7 @@ export default function SubjectEnrollmentForm() {
                   }}
               className="px-5 py-2 rounded-md bg-green-600 text-white">
               Print Barcode
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

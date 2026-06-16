@@ -66,7 +66,10 @@ import ResultEntryList from './components/ResultEntry/ResultEntryList.tsx';
 // Add imports
 import ResultValidationList from './components/ResultEntry/ResultValidationList';
 import ResultValidationReview from './components/ResultEntry/ResultValidationReview';
-import SampleCollection from './components/Sample/SampleCollection.tsx';
+import SampleReview from './components/Sample/SampleAcknowledgment/SampleReview.tsx';
+import SampleCollection from './components/Sample/SampleCollectionModule/SampleCollection.tsx';
+import SampleCollectionGrid from './components/Sample/SampleCollectionModule/SampleCollectionGrid.tsx';
+import SampleReviewGrid from './components/Sample/SampleAcknowledgment/SampleReviewGrid.tsx';
 // -------------------------
 // Main page components
 // -------------------------
@@ -304,15 +307,38 @@ console.log("allowedRoles:", allowedRoles);
     </ProtectedRoute>
   }
 />
+<Route
+  path="/sample/acknowledgement/new-add"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <SampleReview />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/sample/acknowledgement"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <SampleReviewGrid />
+    </ProtectedRoute>
+  }
+/>
  {/* Visit Module */}
  <Route path="/visit" element={
      <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
          <VisitSchedule />
      </ProtectedRoute>
  } />
-
  <Route
   path="/sample/collection"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
+      <SampleCollectionGrid />
+    </ProtectedRoute>
+  }
+/>
+ <Route
+  path="/sample/collection/new-add"
   element={
     <ProtectedRoute userRole={userRole} allowedRoles={['admin']}>
       <SampleCollection />

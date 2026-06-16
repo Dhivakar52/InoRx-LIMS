@@ -103,6 +103,7 @@ const navigationItems: NavigationItem[] = [
     pageKey: 'Sample',
     children: [
       { icon: ClipboardList, label: 'Sample Collection', path: '/sample/collection', pageKey: 'Sample' },
+      { icon: ClipboardList, label: 'Sample Acknowledgement', path: '/sample/acknowledgement', pageKey: 'SampleAcknowledgement' },
       { icon: FlaskConical, label: 'Sample Processing', path: '/sample/processing', pageKey: 'SampleProcessing' },
       { icon: Archive, label: 'Sample Storage', path: '/sample/storage', pageKey: 'SampleStorage' },
       { icon: Archive, label: 'Sample tracking', path: '/sample/tracking', pageKey: 'SampleTracking' },
@@ -124,13 +125,6 @@ const navigationItems: NavigationItem[] = [
       
     ],
   },
-  {
-    icon: CalendarDays,
-    label: 'Visit Schedule',
-    path: '/visit',
-    pageKey: 'Visit',
-  },
-
  
    // ✅ ANALYZER INTEGRATION - MAIN HEADING ONLY (NO SUBHEADINGS)
   {
@@ -178,13 +172,13 @@ const navigationItems: NavigationItem[] = [
       },
     ],
   },
-  {
-    icon: CalendarDays,
-    label: 'Result',
-    path: '/result',
-    pageKey: 'Result',
+  // {
+  //   icon: CalendarDays,
+  //   label: 'Result',
+  //   path: '/result',
+  //   pageKey: 'Result',
 
-  },
+  // },
   {icon:Settings, 
     label:'Settings',
     pageKey:'Settings',

@@ -1,56 +1,64 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "../ui/input";
-import { useNavigate } from "react-router-dom";
 import Barcode from "react-barcode";
-import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
-const initialTests = [
+  const initialTests = [
   {
     id: 1,
+    barcode: "TR000001",
     examName: "CREATININE",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
-    bedSide: "N",
-    repeatCount: 0,
-    selected: true,
+    acknowledgementStatus: "Pending",
+    acknowledgementDate: "",
+    acknowledgementBy: "",
+    selected: false,
   },
   {
     id: 2,
+    barcode: "TR000002",
     examName: "UREA",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
-    bedSide: "N",
-    repeatCount: 0,
-    selected: true,
+    acknowledgementStatus: "Pending",
+    acknowledgementDate: "",
+    acknowledgementBy: "",
+    selected: false,
   },
   {
     id: 3,
+    barcode: "TR000003",
     examName: "URIC ACID",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
-    bedSide: "N",
-    repeatCount: 0,
-    selected: true,
+    acknowledgementStatus: "Pending",
+    acknowledgementDate: "",
+    acknowledgementBy: "",
+    selected: false
   },
   {
     id: 4,
+    barcode: "TR000004",
     examName: "LIPID PROFILE",
     specimen: "Serum",
     subDepartment: "Bacteriology",
-    bedSide: "N",
-    repeatCount: 0,
-    selected: true,
+    acknowledgementStatus: "Pending",
+    acknowledgementDate: "",
+    acknowledgementBy: "",
+    selected: false
   },
   {
     id: 5,
+    barcode: "TR000005",
     examName: "LIVER FUNCTION TEST",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
-    bedSide: "N",
-    repeatCount: 0,
-    selected: true,
+    acknowledgementStatus: "Pending",
+    acknowledgementDate: "",
+    acknowledgementBy: "",
+    selected: false
   },
 ];
 
@@ -108,39 +116,12 @@ const subjectsData = [
   },
 ];
 
-export default function TestRegistrationForm() {
+
+export default function SampleReview() {
   const [tests, setTests] = useState(initialTests);
   const [selectedSubjectCode, setSelectedSubjectCode] = useState("");
   const [subjectDetails, setSubjectDetails] = useState<any>(null);
-  const printRef = useRef<HTMLDivElement>(null);
-  const [barcodes, setBarcodes] = useState<
-  {
-    testId: number;
-    examName: string;
-    barcodeValue: string;
-  }[]
->([]);
     const navigate = useNavigate();
-
-
-  const handleCheckboxChange = (id: number) => {
-    setTests((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, selected: !item.selected } : item
-      )
-    );
-  };
-
-  const handleSelectAll = (e: any) => {
-    const checked = e.target.checked;
-
-    setTests((prev) =>
-      prev.map((item) => ({
-        ...item,
-        selected: checked,
-      }))
-    );
-  };
 
   const handleGetDetails = () => {
     const foundSubject = subjectsData.find(
@@ -163,97 +144,45 @@ export default function TestRegistrationForm() {
     // axios.post("/api/save-tests", payload);
   };
 
-  const handleGenerateBarcode = () => {
-  if (!subjectDetails) {
-    alert("Please select a subject");
-    return;
-  }
+ const handleAcknowledgeSample = (id: number) => {
+  const currentDate = new Date().toLocaleString();
 
-  const selectedTests = tests.filter((x) => x.selected);
-
-  // const generated = selectedTests.map((test, index) => ({
-  //   testId: test.id,
-  //   examName: test.examName,
-  //   barcodeValue: `${subjectDetails.studyCode}-${
-  //     subjectDetails.subjectCode
-  //   }-${String(index + 1).padStart(3, "0")}`,
-  // }));
-
-  const generated = selectedTests.map((test, index) => ({
-  testId: test.id,
-  examName: test.examName,
-  barcodeValue: `TR${String(index + 1).padStart(6, "0")}`,
-  
-}));
-
-
-  setBarcodes(generated);
+  setTests((prev) =>
+    prev.map((item) =>
+      item.id === id
+        ? {
+            ...item,
+            acknowledgementStatus: "Acknowleged",
+            acknowledgementDate: currentDate,
+          }
+        : item
+    )
+  );
 };
 
-const handlePrintBarcodes = () => {
-  const printContents = printRef.current?.innerHTML;
-
-  if (!printContents) return;
-
-  const printWindow = window.open("", "_blank");
-
-  printWindow?.document.write(`
-    <html>
-      <head>
-        <title>Barcode Labels</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            padding: 10px;
+const handleCollectorChange = (
+  id: number,
+  collectorName: string
+) => {
+  setTests((prev) =>
+    prev.map((item) =>
+      item.id === id
+        ? {
+            ...item,
+            acknowledgementBy: collectorName,
           }
-
-          .label {
-            width: 200px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            padding: 8px;
-            margin: 6px;
-            display: inline-block;
-            box-sizing: border-box;
-          }
-
-          .label div {
-            text-align: center;
-          }
-
-          svg {
-            width: auto !important;
-            height: auto !important;
-          }
-
-          .test-name {
-            font-weight: bold;
-            margin-bottom: 8px;
-          }
-
-        </style>
-      </head>
-      <body>
-        ${printContents}
-      </body>
-    </html>
-  `);
-
-  printWindow?.document.close();
-  printWindow?.focus();
-
-  setTimeout(() => {
-    printWindow?.print();
-    printWindow?.close();
-  }, 500);
+        : item
+    )
+  );
 };
+
   return (
 <div className="p-6">
       <div className="bg-white rounded-xl shadow-md p-6 space-y-6">
         <h1 className="text-xl font-bold text-[#00458F]">
-          Test Registration
+          Sample Acknowledgment
         </h1>
-              {/* Subject Lookup Section */}
+        {/* Subject Lookup Section */}
         <div className="flex items-end gap-4 mb-4">
           <div className="w-64">
             <label className="block text-sm font-medium mb-1">
@@ -283,6 +212,7 @@ const handlePrintBarcodes = () => {
 
         {/* Subject Details Display */}
         {subjectDetails && (
+          <div>
           <div className="grid grid-cols-4 gap-4 p-3 border rounded bg-white">
             <div>
               <label className="block text-xs font-semibold text-gray-600">
@@ -335,28 +265,23 @@ const handlePrintBarcodes = () => {
               </span>
             </div>
           </div>
-        )}
-
-
-        <h2 className="text-xl font-semibold text-[#00458F]">
-          Available Tests
+<br/>
+          <h2 className="text-xl font-semibold text-[#00458F]">
+          Tests to be Acknowledged
         </h2>
       <div className="col-span-3 overflow-x-auto">
         <table className="w-full border">
           <thead>
             <tr className="bg-gray-100">
-              <th className="border p-2">
-                <input
-                  type="checkbox"
-                  checked={tests.every((x) => x.selected)}
-                  onChange={handleSelectAll}
-                />
-              </th>
+              <th className="border p-2">S.No</th>
+              <th className="border p-2">Barcode</th>
               <th className="border p-2">Exam Name</th>
               <th className="border p-2">Specimen</th>
               <th className="border p-2">Department</th>
-              <th className="border p-2">BedSide</th>
-              <th className="border p-2">Repeat Count</th>
+              <th className="border p-2">Acknowlegment Status</th>
+              <th className="border p-2">Acknowleged On</th>
+              <th className="border p-2">Acknowleged By</th>
+              <th className="border p-2">Status</th>            
             </tr>
           </thead>
 
@@ -364,75 +289,90 @@ const handlePrintBarcodes = () => {
             {tests.map((test, index) => (
               <tr key={index}>
                 <td className="border p-2">
-                  <input
-                    type="checkbox"
-                    checked={test.selected}
-                    onChange={() => handleCheckboxChange(test.id)}
+                 {test.id} 
+                </td>
+                <td className="border p-2">
+                  <Barcode
+                    value={test.barcode}
+                    width={0.8}
+                    height={30}
+                    fontSize={8}
+                    displayValue={false}
                   />
                 </td>
 
                 <td className="border p-2">
-                  <Input value={test.examName} />
+                  {test.examName}
                 </td>
 
                 <td className="border p-2">
-                  <Input value={test.specimen} />
+                  {test.specimen}
                 </td>
 
                 <td className="border p-2">
-                  <Input value={test.subDepartment} />
+                  {test.subDepartment} 
                 </td>
 
                 <td className="border p-2">
-                  <Input value={test.bedSide} />
+                  <span
+                    className={`px-2 py-1 rounded text-xs ${
+                      test.acknowledgementStatus === "Acknowleged"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
+                  >
+                    {test.acknowledgementStatus}
+                  </span>
                 </td>
-
                 <td className="border p-2">
-                  <Input value={test.repeatCount} />
+                  {test.acknowledgementDate || "-"}
+                </td>
+                 <td className="border p-2">
+                    <select
+                      value={test.acknowledgementBy}
+                      onChange={(e) =>
+                        handleCollectorChange(
+                          test.id,
+                          e.target.value
+                        )
+                      }
+                      className="border rounded px-2 py-1"
+                    >
+                      <option value="">Select</option>
+                      <option value="Lab Technician">
+                        Lab Technician
+                      </option>
+                      <option value="Nurse">
+                        Nurse
+                      </option>
+                      <option value="Research Coordinator">
+                        Research Coordinator
+                      </option>
+                      <option value="Phlebotomist">
+                        Phlebotomist
+                      </option>
+                    </select>
+                  </td>
+                <td className="border p-2">
+                  <button
+                    onClick={() => handleAcknowledgeSample(test.id)}
+                    disabled={test.acknowledgementStatus === "Acknowleged"}
+                    className={`px-3 py-1 rounded text-white ${
+                      test.acknowledgementStatus === "Acknowleged"
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-green-600 hover:bg-green-700"
+                    }`}
+                  >
+                    {test.acknowledgementStatus === "Acknowleged"
+                      ? "Acknowleged"
+                      : "Acknowlege"}
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      {barcodes.length > 0 && (
-   <div ref={printRef}>
-  <div className="mt-6 border rounded-lg p-4">
-    <h3 className="text-lg font-semibold text-[#00458F] mb-4">
-      Generated Barcodes
-    </h3>
-
-    <div className="flex flex-wrap gap-4">
-      {barcodes.map((item) => (
-        <div
-            key={item.testId}
-            className="label border border-gray-300 rounded-md p-3 bg-white w-[220px] shadow-sm"
-          >
-          <div className="font-semibold text-sm text-center">
-            {item.examName}
-          </div>
-
-          <div className="text-xs text-center text-gray-600 mb-2">
-            {subjectDetails?.subjectCode}
-          </div>
-
-          <div className="flex justify-center mt-2">
-            <Barcode
-              value={item.barcodeValue}
-              width={0.8}
-              height={30}
-              fontSize={9}
-              margin={0}
-              displayValue
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-  </div>
-)}
       <div className="flex justify-between pt-6">
           {/* <button onClick={() => navigate(-1)}
       className={`flex items-center gap-2 px-3 py-2 mb-3 border rounded-md bg-gray-100 hover:bg-gray-200 `}> */}
@@ -441,25 +381,16 @@ const handlePrintBarcodes = () => {
             Back
           </button>
           <div className="flex gap-3">
-             <button
-              onClick={handleGenerateBarcode}
-              className="px-5 py-2 rounded-md bg-green-600 text-white"
-            >
-              Generate Barcode
-            </button>
-            <button
-            onClick={handlePrintBarcodes}
-            disabled={barcodes.length === 0}
-            className="px-5 py-2 rounded-md bg-purple-600 text-white disabled:bg-gray-400"
-          >
-            Print Labels
-          </button>
             <button onClick={handleSave}
              className="px-5 py-2 rounded-md bg-[#00458F] text-white">
               Save
             </button>
           </div>
         </div>
+        </div>
+        )}
+
+        
     </div>
     </div>
   );

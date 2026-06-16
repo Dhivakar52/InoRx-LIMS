@@ -11,6 +11,9 @@ type ActionMenuProps<T> = {
   onEdit?: (item: T) => void;
   onDelete?: (item: T) => void;
   onAuditLog?: (item: T) => void;
+  onCollect?:(item:T)=>void;
+  onAck?:(item:T)=>void;
+
 };
 
 export function ActionMenu<T>({
@@ -19,6 +22,8 @@ export function ActionMenu<T>({
   onEdit,
   onDelete,
   onAuditLog,
+  onCollect,
+  onAck,
   openMenuId,
   setOpenMenuId
 }: ActionMenuProps<T>) {
@@ -103,7 +108,23 @@ export function ActionMenu<T>({
             >
               Delete
             </button>
-          )}  
+          )} 
+          {onCollect && (
+            <button
+              onClick={() => handleAction(onCollect)}
+              className="block w-full px-3 py-2 text-left hover:bg-blue-50 text-blue-600 text-sm"
+            >
+              Collect
+            </button>
+          )} 
+           {onAck && (
+            <button
+              onClick={() => handleAction(onAck)}
+              className="block w-full px-3 py-2 text-left hover:bg-blue-50 text-blue-600 text-sm"
+            >
+              Acknowledge
+            </button>
+          )} 
         </div>
       )}
     </div>

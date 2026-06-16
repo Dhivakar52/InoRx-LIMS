@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import DemographicsTab from "./DemographicsTab";
 import AddressShippingTab from "./AddressShippingTab";
-import IRBAccreditationTab from "./IRBAccreditationTab";
 import StaffRoleMappingTab from "./StaffRoleMappingTab";
 import StudySiteMappingTab from "./StudySiteMappingTab";
 
@@ -18,7 +17,7 @@ export default function SiteForm() {
   const steps = [
     "Demographics",
     "Address & Shipping",
-    "IRB & Accreditation",
+    //"IRB & Accreditation",
     "Staff & Role Mapping",
     "Study Mapping"
   ];
@@ -199,87 +198,87 @@ const validateAddress = () => {
   );
 };
 
-const validateIRB = () => {
-  const newErrors: any = {};
+// const validateIRB = () => {
+//   const newErrors: any = {};
 
-  if (
-    !formData.localIRBName?.trim()
-  ) {
-    newErrors.localIRBName =
-      "Local IRB Name is required";
-  }
+//   if (
+//     !formData.localIRBName?.trim()
+//   ) {
+//     newErrors.localIRBName =
+//       "Local IRB Name is required";
+//   }
 
-  if (
-    !formData.irbRegistrationNumber?.trim()
-  ) {
-    newErrors.irbRegistrationNumber =
-      "IRB Registration Number is required";
-  }
+//   if (
+//     !formData.irbRegistrationNumber?.trim()
+//   ) {
+//     newErrors.irbRegistrationNumber =
+//       "IRB Registration Number is required";
+//   }
 
-  if (
-    formData.accreditationTypes?.length >
-      0 &&
-    !formData.accreditationExpiry
-  ) {
-    newErrors.accreditationExpiry =
-      "Accreditation Expiry is required";
-  }
+//   if (
+//     formData.accreditationTypes?.length >
+//       0 &&
+//     !formData.accreditationExpiry
+//   ) {
+//     newErrors.accreditationExpiry =
+//       "Accreditation Expiry is required";
+//   }
 
-  if (
-    formData.accreditationExpiry
-  ) {
-    const selectedDate =
-      new Date(
-        formData.accreditationExpiry
-      );
+//   if (
+//     formData.accreditationExpiry
+//   ) {
+//     const selectedDate =
+//       new Date(
+//         formData.accreditationExpiry
+//       );
 
-    const today = new Date();
+//     const today = new Date();
 
-    today.setHours(0,0,0,0);
+//     today.setHours(0,0,0,0);
 
-    if (
-      selectedDate <= today
-    ) {
-      newErrors.accreditationExpiry =
-        "Expiry date must be future date";
-    }
-  }
+//     if (
+//       selectedDate <= today
+//     ) {
+//       newErrors.accreditationExpiry =
+//         "Expiry date must be future date";
+//     }
+//   }
 
-  const file =
-    formData.gcpCertificate;
+//   const file =
+//     formData.gcpCertificate;
 
-  if (file) {
-    const allowedTypes = [
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
+//   if (file) {
+//     const allowedTypes = [
+//       "application/pdf",
+//       "application/msword",
+//       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+//     ];
 
-    if (
-      !allowedTypes.includes(
-        file.type
-      )
-    ) {
-      newErrors.gcpCertificate =
-        "Only PDF, DOC, DOCX files allowed";
-    }
+//     if (
+//       !allowedTypes.includes(
+//         file.type
+//       )
+//     ) {
+//       newErrors.gcpCertificate =
+//         "Only PDF, DOC, DOCX files allowed";
+//     }
 
-    if (
-      file.size >
-      5 * 1024 * 1024
-    ) {
-      newErrors.gcpCertificate =
-        "File size should not exceed 5 MB";
-    }
-  }
+//     if (
+//       file.size >
+//       5 * 1024 * 1024
+//     ) {
+//       newErrors.gcpCertificate =
+//         "File size should not exceed 5 MB";
+//     }
+//   }
 
-  setErrors(newErrors);
+//   setErrors(newErrors);
 
-  return (
-    Object.keys(newErrors)
-      .length === 0
-  );
-};
+//   return (
+//     Object.keys(newErrors)
+//       .length === 0
+//   );
+// };
 const validateStaff = () => {
   const newErrors: any = {};
 
@@ -364,11 +363,8 @@ const validateCurrentStep = () => {
       return validateAddress();
 
     case 2:
-      return validateIRB();
-
-    case 3:
       return validateStaff();
-    case 4:
+    case 3:
       return validateStudyMapping();
 
     default:
@@ -464,17 +460,17 @@ const renderStep = () => {
         />
       );
 
-    case 2:
-      return (
-        <IRBAccreditationTab
-          formData={formData}
-          handleChange={handleChange}
-          isViewMode={false}
-          errors={errors}
-        />
-      );
+    // case 2:
+    //   return (
+    //     <IRBAccreditationTab
+    //       formData={formData}
+    //       handleChange={handleChange}
+    //       isViewMode={false}
+    //       errors={errors}
+    //     />
+    //   );
 
-    case 3:
+    case 2:
       return (
         <StaffRoleMappingTab
           formData={formData}
@@ -483,7 +479,7 @@ const renderStep = () => {
           errors={errors}
         />
       );
-     case 4:
+     case 3:
       return (
         <StudySiteMappingTab
           formData={formData}

@@ -250,7 +250,7 @@ if (field === "ammendmentNumber") {
 
 
       <div className="space-y-2 col-span-2">
-        <Label>Protocol Attachment</Label>
+        <Label>Protocol Attachment<span className="text-red-500">*</span></Label>
          <div className="relative">
             <input
                 id="protocolAttachment"
