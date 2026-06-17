@@ -1,392 +1,395 @@
-"use client";
+import { useMemo, useState, useEffect } from "react";
 
 import {
-  CheckCircle2,
-  Clock3,
-  MapPin,
-  
-  Package,
-  Printer,
-} from "lucide-react";
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+} from "@tanstack/react-table";
+
+import type { ColumnDef } from "@tanstack/react-table";
+
+import { DataTable } from "../../../common/DataTable";
+import TableSearch from "../../../common/TableSearch";
+import ColumnToggle from "../../../common/ColumnToggle";
+import Pagination from "../../../common/Pagination";
+import { ActionMenu } from "../../../common/ActionMenu";
 import { useNavigate } from "react-router-dom";
 
+export type SampleTrackingData = {
+  id: number;
+  sampleId: string;
+  sampleCode: string;
+  subjectCode: string;
+  department: string;
+
+  registrationDate: string;
+  collectionDate: string;
+  acknowledgementDate: string;
+  processingDate: string;
+  storageDate: string;
+
+  shipmentDate?: string;
+  resultEntryDate?: string;
+  resultValidationDate?: string;
+};
 const SampleTracking = () => {
+  const initialData: SampleTrackingData[] = [
+  {
+    id: 1,
+    sampleId: "SMP001",
+    sampleCode: "SC001",
+    subjectCode: "SUB001",
+    department: "Hematology",
+    registrationDate: "2026-06-01",
+    collectionDate: "2026-06-02",
+    acknowledgementDate: "2026-06-02",
+    processingDate: "2026-06-03",
+    storageDate: "2026-06-04",
+    shipmentDate: "2026-06-05",
+    resultEntryDate: "2026-06-06",
+    resultValidationDate: "2026-06-07",
+  },
+  {
+  id: 2,
+  sampleId: "SMP002",
+  sampleCode: "SC002",
+  subjectCode: "SUB002",
+  department: "Cytology",
+
+  registrationDate: "2026-06-12",
+  collectionDate: "2026-06-13",
+  acknowledgementDate: "2026-06-13",
+  processingDate: "2026-06-14",
+  storageDate: "2026-06-15",
+
+  shipmentDate: "",
+  resultEntryDate: "",
+  resultValidationDate: "",
+},
+  {
+    id: 3,
+    sampleId: "SMP003",
+    sampleCode: "SC003",
+    subjectCode: "SUB003",
+    department: "Microbiology",
+    registrationDate: "2026-06-03",
+    collectionDate: "2026-06-04",
+    acknowledgementDate: "2026-06-04",
+    processingDate: "2026-06-05",
+    storageDate: "2026-06-06",
+    shipmentDate: "2026-06-07",
+    resultEntryDate: "2026-06-08",
+    resultValidationDate: "2026-06-09",
+  },
+  {
+    id: 4,
+    sampleId: "SMP004",
+    sampleCode: "SC004",
+    subjectCode: "SUB004",
+    department: "Pathology",
+    registrationDate: "2026-06-04",
+    collectionDate: "2026-06-05",
+    acknowledgementDate: "2026-06-05",
+    processingDate: "2026-06-06",
+    storageDate: "2026-06-07",
+    shipmentDate: "2026-06-08",
+    resultEntryDate: "2026-06-09",
+    resultValidationDate: "2026-06-10",
+  },
+  {
+    id: 5,
+    sampleId: "SMP005",
+    sampleCode: "SC005",
+    subjectCode: "SUB005",
+    department: "Immunology",
+    registrationDate: "2026-06-05",
+    collectionDate: "2026-06-06",
+    acknowledgementDate: "2026-06-06",
+    processingDate: "2026-06-07",
+    storageDate: "2026-06-08",
+    shipmentDate: "2026-06-09",
+    resultEntryDate: "2026-06-10",
+    resultValidationDate: "2026-06-11",
+  },
+  {
+    id: 6,
+    sampleId: "SMP006",
+    sampleCode: "SC006",
+    subjectCode: "SUB006",
+    department: "Virology",
+    registrationDate: "2026-06-06",
+    collectionDate: "2026-06-07",
+    acknowledgementDate: "2026-06-07",
+    processingDate: "2026-06-08",
+    storageDate: "2026-06-09",
+    shipmentDate: "2026-06-10",
+    resultEntryDate: "2026-06-11",
+    resultValidationDate: "2026-06-12",
+  },
+  {
+    id: 7,
+    sampleId: "SMP007",
+    sampleCode: "SC007",
+    subjectCode: "SUB007",
+    department: "Molecular Biology",
+    registrationDate: "2026-06-07",
+    collectionDate: "2026-06-08",
+    acknowledgementDate: "2026-06-08",
+    processingDate: "2026-06-09",
+    storageDate: "2026-06-10",
+    shipmentDate: "2026-06-11",
+    resultEntryDate: "2026-06-12",
+    resultValidationDate: "2026-06-13",
+  },
+  {
+    id: 8,
+    sampleId: "SMP008",
+    sampleCode: "SC008",
+    subjectCode: "SUB008",
+    department: "Clinical Chemistry",
+    registrationDate: "2026-06-08",
+    collectionDate: "2026-06-09",
+    acknowledgementDate: "2026-06-09",
+    processingDate: "2026-06-10",
+    storageDate: "2026-06-11",
+    shipmentDate: "2026-06-12",
+    resultEntryDate: "2026-06-13",
+    resultValidationDate: "2026-06-14",
+  },
+  {
+    id: 9,
+    sampleId: "SMP009",
+    sampleCode: "SC009",
+    subjectCode: "SUB009",
+    department: "Toxicology",
+    registrationDate: "2026-06-09",
+    collectionDate: "2026-06-10",
+    acknowledgementDate: "2026-06-10",
+    processingDate: "2026-06-11",
+    storageDate: "2026-06-12",
+    shipmentDate: "2026-06-13",
+    resultEntryDate: "2026-06-14",
+    resultValidationDate: "2026-06-15",
+  },
+  {
+    id: 10,
+    sampleId: "SMP010",
+    sampleCode: "SC010",
+    subjectCode: "SUB010",
+    department: "Genetics",
+    registrationDate: "2026-06-10",
+    collectionDate: "2026-06-11",
+    acknowledgementDate: "2026-06-11",
+    processingDate: "2026-06-12",
+    storageDate: "2026-06-13",
+    shipmentDate: "2026-06-14",
+    resultEntryDate: "2026-06-15",
+    resultValidationDate: "2026-06-16",
+  },
+  {
+    id: 11,
+    sampleId: "SMP011",
+    sampleCode: "SC011",
+    subjectCode: "SUB011",
+    department: "Parasitology",
+    registrationDate: "2026-06-11",
+    collectionDate: "2026-06-12",
+    acknowledgementDate: "2026-06-12",
+    processingDate: "2026-06-13",
+    storageDate: "2026-06-14",
+    shipmentDate: "2026-06-15",
+    resultEntryDate: "2026-06-16",
+    resultValidationDate: "2026-06-17",
+  },
+  {
+    id: 12,
+    sampleId: "SMP012",
+    sampleCode: "SC012",
+    subjectCode: "SUB012",
+    department: "Cytology",
+    registrationDate: "2026-06-12",
+    collectionDate: "2026-06-13",
+    acknowledgementDate: "2026-06-13",
+    processingDate: "2026-06-14",
+    storageDate: "2026-06-15",
+    shipmentDate: "2026-06-16",
+    resultEntryDate: "2026-06-17",
+    resultValidationDate: "2026-06-18",
+  },
+  {
+  id: 13,
+  sampleId: "SMP013",
+  sampleCode: "SC013",
+  subjectCode: "SUB013",
+  department: "Cytology",
+
+  registrationDate: "2026-06-12",
+  collectionDate: "2026-06-13",
+  acknowledgementDate: "2026-06-13",
+  processingDate: "2026-06-14",
+  storageDate: "2026-06-15",
+
+  shipmentDate: "",
+  resultEntryDate: "",
+  resultValidationDate: "",
+}
+];
+  const [data, _setData] = useState<SampleTrackingData[]>(initialData);
+  const [globalFilter, setGlobalFilter] = useState("");
+  const [columnVisibility, setColumnVisibility] = useState({});
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const navigate = useNavigate();
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
-  const trackingSteps = [
-    {
-      title: "Sample Registered",
-      date: "14-Jun-2026 09:00 AM",
-      status: "completed",
-    },
-    {
-      title: "Sample Collected",
-      date: "14-Jun-2026 09:15 AM",
-      status: "completed",
-    },
-    {
-      title: "Sample Received",
-      date: "14-Jun-2026 09:45 AM",
-      status: "completed",
-    },
-    {
-      title: "Screening Completed",
-      date: "14-Jun-2026 11:00 AM",
-      status: "completed",
-    },
-    {
-      title: "Component Separation",
-      date: "14-Jun-2026 11:45 AM",
-      status: "completed",
-    },
-    {
-      title: "Stored In Blood Bank",
-      date: "14-Jun-2026 12:15 PM",
-      status: "completed",
-    },
-    {
-      title: "Ready For Issue",
-      date: "Awaiting Request",
-      status: "active",
-    },
-    {
-      title: "Issued",
-      date: "",
-      status: "pending",
-    },
-  ];
+  useEffect(() => {
+    const close = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest(".menu-container")) {
+        setOpenMenuId(null);
+      }
+    };
 
-  const movementHistory = [
-    {
-      date: "14-Jun-2026 09:15",
-      from: "Collection Room",
-      to: "Reception",
-      by: "Nurse",
-      status: "Completed",
+    document.addEventListener("click", close);
+
+    return () => document.removeEventListener("click", close);
+  }, []);
+ 
+  
+    const handleView = (item: SampleTrackingData) => {
+    navigate("/sample/tracking/view", {
+      state: {
+        mode: "view",
+        data: item,
+      },
+    });
+    };
+
+
+      const columns: ColumnDef<SampleTrackingData>[] = useMemo(
+      () => [
+        {
+          accessorKey: "sampleId",
+          header: "Sample ID",
+        },
+        {
+          accessorKey: "sampleCode",
+          header: "Sample Code",
+        },
+        {
+          accessorKey: "subjectCode",
+          header: "Subject Code",
+        },
+        {
+          accessorKey: "department",
+          header: "Department",
+        },
+        {
+          accessorKey: "registrationDate",
+          header: "Registration Date",
+        },
+        {
+          accessorKey: "collectionDate",
+          header: "Collection Date",
+        },
+        {
+          accessorKey: "acknowledgementDate",
+          header: "Acknowledgement Date",
+        },
+        {
+          accessorKey: "processingDate",
+          header: "Processing Date",
+        },
+        {
+          accessorKey: "storageDate",
+          header: "Storage Date",
+        },
+        // {
+        //   accessorKey: "shipmentDate",
+        //   header: "Shipment Date",
+        // },
+        // {
+        //   accessorKey: "resultEntryDate",
+        //   header: "Result Entry Date",
+        // },
+        // {
+        //   accessorKey: "resultValidationDate",
+        //   header: "Result Validation Date",
+        // },
+        {
+          id: "actions",
+          header: "Actions",
+          cell: ({ row }) => (
+            <ActionMenu
+              item={row.original}
+              onView={handleView}
+              openMenuId={openMenuId}
+              setOpenMenuId={setOpenMenuId}
+            />
+          ),
+        },
+      ],
+      [openMenuId]
+    );
+
+//     const sampleTypeMatch =
+//       !sampleTypeFilter ||
+//       item.sampleType === sampleTypeFilter;
+
+//     const conditionMatch =
+//       !conditionFilter ||
+//       item.conditionStatus === conditionFilter;
+
+//     return sampleTypeMatch && conditionMatch;
+//   });
+// }, [
+//   data,
+//   sampleTypeFilter,
+//   conditionFilter,
+// ]);
+  const table = useReactTable({
+    data,
+    columns,
+
+    state: {
+      globalFilter,
+      columnVisibility,
+      pagination,
     },
-    {
-      date: "14-Jun-2026 09:45",
-      from: "Reception",
-      to: "Screening Lab",
-      by: "Technician",
-      status: "Completed",
-    },
-    {
-      date: "14-Jun-2026 11:30",
-      from: "Screening Lab",
-      to: "Component Lab",
-      by: "Technician",
-      status: "Completed",
-    },
-    {
-      date: "14-Jun-2026 12:15",
-      from: "Component Lab",
-      to: "Storage",
-      by: "Blood Bank Staff",
-      status: "Completed",
-    },
-  ];
+
+    onGlobalFilterChange: setGlobalFilter,
+    onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: setPagination,
+
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+
+    globalFilterFn: "includesString",
+  });
 
   return (
     <div className="p-6">
-      <div className="bg-white rounded-xl shadow-md p-6 space-y-8">
+      <div className="bg-white shadow-md rounded-lg p-6">
+      <div className="flex flex-wrap justify-end items-center mb-4 gap-3">
+            <TableSearch
+            value={globalFilter}
+            onChange={setGlobalFilter}
+            placeholder="Search Sample..."
+          />
 
-        {/* Header */}
-        <div className="border-b pb-3">
-          <h2 className="text-xl font-semibold text-[#00458F]">
-            Sample Tracking
-          </h2>
-
-          <p className="text-sm text-gray-500 mt-1">
-            Track sample movement and current location
-          </p>
-        </div>
-
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-          <div className="bg-blue-50 border rounded-lg p-4">
-            <div className="text-sm text-gray-500">
-              Sample ID
-            </div>
-            <div className="font-semibold text-lg">
-              BB-20260001
-            </div>
-          </div>
-
-          <div className="bg-blue-50 border rounded-lg p-4">
-            <div className="text-sm text-gray-500">
-              Donor ID
-            </div>
-            <div className="font-semibold text-lg">
-              DON-10025
-            </div>
-          </div>
-
-          <div className="bg-blue-50 border rounded-lg p-4">
-            <div className="text-sm text-gray-500">
-              Blood Group
-            </div>
-            <div className="font-semibold text-lg">
-              O+
-            </div>
-          </div>
-
-          <div className="bg-blue-50 border rounded-lg p-4">
-            <div className="text-sm text-gray-500">
-              Component
-            </div>
-            <div className="font-semibold text-lg">
-              Packed RBC
-            </div>
-          </div>
+          <ColumnToggle table={table} />
 
         </div>
 
-        {/* Current Status */}
-        <div>
-          <h3 className="text-lg font-semibold text-[#00458F] mb-4">
-            Current Status
-          </h3>
+        <DataTable table={table} columns={columns} />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-
-            <div className="border rounded-lg p-4">
-              <div className="text-sm text-gray-500">
-                Current Status
-              </div>
-
-              <span className="inline-flex mt-2 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm">
-                Stored
-              </span>
-            </div>
-
-            <div className="border rounded-lg p-4">
-              <div className="text-sm text-gray-500">
-                Current Location
-              </div>
-
-              <div className="flex items-center gap-2 mt-2">
-                <MapPin size={16} />
-                Freezer F-01
-              </div>
-            </div>
-
-            <div className="border rounded-lg p-4">
-              <div className="text-sm text-gray-500">
-                Temperature
-              </div>
-
-              <div className="font-semibold mt-2">
-                -30°C
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Timeline */}
-        <div>
-          <h3 className="text-lg font-semibold text-[#00458F] mb-6">
-            Tracking Timeline
-          </h3>
-
-          <div className="space-y-6">
-
-            {trackingSteps.map((step, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-4"
-              >
-                <div>
-                  {step.status === "completed" && (
-                    <CheckCircle2
-                      size={22}
-                      className="text-green-600"
-                    />
-                  )}
-
-                  {step.status === "active" && (
-                    <Clock3
-                      size={22}
-                      className="text-blue-600"
-                    />
-                  )}
-
-                  {step.status === "pending" && (
-                    <div className="w-5 h-5 rounded-full border-2 border-gray-300" />
-                  )}
-                </div>
-
-                <div className="flex-1 border-l pl-4 pb-4">
-                  <div className="font-medium">
-                    {step.title}
-                  </div>
-
-                  <div className="text-sm text-gray-500">
-                    {step.date}
-                  </div>
-                </div>
-              </div>
-            ))}
-
-          </div>
-        </div>
-
-        {/* Blood Bank Details */}
-        <div>
-          <h3 className="text-lg font-semibold text-[#00458F] mb-4">
-            Blood Bank Details
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-            <div className="border rounded-lg p-4">
-              <div className="text-gray-500 text-sm">
-                Blood Group
-              </div>
-              <div className="font-semibold">
-                O Positive
-              </div>
-            </div>
-
-            <div className="border rounded-lg p-4">
-              <div className="text-gray-500 text-sm">
-                Bag Number
-              </div>
-              <div className="font-semibold">
-                BAG-20260025
-              </div>
-            </div>
-
-            <div className="border rounded-lg p-4">
-              <div className="text-gray-500 text-sm">
-                Component Type
-              </div>
-              <div className="font-semibold">
-                Packed RBC
-              </div>
-            </div>
-
-            <div className="border rounded-lg p-4">
-              <div className="text-gray-500 text-sm">
-                Screening Status
-              </div>
-              <div className="font-semibold text-green-600">
-                Cleared
-              </div>
-            </div>
-
-            <div className="border rounded-lg p-4">
-              <div className="text-gray-500 text-sm">
-                Cross Match
-              </div>
-              <div className="font-semibold text-yellow-600">
-                Pending
-              </div>
-            </div>
-
-            <div className="border rounded-lg p-4">
-              <div className="text-gray-500 text-sm">
-                Expiry Date
-              </div>
-              <div className="font-semibold">
-                14-Jul-2026
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Movement History */}
-        <div>
-          <h3 className="text-lg font-semibold text-[#00458F] mb-4">
-            Movement History
-          </h3>
-
-          <div className="overflow-auto border rounded-lg">
-            <table className="w-full text-sm">
-              <thead className="bg-[#00458F] text-white">
-                <tr>
-                  <th className="p-3 text-left">
-                    Date & Time
-                  </th>
-                  <th className="p-3 text-left">
-                    From
-                  </th>
-                  <th className="p-3 text-left">
-                    To
-                  </th>
-                  <th className="p-3 text-left">
-                    Action By
-                  </th>
-                  <th className="p-3 text-left">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {movementHistory.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="border-b hover:bg-gray-50"
-                  >
-                    <td className="p-3">
-                      {item.date}
-                    </td>
-
-                    <td className="p-3">
-                      {item.from}
-                    </td>
-
-                    <td className="p-3">
-                      {item.to}
-                    </td>
-
-                    <td className="p-3">
-                      {item.by}
-                    </td>
-
-                    <td className="p-3">
-                      <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">
-                        {item.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-
-            </table>
-          </div>
-        </div>
-
-        {/* Buttons */}
-        <div className="flex justify-between pt-4">
-
-          <button
-            onClick={() => navigate(-1)}
-            className="px-5 py-2 rounded-md bg-gray-200 hover:bg-gray-300"
-          >
-            Back
-          </button>
-
-          <div className="flex gap-3">
-
-            <button className="flex items-center gap-2 px-5 py-2 rounded-md bg-gray-500 text-white">
-              <Package size={16} />
-              View History
-            </button>
-
-            <button className="flex items-center gap-2 px-5 py-2 rounded-md bg-[#00458F] text-white">
-              <Printer size={16} />
-              Print Report
-            </button>
-
-          </div>
-
-        </div>
-
+        <Pagination
+          table={table}
+          totalCount={table.getFilteredRowModel().rows.length}
+        />
       </div>
     </div>
   );

@@ -25,7 +25,6 @@ import SiteForm from './components/StudyModule/SiteRegistrationModule/SiteForm.t
 import TestRegistration from './components/Test Registration/TestRegistration.tsx';
 import TestRegistrationForm from "./components/Test Registration/TestRegistrationForm.tsx";
 import GenerateReport from "./components/Reports/GenerateReport.tsx";
-import ReportForm from "./components/Reports/ReportForm.tsx";
 
 import Result from "./components/ResultModule/Result.tsx";
 import ForgotPassword from './pages/auth/Login/ForgotPassword.tsx';
@@ -58,11 +57,9 @@ import NotificationIcon from './components/Notifications/NotificationIcon.tsx';
 import UserForm from './components/Settings/UserManagement/UserForm.tsx';
 import AddUserForm from './components/Settings/UserManagement/AddUserForm.tsx';
 import SampleTracking from './components/Sample/SampleTrackingModule/SampleTracking.tsx';
-import SampleTrackingList from './components/Sample/SampleTrackingModule/SampleTrackingList.tsx';
 import ResultEntry from './components/ResultEntry/ResultEntry.tsx';
 import ResultEntryList from './components/ResultEntry/ResultEntryList.tsx';
 // Add imports
-import ResultValidationList from './components/ResultEntry/ResultValidationList';
 import ResultValidationReview from './components/ResultEntry/ResultValidationReview';
 import SampleReview from './components/Sample/SampleAcknowledgment/SampleReview.tsx';
 import SampleCollection from './components/Sample/SampleCollectionModule/SampleCollection.tsx';
@@ -72,6 +69,8 @@ import SampleStorage from './components/Sample/SampleStorage/SampleStorage.tsx';
 import SampleStorageForm from './components/Sample/SampleStorage/SampleStorageForm.tsx';
 import SampleShipment from './components/Sample/SampleShipment/SampleShipment.tsx';
 import SampleShipmentForm from './components/Sample/SampleShipment/SampleShipmentForm.tsx';
+import SampleTrackingForm from './components/Sample/SampleTrackingModule/SampleTrackingForm.tsx';
+import ResultValidation from './components/ResultEntry/ResultValidation.tsx';
 // -------------------------
 // Main page components
 // -------------------------
@@ -97,7 +96,7 @@ const pageComponents: Record<string, React.ReactNode> = {
 
   'Result': <Result/>,
   'ResultEntry': <ResultEntry/>,
-  'ResultValidation': <ResultValidationList/>,
+  'ResultValidation': <ResultValidation/>,
   'SampleProcessing': <SampleProcessing />,
   'SampleStorage': <SampleStorage />,
   // 'My Nominations': <NominationPage />,
@@ -399,10 +398,7 @@ console.log("allowedRoles:", allowedRoles);
          <QcForm />
      </ProtectedRoute>
  } />
-<Route
-  path="/report-form"
-  element={<ReportForm />}
-/>
+
 <Route
   path="/study/master/new-add"
   element={<StudyMasterStepper />}
@@ -481,7 +477,15 @@ console.log("allowedRoles:", allowedRoles);
   path="/result/validation"
   element={
     <ProtectedRoute userRole={userRole} allowedRoles={getAllowedRoles('ResultValidation')}>
-      <ResultValidationList />
+      <ResultValidation />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/result/validation/view"
+  element={
+    <ProtectedRoute userRole={userRole} allowedRoles={getAllowedRoles('ResultValidation')}>
+      <ResultValidationReview />
     </ProtectedRoute>
   }
 />
@@ -515,13 +519,10 @@ console.log("allowedRoles:", allowedRoles);
       <Route path="/sample/shipment/new-add" element={<SampleShipmentForm />}/>
       <Route path="/sample/master/smppro-add" element={<SampleProcessingForm />}/>
       
-      <Route
-  path="/sample/tracking"
-  element={<SampleTrackingList />}
-/>
+      <Route  path="/sample/tracking/view" element={<SampleTrackingForm />}/>
 
 <Route
-  path="/sample/tracking/add"
+  path="/sample/tracking"
   element={<SampleTracking />}
 />
      </Route>

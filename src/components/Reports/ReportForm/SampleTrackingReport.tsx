@@ -1,0 +1,83 @@
+export default function SampleTrackingReport() {
+
+  const rows = [
+    {
+      uhid: "3142433",
+      patient: "LOGANATH",
+      dept: "Bio-Chemistry",
+      status: "Approved",
+    },
+    {
+      uhid: "4176321",
+      patient: "SUNDHAR",
+      dept: "Bio-Chemistry",
+      status: "Printed",
+    },
+  ];
+
+  return (
+
+    <>
+      <h2 className="text-lg font-bold mt-6">
+        SAMPLE TRACKING REPORT
+      </h2>
+
+      <table className="w-full border mt-4">
+
+        <thead>
+
+          <tr>
+
+            <th className="border p-2">
+              UHID
+            </th>
+
+            <th className="border p-2">
+              Patient
+            </th>
+
+            <th className="border p-2">
+              Department
+            </th>
+
+            <th className="border p-2">
+              Status
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          {rows.map((row) => (
+
+            <tr key={row.uhid}>
+
+              <td className="border p-2">
+                {row.uhid}
+              </td>
+
+              <td className="border p-2">
+                {row.patient}
+              </td>
+
+              <td className="border p-2">
+                {row.dept}
+              </td>
+
+              <td className="border p-2">
+                {row.status}
+              </td>
+
+            </tr>
+
+          ))}
+
+        </tbody>
+
+      </table>
+
+    </>
+  );
+}

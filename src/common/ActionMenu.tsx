@@ -13,6 +13,8 @@ type ActionMenuProps<T> = {
   onAuditLog?: (item: T) => void;
   onCollect?:(item:T)=>void;
   onAck?:(item:T)=>void;
+  onValidate?: (item: T) => void;
+  onReject?: (item: T) => void;
 
 };
 
@@ -24,6 +26,8 @@ export function ActionMenu<T>({
   onAuditLog,
   onCollect,
   onAck,
+  onValidate,
+  onReject,
   openMenuId,
   setOpenMenuId
 }: ActionMenuProps<T>) {
@@ -123,6 +127,22 @@ export function ActionMenu<T>({
               className="block w-full px-3 py-2 text-left hover:bg-blue-50 text-blue-600 text-sm"
             >
               Acknowledge
+            </button>
+          )} 
+          {onValidate && (
+            <button
+              onClick={() => handleAction(onValidate)}
+              className="block w-full px-3 py-2 text-left hover:bg-blue-50 text-blue-600 text-sm"
+            >
+              Validate
+            </button>
+          )} 
+          {onReject && (
+            <button
+              onClick={() => handleAction(onReject)}
+              className="block w-full px-3 py-2 text-left hover:bg-red-50 text-red-600 text-sm"
+            >
+              Reject
             </button>
           )} 
         </div>
