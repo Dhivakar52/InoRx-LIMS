@@ -40,10 +40,10 @@ const SampleProcessingForm = () => {
 
   return (
     <div className="p-6">
-      <div className="bg-white rounded-xl shadow-md p-6 space-y-8">
+      <div className="bg-white rounded-xl shadow-md p-6 space-y-2">
 
        
-        <div className="border-b pb-3">
+        <div className="pb-3">
           <h2 className="text-xl font-semibold text-[#00458F]">
             Sample Processing
           </h2>
@@ -212,7 +212,7 @@ const SampleProcessingForm = () => {
             Quality Check
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
 
             <div>
               <label className="text-sm font-medium">

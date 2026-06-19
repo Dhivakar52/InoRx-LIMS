@@ -28,56 +28,38 @@ export default function PatientDetails({
       <div className="p-4">
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-
           <div>
             <label className="block text-sm font-medium mb-1">
-              Patient Name
+              Subject ID
             </label>
 
             <input
-              type="text"
+              type="text" disabled
+              name="subjectId"
+              value={formData.subjectId }
+              onChange={handleChange}
+              className="w-full border rounded h-10 px-3"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Name
+            </label>
+             <input
+              type="text" disabled
               name="patientName"
-              value={formData.patientName}
+              value={formData.patientName }
               onChange={handleChange}
               className="w-full border rounded h-10 px-3"
             />
           </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              UHID No
-            </label>
-
-            <input
-              type="text"
-              name="uhidNo"
-              value={formData.uhidNo}
-              onChange={handleChange}
-              className="w-full border rounded h-10 px-3"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              IP No
-            </label>
-
-            <input
-              type="text"
-              name="ipNo"
-              value={formData.ipNo}
-              onChange={handleChange}
-              className="w-full border rounded h-10 px-3"
-            />
-          </div>
-
           <div>
             <label className="block text-sm font-medium mb-1">
               Gender
             </label>
 
             <select
-              name="gender"
+              name="gender" disabled
               value={formData.gender}
               onChange={handleChange}
               className="w-full border rounded h-10 px-3"
@@ -99,33 +81,43 @@ export default function PatientDetails({
               </option>
             </select>
           </div>
-
           <div>
             <label className="block text-sm font-medium mb-1">
               Age
             </label>
 
             <input
-              type="text"
+              type="text" disabled
               name="age"
               value={formData.age}
               onChange={handleChange}
               className="w-full border rounded h-10 px-3"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium mb-1">
               Department
             </label>
 
-            <input
-              type="text"
-              name="department"
+           <select
+              name="department" disabled
               value={formData.department}
               onChange={handleChange}
-              className="w-full border rounded h-10 px-3"
-            />
+              className="w-full border rounded h-10 px-3">
+
+              <option>Select</option>
+
+              <option value="Bacteriology">Bacteriology</option>
+
+              <option value="Bio Chemistry">Bio Chemistry</option>
+
+              <option value="Clinical Pathology">Clinical Pathology</option>
+
+              <option value="Molecular Biology">Molecular Biology</option>
+
+              <option value="Serology">Serology</option>
+
+              </select>
           </div>
 
           <div>
@@ -134,7 +126,7 @@ export default function PatientDetails({
             </label>
 
             <input
-              type="text"
+              type="text" disabled
               name="ward"
               value={formData.ward}
               onChange={handleChange}
@@ -148,7 +140,7 @@ export default function PatientDetails({
             </label>
 
             <input
-              type="text"
+              type="text" disabled
               name="referredBy"
               value={formData.referredBy}
               onChange={handleChange}

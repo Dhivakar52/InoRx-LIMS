@@ -2,13 +2,13 @@ export default function SampleTrackingReport() {
 
   const rows = [
     {
-      uhid: "3142433",
+      subjectId: "3142433",
       patient: "LOGANATH",
       dept: "Bio-Chemistry",
       status: "Approved",
     },
     {
-      uhid: "4176321",
+      subjectId: "4176321",
       patient: "SUNDHAR",
       dept: "Bio-Chemistry",
       status: "Printed",
@@ -18,9 +18,9 @@ export default function SampleTrackingReport() {
   return (
 
     <>
-      <h2 className="text-lg font-bold mt-6">
+      {/* <h2 className="text-lg font-bold mt-6">
         SAMPLE TRACKING REPORT
-      </h2>
+      </h2> */}
 
       <table className="w-full border mt-4">
 
@@ -29,7 +29,7 @@ export default function SampleTrackingReport() {
           <tr>
 
             <th className="border p-2">
-              UHID
+              Subject ID
             </th>
 
             <th className="border p-2">
@@ -52,10 +52,10 @@ export default function SampleTrackingReport() {
 
           {rows.map((row) => (
 
-            <tr key={row.uhid}>
+            <tr key={row.subjectId}>
 
               <td className="border p-2">
-                {row.uhid}
+                {row.subjectId}
               </td>
 
               <td className="border p-2">

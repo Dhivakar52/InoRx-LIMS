@@ -22,11 +22,8 @@ import {
   TestTube2,
   FileSpreadsheet,
   CalendarDays,
-  AlertTriangle,
-  Microscope,
   Database,
   CheckCircle,
-  ClipboardCheck,
   Settings,
   Warehouse,
   Bell,
@@ -65,7 +62,6 @@ const navigationItems: NavigationItem[] = [
   {
   icon: Home, label: 'Dashboard', path: '/dashboard',pageKey: 'Dashboard'},
   { icon: Bell, label: 'Notifications', path: '/notifications', pageKey: 'Notifications' },
-  // ✅ STUDY
   {
     icon: SquareLibrary,
     label: 'Study',
@@ -76,21 +72,19 @@ const navigationItems: NavigationItem[] = [
       { icon: Building2, label: 'Site Registration', path: '/study/site', pageKey: 'Site Registration' },
     ],
   },
-  // ✅ VISIT
   {
     icon: CalendarDays,
     label: 'Visit Schedule',
     path: '/visit',
     pageKey: 'Visit',
   },
-  // ✅ SUBJECT
   {
     icon: Users,
     label: 'Subject',
     pageKey: 'Subject',
     children: [
       { icon: UserPlus, label: 'Subject Enrollment', path: '/subject/enrollment', pageKey: 'Enrollment' },
-      { icon: AlertTriangle, label: 'Adverse Events', path: '/subject/adverse', pageKey: 'Adverse' },
+      // { icon: AlertTriangle, label: 'Adverse Events', path: '/subject/adverse', pageKey: 'Adverse' },
     ],
   },
   // Test Registration
@@ -130,15 +124,13 @@ const navigationItems: NavigationItem[] = [
     ],
   },
  
-   // ✅ ANALYZER INTEGRATION - MAIN HEADING ONLY (NO SUBHEADINGS)
-  {
-    icon: Microscope,
-    label: 'Analyzer Integration',
-    path: '/analyzer',
-    pageKey: 'AnalyzerIntegration',
-  },
+  // {
+  //   icon: Microscope,
+  //   label: 'Analyzer Integration',
+  //   path: '/analyzer',
+  //   pageKey: 'AnalyzerIntegration',
+  // },
 
-  // ✅ BIOBANK MANAGEMENT - MAIN HEADING ONLY (NO SUBHEADINGS)
 {
   icon: Database,
   label: 'Biobank Management',
@@ -148,21 +140,19 @@ const navigationItems: NavigationItem[] = [
  { icon: Warehouse, label: 'Inventory Management',
  path: '/inventory', pageKey: 'InventoryManagement' },
 
-  // ✅ RESULTS REVIEW - MAIN HEADING ONLY (NO SUBHEADINGS)
-  {
-    icon: ClipboardCheck,
-    label: 'Results Review',
-    path: '/results',
-    pageKey: 'ResultsReview',
-  },
+  // {
+  //   icon: ClipboardCheck,
+  //   label: 'Results Review',
+  //   path: '/results',
+  //   pageKey: 'ResultsReview',
+  // },
 
-  // ✅ FINAL QC APPROVAL - MAIN HEADING ONLY (NO SUBHEADINGS)
-  {
-    icon: CheckCircle,
-    label: 'Final QC Approval',
-    path: '/qc',
-    pageKey: 'FinalQCApproval',
-  },
+  // {
+  //   icon: CheckCircle,
+  //   label: 'Final QC Approval',
+  //   path: '/qc',
+  //   pageKey: 'FinalQCApproval',
+  // },
 
    //  Reports
   {

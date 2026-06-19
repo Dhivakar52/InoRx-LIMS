@@ -103,9 +103,9 @@ const SampleTrackingForm = () => {
 
   return (
     <div className="p-6">
-      <div className="bg-white rounded-xl shadow-md p-6 space-y-8">
+      <div className="bg-white rounded-xl shadow-md p-6 space-y-2">
         {/* Header */}
-        <div className="border-b pb-3">
+        <div className="pb-3">
           <h2 className="text-xl font-semibold text-[#00458F]">
             Sample Tracking Details
           </h2>
@@ -121,7 +121,7 @@ const SampleTrackingForm = () => {
             Sample Information
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
             <div className="bg-gray-50 border rounded-lg p-4">
               <div className="text-xs text-gray-500">
                 Sample ID
@@ -157,21 +157,40 @@ const SampleTrackingForm = () => {
                 {sample.department}
               </div>
             </div>
+            <div className="bg-gray-50 border rounded-lg p-4">
+            <div className="text-xs text-gray-500">
+              Status
+            </div>
+            <div className="mt-2">
+              <span
+                className={`
+                  font-semibold mt-1
+                  ${
+                    sample.resultValidationDate
+                      ? "text-green-700"
+                      : sample.resultEntryDate
+                      ? "text-blue-700"
+                      : sample.shipmentDate
+                      ? "text-purple-700"
+                      : sample.storageDate
+                      ? "text-indigo-700"
+                      : sample.processingDate
+                      ? "text-yellow-700"
+                      : sample.acknowledgementDate
+                      ? "text-cyan-700"
+                      : sample.collectionDate
+                      ? "text-orange-700"
+                      : "text-gray-700"
+                  }
+                `}
+              >
+                {currentStatus}
+              </span>
+            </div>
+          </div>
           </div>
         </div>
 
-        {/* Current Status */}
-        <div className="border rounded-lg p-4 bg-blue-50">
-          <div className="text-sm text-gray-600">
-            Current Status
-          </div>
-
-          <div className="text-lg font-semibold text-[#00458F] mt-1">
-            {currentStatus}
-          </div>
-        </div>
-
-        {/* Timeline */}
         <div>
           <h3 className="font-semibold text-[#00458F] text-lg mb-6">
             Tracking Timeline
@@ -220,7 +239,7 @@ const SampleTrackingForm = () => {
         </div>
 
         {/* Footer Buttons */}
-        <div className="flex justify-between pt-6 border-t">
+        <div className="flex justify-between pt-6">
           <button
             onClick={() => navigate(-1)}
             className="

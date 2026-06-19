@@ -78,7 +78,7 @@ export default function AmendmentMetadata({
 
   return (
     <div className="space-y-6">
-      <div className="border-b pb-4">
+      <div className="pb-4">
         <h2 className="text-xl font-semibold text-[#00458F]">
           Amendment Metadata
         </h2>

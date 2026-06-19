@@ -3,9 +3,8 @@ import PatientInfo from "../PatientInfo";
 import ReportTable from "./ReportTable";
 
   const patient = {
+    subjectId: "4065635",
     patientName: "JAHEEDHA PARVEEN",
-    uhid: "4065635",
-    ipNo: "2626998",
     ageGender: "26 Years / Female",
     department: "Immunoassay",
     consultant: "Dr. Rajesh",

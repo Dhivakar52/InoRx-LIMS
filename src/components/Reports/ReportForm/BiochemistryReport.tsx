@@ -5,9 +5,8 @@ import ReportFooter from "../Footer";
 export default function BiochemistryReport() {
 
   const patient = {
+    subjectId: "4065635",
     patientName: "JAHEEDHA PARVEEN",
-    uhid: "4065635",
-    ipNo: "2626998",
     ageGender: "26 Years / Female",
     department: "Biochemistry",
     consultant: "Dr. Rajesh",

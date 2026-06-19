@@ -3,9 +3,8 @@
 
 interface PatientInfoProps {
   patient: {
+    subjectId: string;
     patientName: string;
-    uhid: string;
-    ipNo: string;
     ageGender: string;
     department: string;
     consultant: string;
@@ -30,86 +29,47 @@ export default function PatientInfo({
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4">
-
-        {/* Patient Name */}
-
         <InfoCard
-          label="Patient Name"
+          label="Subject ID"
+          value={patient.subjectId}
+        />
+        <InfoCard
+          label="Name"
           value={patient.patientName}
         />
-
-        {/* UHID */}
-
-        <InfoCard
-          label="UHID"
-          value={patient.uhid}
-        />
-
-        {/* IP */}
-
-        <InfoCard
-          label="IP No"
-          value={patient.ipNo}
-        />
-
-        {/* Age */}
-
         <InfoCard
           label="Age / Gender"
           value={patient.ageGender}
         />
-
-        {/* Department */}
-
         <InfoCard
           label="Department"
           value={patient.department}
         />
-
-        {/* Consultant */}
-
         <InfoCard
           label="Consultant"
           value={patient.consultant}
         />
-
-        {/* Lab */}
-
         <InfoCard
           label="Lab No"
           value={patient.labNo}
         />
-
-        {/* Sample */}
-
         <InfoCard
           label="Sample Type"
           value={patient.sampleType}
         />
-
-        {/* Collected */}
-
         <InfoCard
           label="Collected On"
           value={patient.collectedOn}
         />
-
-        {/* Received */}
-
         <InfoCard
           label="Received On"
           value={patient.receivedOn}
         />
-
-        {/* Approved */}
-
         <InfoCard
           label="Approved On"
           value={patient.approvedOn}
         />
-
       </div>
-
     </div>
   );
 }

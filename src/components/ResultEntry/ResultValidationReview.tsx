@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Microscope, ArrowLeft } from "lucide-react";
+import { Microscope } from "lucide-react";
 
 const ResultValidationView = () => {
   const navigate = useNavigate();
@@ -55,10 +55,10 @@ const ResultValidationView = () => {
 
   return (
     <div className="p-6">
-      <div className="bg-white rounded-xl shadow-md p-6 space-y-6">
+      <div className="bg-white rounded-xl shadow-md p-6 space-y-2">
 
         {/* Header */}
-        <div className="border-b pb-4">
+        <div className="pb-4">
           <h2 className="text-xl font-semibold text-[#00458F]">
             Result Validation Details
           </h2>
@@ -374,12 +374,12 @@ const ResultValidationView = () => {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-between pt-5 border-t">
+        <div className="flex justify-between pt-5">
           <button
             onClick={() => navigate("/result/validation")}
             className="flex items-center gap-2 px-5 py-2 rounded-md bg-gray-200 hover:bg-gray-300"
           >
-            <ArrowLeft size={16} />
+            {/* <ArrowLeft size={16} /> */}
             Back
           </button>
         </div>

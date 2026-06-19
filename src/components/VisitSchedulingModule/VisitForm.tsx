@@ -550,7 +550,7 @@ export default function UnifiedVisitScheduler() {
     <div className="p-6">
       <div className="bg-white rounded-xl shadow-md p-6">
         {/* Header with Title */}
-        <div className="mb-6 pb-4 border-b border-gray-200">
+        <div className="mb-6 pb-4 border-gray-200">
           <h1 className="text-2xl font-bold text-gray-800">Subject Visit Scheduling</h1>
         </div>
 
@@ -564,11 +564,11 @@ export default function UnifiedVisitScheduler() {
               <select 
                 value={selectedSubjectId} 
                 onChange={(e) => setSelectedSubjectId(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] ${
+                className={`w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-700 ${
                   errors.subjectId ? 'border-red-500' : 'border-gray-300'
                 }`}
               >
-                <option value="" disabled>-- Choose Subject --</option>
+                <option value="" disabled>-- Select Subject --</option>
                 <option value="SUBJ-ONC-BOS-0024">SUBJ-ONC-BOS-0024</option>
                 <option value="SUBJ-ONC-LON-0019">SUBJ-ONC-LON-0019</option>
               </select>
@@ -747,8 +747,8 @@ export default function UnifiedVisitScheduler() {
 
         {/* SPECIMEN KIT MAPPINGS */}
         <div className="mb-6 border border-gray-200 rounded-lg overflow-hidden">
-          <div className="bg-gray-100 px-4 py-3 border-b border-gray-200">
-            <h3 className="font-semibold text-gray-700">Section 3: Specimen Kit Mappings (Read-Only)</h3>
+          <div className="bg-[#1F497D] text-white px-4 py-3 rounded-t-lg">
+            <h3 className="font-semibold">Section 3: Specimen Kit Mappings (Read-Only)</h3>
           </div>
           <div className="p-4 bg-white">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -770,8 +770,8 @@ export default function UnifiedVisitScheduler() {
 
         {/* ADD NEW VISIT RECORD SECTION */}
         <div className="mb-6 border border-gray-200 rounded-lg overflow-hidden">
-          <div className="bg-gray-100 px-4 py-3 border-b border-gray-200">
-            <h3 className="font-semibold text-gray-700">Add New Visit Record</h3>
+          <div className="bg-[#1F497D] text-white px-4 py-3 rounded-t-lg">
+            <h3 className="font-semibold">Add New Visit Record</h3>
           </div>
           <div className="p-4 bg-white">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -853,7 +853,7 @@ export default function UnifiedVisitScheduler() {
         </div>
 
         {/* FOOTER ACTIONS */}
-        <div className="flex justify-between items-center mt-8 pt-4 border-t border-gray-200">
+        <div className="flex justify-between items-center mt-8 pt-4 border-gray-200">
           <button
             onClick={handleCancel}
             className="px-5 py-2 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"

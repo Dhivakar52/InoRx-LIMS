@@ -390,7 +390,7 @@ export default function ConfigurationTabs({ form, setForm }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="border-b pb-4">
+      <div className="pb-4">
         <h2 className="text-xl font-semibold text-[#00458F]">Cloned Workspace & Reconciliation</h2>
         <p className="text-sm text-gray-500 mt-1">Review cloned workspace changes and reconcile configuration updates before approval.</p>
       </div>

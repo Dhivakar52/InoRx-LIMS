@@ -33,11 +33,11 @@ const [searchParams] = useSearchParams();
   };
   return (
     <div className="space-y-6">
-      <div className="border-b">
-        {/* <h2 className="text-xl font-semibold text-[#00458F]">
+      {/* <div className="border-b">
+        <h2 className="text-xl font-semibold text-[#00458F]">
           Sponsor & CRO Details
-        </h2> */}
-      </div>
+        </h2>
+      </div> */}
       <div className="space-y-2 col-span-2">
               <Label>Airway Bill / Commercial Invoice Upload</Label>
                <div className="relative">

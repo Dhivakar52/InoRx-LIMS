@@ -3,15 +3,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
-import {
-  Save,
-  CheckCircle,
-  ArrowLeft,
-  // Printer,
-  // Download,
-} from "lucide-react";
-
 import PatientDetails from "../ResultEntry/ResultForm/PatientDetails";
 import BacteriologyResult from "../ResultEntry/ResultForm/BacteriologyResult";
 import BioChemistryResult from "../ResultEntry/ResultForm/BioChemistryResult";
@@ -36,9 +27,8 @@ export default function ResultEntry() {
 
   const [formData, setFormData] = useState({
     labNumber: "",
+    subjectId: "",
     patientName: "",
-    uhidNo: "",
-    ipNo: "",
     gender: "",
     age: "",
     department: "",
@@ -88,11 +78,11 @@ export default function ResultEntry() {
 
     setFormData((prev) => ({
       ...prev,
+      subjectId: "SUB12345",
       patientName: "John Doe",
-      uhidNo: "UH12345",
-      ipNo: "IP001",
       gender: "Male",
       age: "35",
+      department: "Bacteriology",
       ward: "General",
       referredBy: "Dr. Kumar",
     }));
@@ -230,20 +220,20 @@ export default function ResultEntry() {
               navigate("/result/entry")
             }
             className="px-5 py-2 bg-gray-200 rounded flex items-center gap-2">
-            <ArrowLeft size={16} />
+            {/* <ArrowLeft size={16} /> */}
             Back
           </button>
           <div className="flex gap-3">
             <button
               onClick={handleSave}
-              className="px-5 py-2 bg-[#00458F] text-white rounded flex items-center gap-2">
-              <Save size={16} />
-              Save
+              className="px-5 py-2 bg-gray-500 text-white text-white rounded flex items-center gap-2">
+              {/* <Save size={16} /> */}
+              Save Draft
             </button>
             <button
               onClick={handleApprove}
-              className="px-5 py-2 bg-green-600 text-white rounded flex items-center gap-2">
-              <CheckCircle size={16} />
+              className="px-5 py-2 bg-[#00458F] text-white rounded flex items-center gap-2">
+              {/* <CheckCircle size={16} /> */}
               Approve
             </button>
           </div>

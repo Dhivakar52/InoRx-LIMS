@@ -2,7 +2,7 @@
 
 import { Input } from "../../ui/input";
 import { Label } from "./../../ui/label";
-import Select from "react-select";
+// import Select from "react-select";
 interface Props {
   formData: any;
   errors: any;
@@ -12,44 +12,43 @@ interface Props {
   ) => void;
   isViewMode: boolean;
 }
-const leadPIOptions = [
-  {
-    value: "USR001",
-    label: "Dr. John Smith"
-  },
-  {
-    value: "USR002",
-    label: "Dr. David Kumar"
-  },
-  {
-    value: "USR003",
-    label: "Dr. Sarah Wilson"
-  }
-];
+// const leadPIOptions = [
+//   {
+//     value: "USR001",
+//     label: "Dr. John Smith"
+//   },
+//   {
+//     value: "USR002",
+//     label: "Dr. David Kumar"
+//   },
+//   {
+//     value: "USR003",
+//     label: "Dr. Sarah Wilson"
+//   }
+// ];
 
-const pharmacistOptions = [
-  {
-    value: "USR201",
-    label: "Michael Brown"
-  },
-  {
-    value: "USR202",
-    label: "Ravi Kumar"
-  },
-  {
-    value: "USR203",
-    label: "Emily Watson"
-  }
-];
+// const pharmacistOptions = [
+//   {
+//     value: "USR201",
+//     label: "Michael Brown"
+//   },
+//   {
+//     value: "USR202",
+//     label: "Ravi Kumar"
+//   },
+//   {
+//     value: "USR203",
+//     label: "Emily Watson"
+//   }
+// ];
 export default function StaffRoleMappingTab({
-  formData,
   handleChange,
   isViewMode,
   errors,
 }: Props) {
   return (
     <div className="grid grid-cols-2 gap-4">
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <Label>
           Lead PI <span className="text-red-500 ml-1">*</span>
         </Label>
@@ -75,7 +74,7 @@ export default function StaffRoleMappingTab({
             {errors.leadPI}
           </p>
         )}
-      </div>
+      </div> */}
 
       <div className="space-y-2">
         <Label>
@@ -149,7 +148,7 @@ export default function StaffRoleMappingTab({
           </p>
         )}
       </div>
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <Label> Unblinded Pharmacist</Label>
         <Select isDisabled={isViewMode}
           placeholder="Select Pharmacist"
@@ -180,7 +179,7 @@ export default function StaffRoleMappingTab({
             {errors.unblindedPharmacist}
           </p>
         )}
-      </div>
+      </div> */}
 
     </div>
   );

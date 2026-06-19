@@ -63,7 +63,7 @@ const dropdownRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="space-y-6">
-      <div className="border-b"></div>
+      {/* <div className="border-b"></div> */}
 
         <div className="space-y-2 relative z-50"
             ref={dropdownRef}

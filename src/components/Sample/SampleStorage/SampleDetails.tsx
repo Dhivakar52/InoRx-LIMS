@@ -31,11 +31,11 @@ const [searchParams] = useSearchParams();
   };
   return (
     <div className="space-y-6">
-      <div className="border-b">
-        {/* <h2 className="text-xl font-semibold text-[#00458F]">
+      {/* <div className="border-b">
+        <h2 className="text-xl font-semibold text-[#00458F]">
           Sponsor & CRO Details
-        </h2> */}
-      </div>
+        </h2>
+      </div> */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
              {/* Sample ID */}

@@ -204,7 +204,8 @@ const handleCollectorChange = (
           <button
             type="button"
             onClick={handleGetDetails}
-            className="px-4 py-2 bg-[#00458F] text-white rounded hover:bg-blue-700"
+             className="h-10 px-5 bg-[#00458F] text-white rounded"
+            // className="px-4 py-2 bg-[#00458F] text-white rounded hover:bg-blue-700"
           >
             Get Details
           </button>

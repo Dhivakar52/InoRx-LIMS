@@ -244,7 +244,16 @@ const SampleTracking = () => {
   });
   const navigate = useNavigate();
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
-
+  const getSampleStatus = (sample: SampleTrackingData) => {
+    if (sample.resultValidationDate) return "Result Validated";
+    if (sample.resultEntryDate) return "Result Entered";
+    if (sample.shipmentDate) return "Sample Shipped";
+    if (sample.storageDate) return "Sample Stored";
+    if (sample.processingDate) return "Sample Processing";
+    if (sample.acknowledgementDate) return "Sample Acknowledged";
+    if (sample.collectionDate) return "Sample Collected";
+    return "Sample Registered";
+  };
   useEffect(() => {
     const close = (e: MouseEvent) => {
       if (!(e.target as HTMLElement).closest(".menu-container")) {
@@ -318,6 +327,34 @@ const SampleTracking = () => {
         //   accessorKey: "resultValidationDate",
         //   header: "Result Validation Date",
         // },
+         {
+          id: "status",
+          header: "Status",
+          cell: ({ row }) => {
+            const status = getSampleStatus(row.original);
+
+            const statusColors: Record<string, string> = {
+              "Sample Registered": "bg-gray-100 text-gray-700",
+              "Sample Collected": "bg-blue-100 text-blue-700",
+              "Sample Acknowledged": "bg-indigo-100 text-indigo-700",
+              "Sample Processing": "bg-yellow-100 text-yellow-700",
+              "Sample Stored": "bg-purple-100 text-purple-700",
+              "Sample Shipped": "bg-cyan-100 text-cyan-700",
+              "Result Entered": "bg-orange-100 text-orange-700",
+              "Result Validated": "bg-green-100 text-green-700",
+            };
+
+            return (
+              <span
+                className={`px-3 py-1 rounded text-xs font-semibold whitespace-nowrap ${
+                  statusColors[status] || "bg-gray-100 text-gray-700"
+                }`}
+              >
+                {status}
+              </span>
+            );
+          },
+        },
         {
           id: "actions",
           header: "Actions",

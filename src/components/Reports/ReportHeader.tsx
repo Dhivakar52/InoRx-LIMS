@@ -9,7 +9,7 @@ export default function ReportHeader({
   department,
 }: Props) {
   return (
-    <div className="border-b-2 border-gray-300 pb-6">
+    <div className="border-gray-300 pb-6">
       <div className="flex items-center justify-between">
 
         <img
