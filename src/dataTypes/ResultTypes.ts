@@ -5,15 +5,13 @@ export type DepartmentType =
   | "Molecular Biology"
   | "Serology";
 
-export interface PatientInfo {
+export interface SubjectInfo {
   labNumber: string;
-  patientName: string;
   uhidNo: string;
   ipNo: string;
   gender: string;
   age: string;
   department: string;
-  ward: string;
   requestDate: string;
   receiptDate: string;
   referredBy: string;

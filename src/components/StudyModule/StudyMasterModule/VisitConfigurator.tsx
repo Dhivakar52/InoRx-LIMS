@@ -11,6 +11,22 @@ interface Props {
     setErrors:any;
 }
 
+const specimenOptions = [
+  "Blood",
+  "Urine",
+  "Plasma",
+  "Serum",
+  "Saliva",
+];
+
+const testOptions = [
+  "CBC",
+  "LFT",
+  "PK",
+  "Biomarker",
+  "HbA1c",
+];
+
 export default function VisitConfigurator({
     visit,
     setVisit,
@@ -22,6 +38,27 @@ const [searchParams] = useSearchParams();
 const mode = searchParams.get("mode");
 const isViewMode = mode === "view";
 
+
+const toggleMultiSelect = (
+  index: number,
+  field: "specimen" | "mappedTests",
+  value: string
+) => {
+  setVisit((prev) =>
+    prev.map((item, i) => {
+      if (i !== index) return item;
+
+      const currentValues = item[field] || [];
+
+      return {
+        ...item,
+        [field]: currentValues.includes(value)
+          ? currentValues.filter((v: string) => v !== value)
+          : [...currentValues, value],
+      };
+    })
+  );
+};
   const addVisitRow = () => {
   setVisit([
     ...visit,
@@ -32,8 +69,8 @@ const isViewMode = mode === "view";
       targetDay: "",
       windowMinus: "",
       windowPlus: "",
-      specimen: "",
-      mappedTests: "",
+      specimen: [],
+      mappedTests: [],
     },
   ]);
 };
@@ -96,18 +133,27 @@ let error = "";
 <div className="col-span-3 overflow-x-auto">
   <table className="w-full border">
     <thead>
-      <tr className="bg-gray-100">
-        <th className="border p-2">Visit Code <span className="text-red-500">*</span></th>
-        <th className="border p-2">Visit Name <span className="text-red-500">*</span></th>
-        <th className="border p-2">Visit Type</th>
-        <th className="border p-2">Target Day <span className="text-red-500">*</span></th>
-        <th className="border p-2">Window - <span className="text-red-500">*</span></th>
-        <th className="border p-2">Window +<span className="text-red-500">*</span></th>
-        <th className="border p-2">Required Specimen <span className="text-red-500">*</span></th>
-        <th className="border p-2">Mapped Tests<span className="text-red-500">*</span></th>
-        <th className="border p-2">Action</th>
-      </tr>
-    </thead>
+  <tr className="bg-gray-100">
+    <th className="border p-2 w-[10%]">Visit Code</th>
+    <th className="border p-2 w-[12%]">Visit Name</th>
+    <th className="border p-2 w-[8%]">Visit Type</th>
+    <th className="border p-2 w-[8%]">Target Day</th>
+    <th className="border p-2 w-[8%]">Window -</th>
+    <th className="border p-2 w-[8%]">Window +</th>
+
+    <th className="border p-2 w-[18%]">
+      Required Specimen
+    </th>
+
+    <th className="border p-2 w-[18%]">
+      Mapped Tests
+    </th>
+
+    <th className="border p-2 w-[5%]">
+      Action
+    </th>
+  </tr>
+</thead>
 
     <tbody>
       {visit.map((_visit: any, index: number) => (
@@ -218,52 +264,132 @@ let error = "";
           </td>
 
           <td className="border p-2">
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Specimen" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Blood">
-                  Blood
-                </SelectItem>
-                <SelectItem value="Urine">
-                  Urine
-                </SelectItem>
-                <SelectItem value="Plasma">
-                  Plasma
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            {errors[`specimen_${index}`]  && (
-            <p className="text-red-500 text-xs mt-1">
-              {errors[`specimen_${index}`]}
-            </p>
-          )}
-          </td>
+              <div className="space-y-2">
 
-          <td className="border p-2">
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Mapped Tests" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="CBC">
-                  CBC
-                </SelectItem>
-                <SelectItem value="LFT">
-                  LFT
-                </SelectItem>
-                <SelectItem value="PK">
-                  PK
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            {errors[`mappedTests_${index}`]  && (
-            <p className="text-red-500 text-xs mt-1">
-              {errors[`mappedTests_${index}`]}
-            </p>
-          )}
-          </td>
+                <select
+                  onChange={(e) => {
+                    if (!e.target.value) return;
+
+                    toggleMultiSelect(
+                      index,
+                      "specimen",
+                      e.target.value
+                    );
+
+                    e.target.value = "";
+                  }}
+                  className="w-full border rounded px-2 py-1"
+                >
+                  <option value="">Select Specimen</option>
+
+                  {specimenOptions.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+
+                <div className="flex flex-wrap gap-1">
+                  {(visit[index].specimen || []).map(
+                    (specimen: string) => (
+                      <span
+                        key={specimen}
+                        className="
+                          bg-blue-100
+                          text-blue-700
+                          px-2 py-1
+                          rounded-full
+                          text-xs
+                          flex
+                          items-center
+                          gap-1
+                        "
+                      >
+                        {specimen}
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            toggleMultiSelect(
+                              index,
+                              "specimen",
+                              specimen
+                            )
+                          }
+                        >
+                          ×
+                        </button>
+                      </span>
+                    )
+                  )}
+                </div>
+              </div>
+            </td>
+
+            <td className="border p-2">
+              <div className="space-y-2">
+
+                <select
+                  onChange={(e) => {
+                    if (!e.target.value) return;
+
+                    toggleMultiSelect(
+                      index,
+                      "mappedTests",
+                      e.target.value
+                    );
+
+                    e.target.value = "";
+                  }}
+                  className="w-full border rounded px-2 py-1"
+                >
+                  <option value="">
+                    Select Test
+                  </option>
+
+                  {testOptions.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+
+                <div className="flex flex-wrap gap-1">
+                  {(visit[index].mappedTests || []).map(
+                    (test: string) => (
+                      <span
+                        key={test}
+                        className="
+                          bg-green-100
+                          text-green-700
+                          px-2 py-1
+                          rounded-full
+                          text-xs
+                          flex
+                          items-center
+                          gap-1
+                        "
+                      >
+                        {test}
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            toggleMultiSelect(
+                              index,
+                              "mappedTests",
+                              test
+                            )
+                          }
+                        >
+                          ×
+                        </button>
+                      </span>
+                    )
+                  )}
+                </div>
+              </div>
+            </td>
 
           <td className="border p-2">
             <button

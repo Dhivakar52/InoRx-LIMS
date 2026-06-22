@@ -107,8 +107,8 @@ export interface StudyVisitData{
   targetDay:string,
   windowMinus:string,
   windowPlus:string,
-  specimen:string,
-  mappedTests:string
+  specimen:string[],
+  mappedTests:string[]
 }
 
 const initialVisitData:StudyVisitData[]=[
@@ -119,8 +119,8 @@ const initialVisitData:StudyVisitData[]=[
       targetDay:"",
       windowMinus:"",
       windowPlus:"",
-      specimen:"",
-      mappedTests:""
+      specimen:[],
+      mappedTests:[]
   }
 ]
 
@@ -469,10 +469,10 @@ export default function StudyMasterStepper() {
     return;
   }
 
-  const isValid =
-    validateStudyMaster();
+  // const isValid =
+  //   validateStudyMaster();
 
-  if (!isValid) return;
+  // if (!isValid) return;
 
   setCurrentStep(targetStep);
 };

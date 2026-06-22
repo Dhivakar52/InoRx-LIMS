@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-  const initialTests = [
+const initialTests = [
   {
     id: 1,
     barcode: "TR000001",
     examName: "CREATININE",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
-    lab:"",
+    lab: "",
     acknowledgementStatus: "Pending",
     acknowledgementDate: "",
     acknowledgementBy: "",
@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
     examName: "UREA",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
-    lab:"",
+    lab: "",
     acknowledgementStatus: "Pending",
     acknowledgementDate: "",
     acknowledgementBy: "",
@@ -34,7 +34,7 @@ import { useNavigate } from "react-router-dom";
     examName: "URIC ACID",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
-    lab:"",
+    lab: "",
     acknowledgementStatus: "Pending",
     acknowledgementDate: "",
     acknowledgementBy: "",
@@ -46,7 +46,7 @@ import { useNavigate } from "react-router-dom";
     examName: "LIPID PROFILE",
     specimen: "Serum",
     subDepartment: "Bacteriology",
-    lab:"",
+    lab: "",
     acknowledgementStatus: "Pending",
     acknowledgementDate: "",
     acknowledgementBy: "",
@@ -58,7 +58,7 @@ import { useNavigate } from "react-router-dom";
     examName: "LIVER FUNCTION TEST",
     specimen: "Serum",
     subDepartment: "Bio-Chemistry",
-    lab:"",
+    lab: "",
     acknowledgementStatus: "Pending",
     acknowledgementDate: "",
     acknowledgementBy: "",
@@ -70,7 +70,6 @@ import { useNavigate } from "react-router-dom";
 const subjectsData = [
   {
     subjectCode: "SUB-001",
-    name: "John Smith",
     dateOfBirth: "1985-03-15",
     age: 41,
     gender: "Male",
@@ -80,7 +79,6 @@ const subjectsData = [
   },
   {
     subjectCode: "SUB-002",
-    name: "Sarah Johnson",
     dateOfBirth: "1990-07-22",
     age: 36,
     gender: "Female",
@@ -90,7 +88,6 @@ const subjectsData = [
   },
   {
     subjectCode: "SUB-003",
-    name: "Michael Brown",
     dateOfBirth: "1978-11-08",
     age: 48,
     gender: "Male",
@@ -100,7 +97,6 @@ const subjectsData = [
   },
   {
     subjectCode: "SUB-004",
-    name: "Emily Davis",
     dateOfBirth: "1995-01-30",
     age: 31,
     gender: "Female",
@@ -110,7 +106,6 @@ const subjectsData = [
   },
   {
     subjectCode: "SUB-005",
-    name: "Robert Wilson",
     dateOfBirth: "1982-09-10",
     age: 44,
     gender: "Male",
@@ -125,7 +120,7 @@ export default function SampleReview() {
   const [tests, setTests] = useState(initialTests);
   const [selectedSubjectCode, setSelectedSubjectCode] = useState("");
   const [subjectDetails, setSubjectDetails] = useState<any>(null);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleGetDetails = () => {
     const foundSubject = subjectsData.find(
@@ -148,40 +143,40 @@ export default function SampleReview() {
     // axios.post("/api/save-tests", payload);
   };
 
- const handleAcknowledgeSample = (id: number) => {
-  const currentDate = new Date().toLocaleString();
+  const handleAcknowledgeSample = (id: number) => {
+    const currentDate = new Date().toLocaleString();
 
-  setTests((prev) =>
-    prev.map((item) =>
-      item.id === id
-        ? {
+    setTests((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
             ...item,
             acknowledgementStatus: "Acknowleged",
             acknowledgementDate: currentDate,
           }
-        : item
-    )
-  );
-};
+          : item
+      )
+    );
+  };
 
-const handleCollectorChange = (
-  id: number,
-  collectorName: string
-) => {
-  setTests((prev) =>
-    prev.map((item) =>
-      item.id === id
-        ? {
+  const handleCollectorChange = (
+    id: number,
+    collectorName: string
+  ) => {
+    setTests((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
             ...item,
             acknowledgementBy: collectorName,
           }
-        : item
-    )
-  );
-};
+          : item
+      )
+    );
+  };
 
   return (
-<div className="p-6">
+    <div className="p-6">
       <div className="bg-white rounded-xl shadow-md p-6 space-y-6">
         <h1 className="text-xl font-bold text-[#00458F]">
           Sample Acknowledgment
@@ -208,8 +203,8 @@ const handleCollectorChange = (
           <button
             type="button"
             onClick={handleGetDetails}
-             className="h-10 px-5 bg-[#00458F] text-white rounded"
-            // className="px-4 py-2 bg-[#00458F] text-white rounded hover:bg-blue-700"
+            className="h-10 px-5 bg-[#00458F] text-white rounded"
+          // className="px-4 py-2 bg-[#00458F] text-white rounded hover:bg-blue-700"
           >
             Get Details
           </button>
@@ -218,86 +213,81 @@ const handleCollectorChange = (
         {/* Subject Details Display */}
         {subjectDetails && (
           <div>
-          <div className="grid grid-cols-4 gap-4 p-3 border rounded bg-white">
-            <div>
-              <label className="block text-xs font-semibold text-gray-600">
-                Subject Code
-              </label>
-              <span className="text-sm">{subjectDetails.subjectCode}</span>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-600">
-                Name
-              </label>
-              <span className="text-sm">{subjectDetails.name}</span>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-600">
-                Date of Birth
-              </label>
-              <span className="text-sm">{subjectDetails.dateOfBirth}</span>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-600">
-                Age
-              </label>
-              <span className="text-sm">{subjectDetails.age}</span>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-600">
-                Gender
-              </label>
-              <span className="text-sm">{subjectDetails.gender}</span>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-600">
-                Study Code
-              </label>
-              <span className="text-sm">{subjectDetails.studyCode}</span>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-600">
-                Protocol Number
-              </label>
-              <span className="text-sm">{subjectDetails.protocolNumber}</span>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-600">
-                Visit Schedule Code
-              </label>
-              <span className="text-sm">
-                {subjectDetails.visitScheduleCode}
-              </span>
-            </div>
-          </div>
-<br/>
-          <h2 className="text-xl font-semibold text-[#00458F]">
-          Tests to be Acknowledged
-        </h2>
-      <div className="col-span-3 overflow-x-auto">
-        <table className="w-full border">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border p-2">S.No</th>
-              {/* <th className="border p-2">Barcode</th> */}
-              <th className="border p-2">Exam Name</th>
-              <th className="border p-2">Specimen</th>
-              <th className="border p-2">Department</th>
-              <th className="border p-2">Assigned Lab</th>
-              <th className="border p-2">Acknowlegment Status</th>
-              <th className="border p-2">Acknowleged On</th>
-              <th className="border p-2">Acknowleged By</th>
-              <th className="border p-2">Status</th>            
-            </tr>
-          </thead>
+            <div className="grid grid-cols-4 gap-4 p-3 border rounded bg-white">
+              <div>
+                <label className="block text-xs font-semibold text-gray-600">
+                  Subject Code
+                </label>
+                <span className="text-sm">{subjectDetails.subjectCode}</span>
+              </div>
 
-          <tbody>
-            {tests.map((test, index) => (
-              <tr key={index}>
-                <td className="border p-2">
-                 {test.id} 
-                </td>
-                {/* <td className="border p-2">
+              <div>
+                <label className="block text-xs font-semibold text-gray-600">
+                  Date of Birth
+                </label>
+                <span className="text-sm">{subjectDetails.dateOfBirth}</span>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600">
+                  Age
+                </label>
+                <span className="text-sm">{subjectDetails.age}</span>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600">
+                  Gender
+                </label>
+                <span className="text-sm">{subjectDetails.gender}</span>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600">
+                  Study Code
+                </label>
+                <span className="text-sm">{subjectDetails.studyCode}</span>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600">
+                  Protocol Number
+                </label>
+                <span className="text-sm">{subjectDetails.protocolNumber}</span>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600">
+                  Visit Schedule Code
+                </label>
+                <span className="text-sm">
+                  {subjectDetails.visitScheduleCode}
+                </span>
+              </div>
+            </div>
+            <br />
+            <h2 className="text-xl font-semibold text-[#00458F]">
+              Tests to be Acknowledged
+            </h2>
+            <div className="col-span-3 overflow-x-auto">
+              <table className="w-full border">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="border p-2">S.No</th>
+                    {/* <th className="border p-2">Barcode</th> */}
+                    <th className="border p-2">Exam Name</th>
+                    <th className="border p-2">Specimen</th>
+                    <th className="border p-2">Department</th>
+                    <th className="border p-2">Assigned Lab</th>
+                    <th className="border p-2">Acknowlegment Status</th>
+                    <th className="border p-2">Acknowleged On</th>
+                    <th className="border p-2">Acknowleged By</th>
+                    <th className="border p-2">Status</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {tests.map((test, index) => (
+                    <tr key={index}>
+                      <td className="border p-2">
+                        {test.id}
+                      </td>
+                      {/* <td className="border p-2">
                   <Barcode
                     value={test.barcode}
                     width={0.8}
@@ -307,122 +297,120 @@ const handleCollectorChange = (
                   />
                 </td> */}
 
-                <td className="border p-2">
-                  {test.examName}
-                </td>
+                      <td className="border p-2">
+                        {test.examName}
+                      </td>
 
-                <td className="border p-2">
-                  {test.specimen}
-                </td>
+                      <td className="border p-2">
+                        {test.specimen}
+                      </td>
 
-                <td className="border p-2">
-                  {test.subDepartment} 
-                </td>
-                <td className="border p-2">
-                    <select
-                      value={test.lab}
-                      onChange={(e) =>
-                        handleCollectorChange(
-                          test.id,
-                          e.target.value
-                        )
-                      }
-                      className="border rounded px-2 py-1"
-                    >
-                      <option value="">Select</option>
-                      <option value="Lab1">
-                        Lab 1
-                      </option>
-                      <option value="Lab2">
-                        Lab 2
-                      </option>
-                      <option value="Lab3">
-                        Lab 3
-                      </option>
-                      <option value="Lab4">
-                        Lab 4
-                      </option>
-                    </select>
-                  </td>
-                <td className="border p-2">
-                  <span
-                    className={`px-2 py-1 rounded text-xs ${
-                      test.acknowledgementStatus === "Acknowleged"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
-                  >
-                    {test.acknowledgementStatus}
-                  </span>
-                </td>
-                <td className="border p-2">
-                  {test.acknowledgementDate || "-"}
-                </td>
-                 <td className="border p-2">
-                    <select
-                      value={test.acknowledgementBy}
-                      onChange={(e) =>
-                        handleCollectorChange(
-                          test.id,
-                          e.target.value
-                        )
-                      }
-                      className="border rounded px-2 py-1"
-                    >
-                      <option value="">Select</option>
-                      <option value="Lab Technician">
-                        Lab Technician
-                      </option>
-                      <option value="Nurse">
-                        Nurse
-                      </option>
-                      <option value="Research Coordinator">
-                        Research Coordinator
-                      </option>
-                      <option value="Phlebotomist">
-                        Phlebotomist
-                      </option>
-                    </select>
-                  </td>
-                <td className="border p-2">
-                  <button
-                    onClick={() => handleAcknowledgeSample(test.id)}
-                    disabled={test.acknowledgementStatus === "Acknowleged"}
-                    className={`px-3 py-1 rounded text-white ${
-                      test.acknowledgementStatus === "Acknowleged"
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-green-600 hover:bg-green-700"
-                    }`}
-                  >
-                    {test.acknowledgementStatus === "Acknowleged"
-                      ? "Acknowleged"
-                      : "Acknowlege"}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="flex justify-between pt-6">
-          {/* <button onClick={() => navigate(-1)}
+                      <td className="border p-2">
+                        {test.subDepartment}
+                      </td>
+                      <td className="border p-2">
+                        <select
+                          value={test.lab}
+                          onChange={(e) =>
+                            handleCollectorChange(
+                              test.id,
+                              e.target.value
+                            )
+                          }
+                          className="border rounded px-2 py-1"
+                        >
+                          <option value="">Select</option>
+                          <option value="Lab1">
+                            Lab 1
+                          </option>
+                          <option value="Lab2">
+                            Lab 2
+                          </option>
+                          <option value="Lab3">
+                            Lab 3
+                          </option>
+                          <option value="Lab4">
+                            Lab 4
+                          </option>
+                        </select>
+                      </td>
+                      <td className="border p-2">
+                        <span
+                          className={`px-2 py-1 rounded text-xs ${test.acknowledgementStatus === "Acknowleged"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-yellow-100 text-yellow-700"
+                            }`}
+                        >
+                          {test.acknowledgementStatus}
+                        </span>
+                      </td>
+                      <td className="border p-2">
+                        {test.acknowledgementDate || "-"}
+                      </td>
+                      <td className="border p-2">
+                        <select
+                          value={test.acknowledgementBy}
+                          onChange={(e) =>
+                            handleCollectorChange(
+                              test.id,
+                              e.target.value
+                            )
+                          }
+                          className="border rounded px-2 py-1"
+                        >
+                          <option value="">Select</option>
+                          <option value="Lab Technician">
+                            Lab Technician
+                          </option>
+                          <option value="Nurse">
+                            Nurse
+                          </option>
+                          <option value="Research Coordinator">
+                            Research Coordinator
+                          </option>
+                          <option value="Phlebotomist">
+                            Phlebotomist
+                          </option>
+                        </select>
+                      </td>
+                      <td className="border p-2">
+                        <button
+                          onClick={() => handleAcknowledgeSample(test.id)}
+                          disabled={test.acknowledgementStatus === "Acknowleged"}
+                          className={`px-3 py-1 rounded text-white ${test.acknowledgementStatus === "Acknowleged"
+                              ? "bg-gray-400 cursor-not-allowed"
+                              : "bg-green-600 hover:bg-green-700"
+                            }`}
+                        >
+                          {test.acknowledgementStatus === "Acknowleged"
+                            ? "Acknowleged"
+                            : "Acknowlege"}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="flex justify-between pt-6">
+              {/* <button onClick={() => navigate(-1)}
       className={`flex items-center gap-2 px-3 py-2 mb-3 border rounded-md bg-gray-100 hover:bg-gray-200 `}> */}
-          <button onClick={() => navigate(-1)} className="px-5 py-2 rounded-md bg-gray-200">
-            {/* <ArrowLeft size={16} /> */}
-            Back
-          </button>
-          <div className="flex gap-3">
-            <button onClick={handleSave}
-             className="px-5 py-2 rounded-md bg-[#00458F] text-white">
-              Save
-            </button>
+              <button onClick={() => navigate(-1)} className="px-5 py-2 rounded-md bg-gray-200">
+                {/* <ArrowLeft size={16} /> */}
+                Back
+              </button>
+              <div className="flex gap-3">
+                <button onClick={handleSave}
+                  className="px-5 py-2 rounded-md bg-[#00458F] text-white">
+                  Save
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-        </div>
         )}
 
-        
-    </div>
+
+      </div>
     </div>
   );
 }
