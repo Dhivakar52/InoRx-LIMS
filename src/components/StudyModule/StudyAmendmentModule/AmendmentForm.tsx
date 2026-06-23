@@ -14,15 +14,15 @@ import SiteActivation from "../AmendmentForm/SiteActivation";
 const steps = [
   "Study Summary",
   "Amendment Details",
-   "Migration Policy",
-   "Cloned Workspace & Reconciliation",
- "Site Activation Deployment",
+  "Migration Policy",
+  "Cloned Workspace & Reconciliation",
+  "Site Activation Deployment",
 
   // "Configuration",
   // "Delta Report",
- 
 
-  
+
+
 ];
 
 export default function AmendmentForm() {
@@ -41,7 +41,7 @@ export default function AmendmentForm() {
     amendmentTitle: "",
     amendmentDescription: "",
     amendmentReasonCategory: "",
-   
+
     reasonForAmendment: "",
     rootCause: "",
     versionIncrementType: "Minor",
@@ -54,23 +54,22 @@ export default function AmendmentForm() {
     consentDocument: null as File | null,
     associatedDeviations: [] as string[],
     associatedCAPAs: [] as string[],
- // Update cohorts to match the new structure
-cohorts: [
-  { id: 1, armCode: "ARM-A", armName: "Active Cohort 50mg", actionType: 0 },
-  { id: 2, armCode: "ARM-B", armName: "Placebo Control Group", actionType: 0 },
-  { id: 3, armCode: "ARM-C", armName: "Extended Safety Cohort 100mg", actionType: 0 },
-],
+    // Update cohorts to match the new structure
+    cohorts: [
+      { id: 1, armCode: "ARM-A", armName: "Active Cohort 50mg", actionType: 0 },
+      { id: 2, armCode: "ARM-B", armName: "Placebo Control Group", actionType: 0 },
+      { id: 3, armCode: "ARM-C", armName: "Extended Safety Cohort 100mg", actionType: 0 },
+    ],
 
-// Update visits to match the new structure
-visits: [
-  { id: 1, visitCode: "SCR", visitName: "Screening", targetDay: "-7", windowMinus: "3", windowPlus: "3", actionType: 0 },
-  { id: 2, visitCode: "D01", visitName: "Baseline Dosing", targetDay: "0", windowMinus: "0", windowPlus: "1", actionType: 0 },
-],
+    // Update visits to match the new structure
+    visits: [
+      { id: 1, visitCode: "SCR", visitName: "Screening", targetDay: "-7", windowMinus: "3", windowPlus: "3", actionType: 0 },
+      { id: 2, visitCode: "D01", visitName: "Baseline Dosing", targetDay: "0", windowMinus: "0", windowPlus: "1", actionType: 0 },
+    ],
 
     migrationSubjects: [
       {
         subjectId: "SUB001",
-        subjectName: "John",
         currentVersion: "V1.0",
         targetVersion: "V2.0",
         consentStatus: "PENDING",
@@ -156,20 +155,20 @@ visits: [
     const regex = /^[A-Z0-9\-]+$/;
     return regex.test(code);
   };
-// const validateMigrationPolicy = () => {
-//   const newErrors: any = {};
+  // const validateMigrationPolicy = () => {
+  //   const newErrors: any = {};
 
-//   if (!form.migrationPolicy?.trim()) {
-//     newErrors.migrationPolicy = "Migration Policy is required";
-//   }
+  //   if (!form.migrationPolicy?.trim()) {
+  //     newErrors.migrationPolicy = "Migration Policy is required";
+  //   }
 
-//   setErrors((prev: any) => ({
-//     ...prev,
-//     ...newErrors,
-//   }));
+  //   setErrors((prev: any) => ({
+  //     ...prev,
+  //     ...newErrors,
+  //   }));
 
-//   return Object.keys(newErrors).length === 0;
-// };
+  //   return Object.keys(newErrors).length === 0;
+  // };
   // Validate Metadata - Complete as per document
   const validateMetadata = () => {
     const newErrors: any = {};
@@ -219,26 +218,26 @@ visits: [
       const proposedDate = new Date(form.effectiveDate);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       if (proposedDate <= today) {
         newErrors.effectiveDate = "Proposed Effective Date must be in the future";
       }
-      
+
       if (form.irbApprovalDate && proposedDate < new Date(form.irbApprovalDate)) {
         newErrors.effectiveDate = "Proposed Effective Date must be on or after IRB Approval Date";
       }
     }
-  if (!form.releaseDate) {
+    if (!form.releaseDate) {
       newErrors.releaseDate = "Release Date is required";
     } else {
       const proposedDate = new Date(form.releaseDate);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       if (proposedDate <= today) {
         newErrors.releaseDate = "Release Date must be in the future";
       }
-      
+
       if (form.irbApprovalDate && proposedDate < new Date(form.irbApprovalDate)) {
         newErrors.releaseDate = "Release Date must be on or after IRB Approval Date";
       }
@@ -250,7 +249,7 @@ visits: [
     if (form.irbApprovalDate && !form.irbApprovalNumber) {
       newErrors.irbApprovalNumber = "IRB Approval Number is required when IRB Date is provided";
     }
- 
+
     // Consent Document validation
     if (!form.consentDocument) {
       newErrors.consentDocument = "Consent Document is required";
@@ -285,7 +284,7 @@ visits: [
   //     if (pendingSubjects.length > 0) {
   //       newErrors.migrationSubjects = `${pendingSubjects.length} subject(s) require re-consent before migration. System will block new kit generation until re-consent is completed.`;
   //     }
-      
+
   //     // Validate re-consent dates are >= amendment release date
   //     const invalidDates = form.migrationSubjects.filter(
   //       (s: any) => s.reConsentDate && form.releaseDate && new Date(s.reConsentDate) < new Date(form.releaseDate)
@@ -306,7 +305,7 @@ visits: [
     const invalidSites = form.siteActivations.filter(
       (site: any) => site.status === "Activated" && (!site.irbApprovalNumber || !site.irbApprovalDate || !site.siteEffectiveDate)
     );
-    
+
     if (invalidSites.length > 0) {
       newErrors.siteActivations = `${invalidSites.length} site(s) are missing required IRB information for activation`;
     }
@@ -437,7 +436,7 @@ visits: [
 
     if (credentials) {
       setIsSubmitting(true);
-      
+
       // Simulate activation process
       setTimeout(() => {
         // Archive predecessor version and activate target version
@@ -451,23 +450,23 @@ visits: [
           },
           ...(form.versionHistory || [])
         ];
-        
-        setForm(prev => ({ 
-          ...prev, 
+
+        setForm(prev => ({
+          ...prev,
           currentStatus: "ACTIVATED",
           electronicSignature: credentials.signatureMeaning,
           mfaVerified: true,
           versionHistory: updatedVersionHistory,
           effectiveDate: form.effectiveDate || new Date().toISOString().split('T')[0]
         }));
-        
+
         addAuditEntry(
           "ACTIVATED",
           { status: "SUBMITTED", version: form.currentVersion },
           { status: "ACTIVATED", version: form.targetVersion },
           `Amendment activated with MFA e-signature. Signature meaning: ${credentials.signatureMeaning}`
         );
-        
+
         Swal.fire({
           title: "Amendment Activated!",
           html: `
@@ -476,7 +475,7 @@ visits: [
           `,
           icon: "success"
         });
-        
+
         setIsSubmitting(false);
       }, 2000);
     }
@@ -510,19 +509,19 @@ visits: [
     });
 
     if (comment) {
-      setForm(prev => ({ 
-        ...prev, 
+      setForm(prev => ({
+        ...prev,
         currentStatus: "RETURNED",
         rejectionComment: comment
       }));
-      
+
       addAuditEntry(
         "RETURNED_TO_DRAFT",
         { status: "SUBMITTED" },
         { status: "RETURNED" },
         comment
       );
-      
+
       Swal.fire({
         title: "Returned",
         text: "Amendment has been returned to draft status",
@@ -532,23 +531,23 @@ visits: [
   };
 
   const validateCurrentStep = () => {
-  switch (currentStep) {
-    case 1:
-      return validateMetadata();
+    switch (currentStep) {
+      case 1:
+        return validateMetadata();
 
-    case 2:
-      return true;
+      case 2:
+        return true;
 
-    case 4:
-      return true;
+      case 4:
+        return true;
 
-    case 5:
-      return validateSites();
+      case 5:
+        return validateSites();
 
-    default:
-      return true;
-  }
-};
+      default:
+        return true;
+    }
+  };
 
   const nextStep = () => {
     const isValid = validateCurrentStep();
@@ -600,7 +599,7 @@ visits: [
         );
       case 2:
         return (
-          < SubjectMigration 
+          < SubjectMigration
             {...({ form, setForm, addAuditEntry } as any)}
           />
         );
@@ -622,8 +621,8 @@ visits: [
             {...({ form, setForm, errors, addAuditEntry } as any)}
           />
         );
-  
-      
+
+
       default:
         return (
           <div className="text-center py-10">
@@ -642,7 +641,7 @@ visits: [
             <p className="text-yellow-800">⚠️ This amendment is pending review and approval. Dual MFA e-signature required for activation.</p>
           </div>
         )}
-        
+
         {form.currentStatus === "ACTIVATED" && (
           <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
             <p className="text-green-800">✅ Version {form.targetVersion} has been activated. Predecessor version {form.currentVersion} is locked.</p>
@@ -680,7 +679,7 @@ visits: [
         </div>
 
         {renderStep()}
-        
+
         <div className="flex justify-between items-center mt-8">
           <button
             onClick={prevStep}
@@ -699,7 +698,7 @@ visits: [
                 Save Draft
               </button>
             )}
-            
+
             {form.currentStatus === "DRAFT" && currentStep === steps.length - 1 && (
               <button
                 onClick={submitForReview}
@@ -726,7 +725,7 @@ visits: [
                 </button>
               </>
             )}
-            
+
             {currentStep < steps.length - 1 && form.currentStatus !== "SUBMITTED" && (
               <button
                 onClick={nextStep}

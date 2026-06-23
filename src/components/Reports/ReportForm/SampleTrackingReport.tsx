@@ -3,13 +3,11 @@ export default function SampleTrackingReport() {
   const rows = [
     {
       subjectId: "3142433",
-      patient: "LOGANATH",
       dept: "Bio-Chemistry",
       status: "Approved",
     },
     {
       subjectId: "4176321",
-      patient: "SUNDHAR",
       dept: "Bio-Chemistry",
       status: "Printed",
     },
@@ -33,10 +31,6 @@ export default function SampleTrackingReport() {
             </th>
 
             <th className="border p-2">
-              Patient
-            </th>
-
-            <th className="border p-2">
               Department
             </th>
 
@@ -56,10 +50,6 @@ export default function SampleTrackingReport() {
 
               <td className="border p-2">
                 {row.subjectId}
-              </td>
-
-              <td className="border p-2">
-                {row.patient}
               </td>
 
               <td className="border p-2">

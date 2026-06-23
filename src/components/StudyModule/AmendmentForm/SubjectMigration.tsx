@@ -8,8 +8,8 @@ interface Subject {
   reConsentStatus: string;
   reConsentDate: string;
   reconsentLoggedBy: string;
- 
- 
+
+
   selected?: boolean;
 }
 
@@ -42,8 +42,8 @@ export default function SubjectMigration({ form, setForm, errors, addAuditEntry 
   const addReconsentRow = () => {
     const newSubject: Subject = {
       subjectId: "",
-   
- 
+
+
       reConsentStatus: "PENDING",
       reConsentDate: "",
 
@@ -116,8 +116,8 @@ export default function SubjectMigration({ form, setForm, errors, addAuditEntry 
                 className="border border-gray-300 rounded-md h-10 px-3 bg-white"
               >
                 <option value="">Select Policy</option>
-                <option value="Future Cohorts Only">Future Cohorts Only (Existing patients remain on V1.0)</option>
-                <option value="Global Mid-Study Transition">Global Mid-Study Transition (Active patients transition to new protocol visits)</option>
+                <option value="Future Cohorts Only">Future Cohorts Only (Existing subjects remain on V1.0)</option>
+                <option value="Global Mid-Study Transition">Global Mid-Study Transition (Active subjects transition to new protocol visits)</option>
                 <option value="Manual Assignment">Manual Assignment (Selected case-by-case)</option>
               </select>
               {errors?.migrationPolicy && <p className="text-red-500 text-xs mt-1">{errors.migrationPolicy}</p>}
@@ -161,7 +161,7 @@ export default function SubjectMigration({ form, setForm, errors, addAuditEntry 
                 <input type="checkbox" onChange={(e) => selectAll(e.target.checked)} className="w-4 h-4" />
               </th>
               <th className="p-3 text-left text-white font-semibold text-sm">Subject ID</th>
-           
+
               <th className="p-3 text-left text-white font-semibold text-sm">Re-consent Status</th>
               <th className="p-3 text-left text-white font-semibold text-sm">Re-consent Date</th>
               <th className="p-3 text-left text-white font-semibold text-sm">Re-Consent-LoggedBY</th>
@@ -182,7 +182,7 @@ export default function SubjectMigration({ form, setForm, errors, addAuditEntry 
                 <td className="p-3 font-medium">
                   {row.subjectId || <input type="text" placeholder="Enter Subject ID" className="border rounded px-2 py-1 text-sm w-full" onChange={(e) => updateSubject(index, "subjectId", e.target.value)} />}
                 </td>
-              
+
                 <td className="p-3">
                   <select value={row.reConsentStatus} onChange={(e) => updateSubject(index, "reConsentStatus", e.target.value)} className="border rounded px-2 py-1 text-sm">
                     <option value="PENDING">PENDING</option>
@@ -193,7 +193,7 @@ export default function SubjectMigration({ form, setForm, errors, addAuditEntry 
                 <td className="p-3">
                   <input type="date" value={row.reConsentDate === "--" ? "" : row.reConsentDate} onChange={(e) => updateSubject(index, "reConsentDate", e.target.value)} className="border rounded px-2 py-1 text-sm" disabled={row.reConsentStatus === "WAIVED"} />
                 </td>
-                 <td className="p-3 font-medium">
+                <td className="p-3 font-medium">
                   {row.reconsentLoggedBy || <input type="text" placeholder="Enter Re-Consent Logged By" className="border rounded px-2 py-1 text-sm w-full" onChange={(e) => updateSubject(index, "reConsentLoggedBy", e.target.value)} />}
                 </td>
                 <td className="p-3 text-center">

@@ -19,7 +19,7 @@ const steps = [
   "Migration",
   "Site Activation",
   "Kit Reconciliation",
-  
+
 ];
 
 export default function StudyAmendmentStepper() {
@@ -64,117 +64,116 @@ export default function StudyAmendmentStepper() {
 
     migrationPolicy: "",
     cohorts: [
-  {
-    id: 1,
-    armCode: "ARM-A",
-    armName: "Control Arm",
-    targetEnrollment: 100,
-    status: "ACTIVE",
-    actionType: 0,
-  },
-],
+      {
+        id: 1,
+        armCode: "ARM-A",
+        armName: "Control Arm",
+        targetEnrollment: 100,
+        status: "ACTIVE",
+        actionType: 0,
+      },
+    ],
 
-visits: [
-  {
-    id: 1,
-    visitName: "Screening",
-    visitDay: 0,
-    deviationWindow: 2,
-    mandatory: true,
-    actionType: 0,
-  },
-],
-specimens: [
- {
-   id:1,
-   specimenType:"Blood",
-   tubeType:"EDTA",
-   quantity:5,
-   unit:"mL",
-   required:true,
-   actionType:0
- }
-],
+    visits: [
+      {
+        id: 1,
+        visitName: "Screening",
+        visitDay: 0,
+        deviationWindow: 2,
+        mandatory: true,
+        actionType: 0,
+      },
+    ],
+    specimens: [
+      {
+        id: 1,
+        specimenType: "Blood",
+        tubeType: "EDTA",
+        quantity: 5,
+        unit: "mL",
+        required: true,
+        actionType: 0
+      }
+    ],
 
-tests: [
- {
-   id:1,
-   testCode:"CBC",
-   testName:"Complete Blood Count",
-   category:"Hematology",
-   mandatory:true,
-   actionType:0
- }
-],
-migrationSubjects:[
- {
-   subjectId:"SUB001",
-   subjectName:"John",
-   currentVersion:"V1.0",
-   targetVersion:"V2.0",
-   consentStatus:"PENDING",
-   reConsentDate:"",
-   selected:false
- }
-],
+    tests: [
+      {
+        id: 1,
+        testCode: "CBC",
+        testName: "Complete Blood Count",
+        category: "Hematology",
+        mandatory: true,
+        actionType: 0
+      }
+    ],
+    migrationSubjects: [
+      {
+        subjectId: "SUB001",
+        currentVersion: "V1.0",
+        targetVersion: "V2.0",
+        consentStatus: "PENDING",
+        reConsentDate: "",
+        selected: false
+      }
+    ],
 
-siteActivations:[
- {
-   siteId:1,
-   siteCode:"SITE001",
-   siteName:"Chennai Site",
-   irbApprovalNumber:"",
-   irbApprovalDate:"",
-   siteEffectiveDate:"",
-   status:"PENDING"
- }
-],
+    siteActivations: [
+      {
+        siteId: 1,
+        siteCode: "SITE001",
+        siteName: "Chennai Site",
+        irbApprovalNumber: "",
+        irbApprovalDate: "",
+        siteEffectiveDate: "",
+        status: "PENDING"
+      }
+    ],
 
-kits:[
- {
-   id:1,
-   batchNo:"KIT001",
-   kitType:"Blood Collection",
-   version:"V1.0",
-   quantity:250,
-   status:"ACTIVE"
- }
-],
-approvalHistory:[
- {
-  reviewerId:1,
-  reviewerName:"Medical Monitor",
-  role:"Medical Review",
-  decision:"PENDING",
-  comments:"",
-  reviewedDate:""
- }
-],
+    kits: [
+      {
+        id: 1,
+        batchNo: "KIT001",
+        kitType: "Blood Collection",
+        version: "V1.0",
+        quantity: 250,
+        status: "ACTIVE"
+      }
+    ],
+    approvalHistory: [
+      {
+        reviewerId: 1,
+        reviewerName: "Medical Monitor",
+        role: "Medical Review",
+        decision: "PENDING",
+        comments: "",
+        reviewedDate: ""
+      }
+    ],
 
-auditTrail:[
- {
-  id:1,
-  action:"Created",
-  userName:"Admin",
-  dateTime:"2026-06-01",
-  remarks:"Initial Amendment Created"
- }
-],
+    auditTrail: [
+      {
+        id: 1,
+        action: "Created",
+        userName: "Admin",
+        dateTime: "2026-06-01",
+        remarks: "Initial Amendment Created"
+      }
+    ],
 
-versionHistory:[
- {
-  versionNo:"V1.0",
-  effectiveDate:"2026-01-01",
-  status:"Approved",
-  approvedBy:"Sponsor"
- }
-],
+    versionHistory: [
+      {
+        versionNo: "V1.0",
+        effectiveDate: "2026-01-01",
+        status: "Approved",
+        approvedBy: "Sponsor"
+      }
+    ],
 
-currentStatus:"DRAFT",
+    currentStatus: "DRAFT",
 
-electronicSignature:"",
+    electronicSignature: "",
 
-mfaVerified:false
+    mfaVerified: false
   });
 
   const validateMetadata = () => {
@@ -205,7 +204,7 @@ mfaVerified:false
         .length === 0
     );
   };
-  
+
   const nextStep = () => {
     if (currentStep === 1) {
       if (!validateMetadata()) {
@@ -246,39 +245,39 @@ mfaVerified:false
             errors={errors}
           />
         );
-       case 2:
+      case 2:
         return (
-            <ConfigurationTabs
+          <ConfigurationTabs
             form={form}
             setForm={setForm}
-            />
+          />
         );
       case 3:
         return (
-        <DeltaReport
-            // form={form}
-        />
+          <DeltaReport
+          // form={form}
+          />
         );
       case 4:
         return (
           <SubjectMigration
-              // form={form}
-              // setForm={setForm}
+          // form={form}
+          // setForm={setForm}
           />
         );
 
-        case 5:
+      case 5:
         return (
           <SiteActivation
-              // form={form}
-              // setForm={setForm}
+          // form={form}
+          // setForm={setForm}
           />
         );
 
-        case 6:
+      case 6:
         return (
           <KitReconciliation
-              // form={form}
+          // form={form}
           />
         );
       default:
@@ -305,12 +304,11 @@ mfaVerified:false
 
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold
-                    ${
-                      index <=
-                      currentStep
+                    ${index <=
+                        currentStep
                         ? "bg-[#00458F] text-white"
                         : "bg-gray-200"
-                    }`}>
+                      }`}>
 
                     {index + 1}
                   </div>
@@ -322,17 +320,16 @@ mfaVerified:false
 
                 {index !==
                   steps.length -
-                    1 && (
-                  <div
-                    className={`flex-1 h-1 mx-2 rounded
-                    ${
-                      index <
-                      currentStep
-                        ? "bg-[#00458F]"
-                        : "bg-gray-200"
-                    }`}
-                  />
-                )}
+                  1 && (
+                    <div
+                      className={`flex-1 h-1 mx-2 rounded
+                    ${index <
+                          currentStep
+                          ? "bg-[#00458F]"
+                          : "bg-gray-200"
+                        }`}
+                    />
+                  )}
               </div>
             )
           )}

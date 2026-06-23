@@ -1,4 +1,5 @@
 export interface ReportData {
+  subjectId?: string;
   department: string;
   title: string;
   preparedBy: string;
@@ -11,6 +12,46 @@ export interface ReportData {
     remarks: string;
   }[];
 }
+
+export interface SubjectRecord {
+  subjectId: string;
+  subjectName: string;
+  departments: string[];
+}
+
+export const subjectRecords: SubjectRecord[] = [
+  {
+    subjectId: "4065635",
+    subjectName: "Priya Sharma",
+    departments: ["Biochemistry", "Immunoassay"],
+  },
+  {
+    subjectId: "3142433",
+    subjectName: "Rahul Verma",
+    departments: ["Biochemistry", "Sample Tracking"],
+  },
+  {
+    subjectId: "5278491",
+    subjectName: "Anitha Raj",
+    departments: ["Clinical Pathology", "Microbiology"],
+  },
+  {
+    subjectId: "6103287",
+    subjectName: "Karthik Naidu",
+    departments: ["Immunoassay", "Clinical Pathology"],
+  },
+  {
+    subjectId: "7294156",
+    subjectName: "Meena Kumari",
+    departments: ["Microbiology", "Sample Tracking"],
+  },
+  {
+    subjectId: "8351074",
+    subjectName: "Suresh Babu",
+    departments: ["Biochemistry", "Immunoassay", "Sample Tracking"],
+  },
+];
+
 export const departments = [
   "Select Department",
   "Biochemistry",

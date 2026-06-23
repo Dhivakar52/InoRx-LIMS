@@ -18,7 +18,6 @@ interface Visit {
 
 interface Subject {
   id: string;
-  name: string;
   baseline: string;
   arm: string;
   visits: Visit[];
@@ -38,7 +37,6 @@ interface Errors {
 const subjectsDb: Record<string, Subject> = {
   "SUBJ-ONC-BOS-0024": {
     id: "SUBJ-ONC-BOS-0024",
-    name: "John Doe (PII Encrypted)",
     baseline: "2026-06-12",
     arm: "ARM-A (Masked Cohort)",
     visits: [
@@ -51,7 +49,6 @@ const subjectsDb: Record<string, Subject> = {
   },
   "SUBJ-ONC-LON-0019": {
     id: "SUBJ-ONC-LON-0019",
-    name: "Clara Oswald (PII Encrypted)",
     baseline: "2026-06-20",
     arm: "ARM-B (Masked Cohort)",
     visits: [
@@ -151,15 +148,15 @@ const validateProposedDate = (proposedDate: string, currentDate: string): string
   const proposed = new Date(proposedDate);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
+
   if (proposed < today) {
     return "Proposed date cannot be in the past";
   }
-  
+
   if (proposedDate === currentDate) {
     return "Proposed date must be different from current scheduled date";
   }
-  
+
   return null;
 };
 
@@ -170,10 +167,10 @@ export default function UnifiedVisitScheduler() {
   const [activeSubject, setActiveSubject] = useState<Subject | null>(null);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [selectedRowIdx, setSelectedRowIdx] = useState<number | null>(null);
-  
+
   // Error state (like AmendmentForm)
   const [errors, setErrors] = useState<Errors>({});
-  
+
   // Reschedule state (Section 2)
   const [showRescheduleSection, setShowRescheduleSection] = useState(false);
   const [activeReschedIdx, setActiveReschedIdx] = useState<number | null>(null);
@@ -181,10 +178,10 @@ export default function UnifiedVisitScheduler() {
   const [reschedReason, setReschedReason] = useState("");
   const [reschedJustification, setReschedJustification] = useState("");
   const [isDeviation, setIsDeviation] = useState(false);
-  
+
   // Form status
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // ===== VISIT FORM FIELDS =====
   const [visitFormData, setVisitFormData] = useState({
     visitId: "",
@@ -233,7 +230,7 @@ export default function UnifiedVisitScheduler() {
     e.stopPropagation();
     const visit = visits[index];
     if (!visit) return;
-    
+
     setActiveReschedIdx(index);
     setNewProposedDate(visit.date);
     setReschedReason("");
@@ -241,12 +238,12 @@ export default function UnifiedVisitScheduler() {
     setIsDeviation(false);
     setShowRescheduleSection(true);
     setErrors({});
-    
+
     const auditVisitEl = document.getElementById('audit-visit-code');
     const auditOrigDateEl = document.getElementById('audit-orig-date');
     if (auditVisitEl) auditVisitEl.innerText = `${visit.code} - ${visit.name}`;
     if (auditOrigDateEl) auditOrigDateEl.innerText = visit.date;
-    
+
     setTimeout(() => {
       document.getElementById('reschedule-audit-section')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
@@ -274,19 +271,19 @@ export default function UnifiedVisitScheduler() {
   // Validate reschedule fields (similar to validateMetadata in AmendmentForm)
   const validateReschedule = (): boolean => {
     const newErrors: Errors = {};
-    
+
     if (activeReschedIdx !== null) {
       const currentVisit = visits[activeReschedIdx];
       const dateError = validateProposedDate(newProposedDate, currentVisit?.date || "");
       if (dateError) newErrors.newProposedDate = dateError;
-      
+
       const reasonError = validateRescheduleReason(reschedReason);
       if (reasonError) newErrors.reschedReason = reasonError;
-      
+
       const justificationError = validateRescheduleJustification(reschedJustification);
       if (justificationError) newErrors.reschedJustification = justificationError;
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -294,27 +291,27 @@ export default function UnifiedVisitScheduler() {
   // Validate visit form fields
   const validateVisitForm = (): boolean => {
     const newErrors: Errors = {};
-    
+
     const visitIdError = validateVisitId(visitFormData.visitId, visits);
     if (visitIdError) newErrors.visitId = visitIdError;
-    
+
     const visitNameError = validateVisitName(visitFormData.visitName);
     if (visitNameError) newErrors.visitName = visitNameError;
-    
+
     const statusError = validateStatus(visitFormData.status);
     if (statusError) newErrors.status = statusError;
-    
+
     if (!selectedSubjectId) {
       newErrors.subjectId = "Please select a subject first";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const commitRescheduleInline = () => {
     if (activeReschedIdx === null) return;
-    
+
     // Validate before committing
     if (!validateReschedule()) {
       Swal.fire({
@@ -325,26 +322,26 @@ export default function UnifiedVisitScheduler() {
       });
       return;
     }
-    
+
     const updatedVisits = [...visits];
     updatedVisits[activeReschedIdx].date = newProposedDate;
     setVisits(updatedVisits);
     if (activeSubject) {
       activeSubject.visits = updatedVisits;
     }
-    
+
     // Audit trail message based on deviation
-    const auditMessage = isDeviation 
+    const auditMessage = isDeviation
       ? 'FDA 21 CFR Part 11 Audit Trail log written successfully. Minor Protocol Deviation logged.'
       : 'FDA 21 CFR Part 11 Audit Trail log written successfully. New scheduled date authorized.';
-    
+
     Swal.fire({
       icon: 'success',
       title: 'Reschedule Authorized',
       text: auditMessage,
       confirmButtonColor: '#00458F'
     });
-    
+
     setShowRescheduleSection(false);
     setActiveReschedIdx(null);
     setNewProposedDate("");
@@ -379,7 +376,7 @@ export default function UnifiedVisitScheduler() {
       });
       return;
     }
-    
+
     const newVisit: Visit = {
       code: visitFormData.visitId,
       name: visitFormData.visitName,
@@ -391,20 +388,20 @@ export default function UnifiedVisitScheduler() {
       vials: '2x EDTA, 1x SST',
       storage: 'Refrigerate 2-8°C'
     };
-    
+
     const updatedVisits = [...visits, newVisit];
     setVisits(updatedVisits);
     if (activeSubject) {
       activeSubject.visits = updatedVisits;
     }
-    
+
     Swal.fire({
       icon: 'success',
       title: 'Success!',
       text: 'Visit has been added successfully.',
       confirmButtonColor: '#00458F'
     });
-    
+
     setVisitFormData(prev => ({
       visitId: "",
       subject: prev.subject,
@@ -425,7 +422,7 @@ export default function UnifiedVisitScheduler() {
       });
       return;
     }
-    
+
     Swal.fire({
       icon: 'success',
       title: 'Draft Saved',
@@ -445,9 +442,9 @@ export default function UnifiedVisitScheduler() {
       });
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     setTimeout(() => {
       Swal.fire({
         icon: 'success',
@@ -497,20 +494,20 @@ export default function UnifiedVisitScheduler() {
   // Render matrix rows
   const renderMatrixRows = () => {
     if (!activeSubject || visits.length === 0) return null;
-    
+
     return visits.map((visit, idx) => {
       const targetDateObj = addDays(activeSubject.baseline, visit.day);
       const targetDateStr = formatDate(targetDateObj);
       const windowRange = getWindowRange(activeSubject.baseline, visit.day, visit.tol);
-      
+
       let statusClass = "";
       if (visit.status === 'COMPLETED') statusClass = "status-completed";
       else if (visit.status === 'SCHEDULED') statusClass = "status-scheduled";
       else statusClass = "status-missed";
-      
+
       return (
-        <tr 
-          key={visit.code} 
+        <tr
+          key={visit.code}
           className={selectedRowIdx === idx ? 'selected-row' : ''}
           onClick={() => selectRow(idx, visit.kit, visit.vials, visit.storage)}
           style={{ cursor: 'pointer' }}
@@ -521,8 +518,8 @@ export default function UnifiedVisitScheduler() {
           <td style={{ padding: '12px 16px', border: '1px solid #DEE2E6' }}>{targetDateStr}</td>
           <td style={{ padding: '12px 16px', border: '1px solid #DEE2E6', fontSize: '12px', color: '#6C757D' }}>{windowRange}</td>
           <td style={{ padding: '12px 16px', border: '1px solid #DEE2E6' }}>
-            <input 
-              type="date" 
+            <input
+              type="date"
               value={visit.date}
               onChange={(e) => updateScheduledDate(idx, e.target.value)}
               onClick={(e) => e.stopPropagation()}
@@ -533,8 +530,8 @@ export default function UnifiedVisitScheduler() {
             <span className={`status-badge ${statusClass}`}>{visit.status}</span>
           </td>
           <td style={{ padding: '12px 16px', border: '1px solid #DEE2E6', textAlign: 'center' }}>
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="btn-action"
               onClick={(e) => openRescheduleSection(e, idx)}
             >
@@ -561,12 +558,11 @@ export default function UnifiedVisitScheduler() {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Select Subject ID <span className="text-red-500">*</span>
               </label>
-              <select 
-                value={selectedSubjectId} 
+              <select
+                value={selectedSubjectId}
                 onChange={(e) => setSelectedSubjectId(e.target.value)}
-                className={`w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-700 ${
-                  errors.subjectId ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-700 ${errors.subjectId ? 'border-red-500' : 'border-gray-300'
+                  }`}
               >
                 <option value="" disabled>-- Select Subject --</option>
                 <option value="SUBJ-ONC-BOS-0024">SUBJ-ONC-BOS-0024</option>
@@ -576,12 +572,7 @@ export default function UnifiedVisitScheduler() {
                 <p className="text-red-500 text-xs mt-1">{errors.subjectId}</p>
               )}
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Subject Full Name</label>
-              <div className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-700">
-                {activeSubject?.name || '-'}
-              </div>
-            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Baseline Dosing Date (Day 1)</label>
               <div className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-700">
@@ -649,13 +640,12 @@ export default function UnifiedVisitScheduler() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     New Proposed Date <span className="text-red-500">*</span>
                   </label>
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     value={newProposedDate}
                     onChange={(e) => handleProposedDateChange(e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] ${
-                      errors.newProposedDate ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] ${errors.newProposedDate ? 'border-red-500' : 'border-gray-300'
+                      }`}
                   />
                   {errors.newProposedDate && (
                     <p className="text-red-500 text-xs mt-1">{errors.newProposedDate}</p>
@@ -665,20 +655,19 @@ export default function UnifiedVisitScheduler() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Reason Code <span className="text-red-500">*</span>
                   </label>
-                  <select 
-                    value={reschedReason} 
+                  <select
+                    value={reschedReason}
                     onChange={(e) => {
                       setReschedReason(e.target.value);
                       if (errors.reschedReason) {
                         setErrors(prev => ({ ...prev, reschedReason: undefined }));
                       }
                     }}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] ${
-                      errors.reschedReason ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] ${errors.reschedReason ? 'border-red-500' : 'border-gray-300'
+                      }`}
                   >
                     <option value="" disabled>-- Choose Reason --</option>
-                    <option value="Patient Conflict">Patient Schedule Conflict</option>
+                    <option value="Subject Conflict">Subject Schedule Conflict</option>
                     <option value="Investigator Conflict">Investigator / Coordinator Unavailable</option>
                     <option value="Weather">Weather / Force Majeure</option>
                     <option value="Site Closure">Clinical Site Holiday/Closure</option>
@@ -693,7 +682,7 @@ export default function UnifiedVisitScheduler() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Audit Justification Details (FDA 21 CFR Part 11 Compliance) <span className="text-red-500">*</span>
                   </label>
-                  <textarea 
+                  <textarea
                     value={reschedJustification}
                     onChange={(e) => {
                       setReschedJustification(e.target.value);
@@ -703,16 +692,15 @@ export default function UnifiedVisitScheduler() {
                     }}
                     placeholder="Provide detailed explanation for the reschedule change (FDA 21 CFR Part 11 Audit Trail log)..."
                     rows={3}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] resize-none ${
-                      errors.reschedJustification ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] resize-none ${errors.reschedJustification ? 'border-red-500' : 'border-gray-300'
+                      }`}
                   />
                   {errors.reschedJustification && (
                     <p className="text-red-500 text-xs mt-1">{errors.reschedJustification}</p>
                   )}
                 </div>
               </div>
-              
+
               {isDeviation && (
                 <div className="mb-4 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
                   <div className="flex items-start gap-3">
@@ -726,7 +714,7 @@ export default function UnifiedVisitScheduler() {
                   </div>
                 </div>
               )}
-              
+
               <div className="flex justify-end gap-3">
                 <button
                   onClick={cancelRescheduleInline}
@@ -779,14 +767,13 @@ export default function UnifiedVisitScheduler() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Visit ID <span className="text-red-500">*</span>
                 </label>
-                <input 
-                  type="text" 
-                  placeholder="Enter Visit ID" 
+                <input
+                  type="text"
+                  placeholder="Enter Visit ID"
                   value={visitFormData.visitId}
                   onChange={(e) => handleVisitFormChange('visitId', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] ${
-                    errors.visitId ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] ${errors.visitId ? 'border-red-500' : 'border-gray-300'
+                    }`}
                 />
                 {errors.visitId && (
                   <p className="text-red-500 text-xs mt-1">{errors.visitId}</p>
@@ -794,9 +781,9 @@ export default function UnifiedVisitScheduler() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Subject <span className="text-red-500">*</span></label>
-                <input 
-                  type="text" 
-                  placeholder="Enter Subject" 
+                <input
+                  type="text"
+                  placeholder="Enter Subject"
                   value={visitFormData.subject}
                   disabled
                   className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-500"
@@ -807,14 +794,13 @@ export default function UnifiedVisitScheduler() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Visit Name <span className="text-red-500">*</span>
                 </label>
-                <input 
-                  type="text" 
-                  placeholder="Enter Visit Name" 
+                <input
+                  type="text"
+                  placeholder="Enter Visit Name"
                   value={visitFormData.visitName}
                   onChange={(e) => handleVisitFormChange('visitName', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] ${
-                    errors.visitName ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] ${errors.visitName ? 'border-red-500' : 'border-gray-300'
+                    }`}
                 />
                 {errors.visitName && (
                   <p className="text-red-500 text-xs mt-1">{errors.visitName}</p>
@@ -824,12 +810,11 @@ export default function UnifiedVisitScheduler() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Status <span className="text-red-500">*</span>
                 </label>
-                <select 
+                <select
                   value={visitFormData.status}
                   onChange={(e) => handleVisitFormChange('status', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] ${
-                    errors.status ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00458F] ${errors.status ? 'border-red-500' : 'border-gray-300'
+                    }`}
                 >
                   <option value="" disabled>Select Status</option>
                   <option value="Scheduled">Scheduled</option>
@@ -868,7 +853,7 @@ export default function UnifiedVisitScheduler() {
             >
               Save Draft
             </button>
-            
+
             <button
               onClick={saveSchedule}
               disabled={isSubmitting}

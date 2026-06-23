@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import {
   Printer,
   // FileSpreadsheet,
@@ -10,6 +10,7 @@ import {
 
 import ReportLayout from "./ReportLayout";
 import { useReactToPrint } from "react-to-print";
+import { subjectRecords } from "../../dataTypes/reportData";
 // import html2canvas from "html2canvas";
 // import jsPDF from "jspdf";
 // import * as XLSX from "xlsx";
@@ -24,15 +25,39 @@ const departments = [
 ];
 
 export default function GenerateReport() {
+  const [subjectId, setSubjectId] =
+    useState("");
   const [department, setDepartment] =
     useState("");
 
   const reportRef =
     useRef<HTMLDivElement>(null);
 
+  // Get departments associated with the selected subject
+  const filteredDepartments = useMemo(() => {
+    if (!subjectId) return [];
+    const subject = subjectRecords.find(
+      (s) => s.subjectId === subjectId
+    );
+    if (!subject) return [];
+    return departments.filter(
+      (dept) =>
+        dept === "" ||
+        subject.departments.includes(dept)
+    );
+  }, [subjectId]);
+
+  // Reset department when subject changes
+  const handleSubjectChange = (
+    newSubjectId: string
+  ) => {
+    setSubjectId(newSubjectId);
+    setDepartment("");
+  };
+
   const handlePrint = useReactToPrint({
     contentRef: reportRef,
-    documentTitle: `${department}_Report`,
+    documentTitle: `${subjectId}_${department}_Report`,
   });
   // const handlePdf = async () => {
   //   if (!reportRef.current) return;
@@ -98,46 +123,101 @@ export default function GenerateReport() {
       <div className="bg-white rounded-xl border shadow-sm p-6">
 
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-          <div className="w-full lg:w-96">
+          <div className="flex flex-col lg:flex-row gap-4">
 
-            <label className="block text-sm font-semibold mb-2">
-              Department
-            </label>
-            <select
-              value={department}
-              onChange={(e) =>
-                setDepartment(e.target.value)
-              }
-              className="
-                w-full
-                h-11
-                rounded-lg
-                border
-                border-gray-300
-                px-3
-                outline-none
-                focus:ring-2
-                focus:ring-blue-500
-              "
-            >
-              {departments.map((item) => (
-                <option
-                  key={item}
-                  value={item}
-                >
-                  {item === ""
-                    ? "Select Department"
-                    : item}
+            {/* Subject ID Dropdown */}
+            <div className="w-full lg:w-96">
+              <label
+                htmlFor="subject-id-select"
+                className="block text-sm font-semibold mb-2"
+              >
+                Subject ID
+              </label>
+              <select
+                id="subject-id-select"
+                value={subjectId}
+                onChange={(e) =>
+                  handleSubjectChange(e.target.value)
+                }
+                className="
+                  w-full
+                  h-11
+                  rounded-lg
+                  border
+                  border-gray-300
+                  px-3
+                  outline-none
+                  focus:ring-2
+                  focus:ring-blue-500
+                "
+              >
+                <option value="">
+                  Select Subject ID
                 </option>
-              ))}
-            </select>
+                {subjectRecords.map((subject) => (
+                  <option
+                    key={subject.subjectId}
+                    value={subject.subjectId}
+                  >
+                    {subject.subjectId} - {subject.subjectName}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Department Dropdown */}
+            <div className="w-full lg:w-96">
+              <label
+                htmlFor="department-select"
+                className="block text-sm font-semibold mb-2"
+              >
+                Department
+              </label>
+              <select
+                id="department-select"
+                value={department}
+                onChange={(e) =>
+                  setDepartment(e.target.value)
+                }
+                disabled={!subjectId}
+                className={`
+                  w-full
+                  h-11
+                  rounded-lg
+                  border
+                  border-gray-300
+                  px-3
+                  outline-none
+                  focus:ring-2
+                  focus:ring-blue-500
+                  ${!subjectId ? "bg-gray-100 cursor-not-allowed opacity-60" : ""}
+                `}
+              >
+                {subjectId ? (
+                  filteredDepartments.map((item) => (
+                    <option
+                      key={item}
+                      value={item}
+                    >
+                      {item === ""
+                        ? "Select Department"
+                        : item}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">
+                    Select a Subject ID first
+                  </option>
+                )}
+              </select>
+            </div>
 
           </div>
 
           <div className="flex flex-wrap gap-3">
 
             <button
-              disabled={!department}
+              disabled={!subjectId || !department}
               onClick={handlePrint}
               className="
                 flex
@@ -205,7 +285,7 @@ export default function GenerateReport() {
 
       </div>
 
-      {department && (
+      {subjectId && department && (
         <div
           ref={reportRef}
           className="
@@ -219,6 +299,7 @@ export default function GenerateReport() {
         >
           <ReportLayout
             department={department}
+            subjectId={subjectId}
           />
         </div>
       )}
