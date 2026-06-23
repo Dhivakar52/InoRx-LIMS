@@ -1,11 +1,12 @@
-import SubjectInfo from "../SubjectInfo";
+import PatientInfo from "../PatientInfo";
 import ReportTable from "./ReportTable";
 import ReportFooter from "../Footer";
 
 export default function BiochemistryReport() {
 
-  const subject = {
+  const patient = {
     subjectId: "4065635",
+    patientName: "JAHEEDHA PARVEEN",
     ageGender: "26 Years / Female",
     department: "Biochemistry",
     consultant: "Dr. Rajesh",
@@ -16,39 +17,39 @@ export default function BiochemistryReport() {
     approvedOn: "17-Jun-2026 10:25 AM",
   };
   const rows = [
-    {
-      test: "Urine Albumin",
-      result: "Negative",
-      unit: "",
-      referenceRange: "Negative",
-      status: "NORMAL",
-    },
-    {
-      test: "Urine Sugar",
-      result: "Negative",
-      unit: "",
-      referenceRange: "Negative",
-      status: "NORMAL",
-    },
-    {
-      test: "Urine pH",
-      result: "6.5",
-      unit: "",
-      referenceRange: "5.0 - 8.0",
-      status: "NORMAL",
-    },
-    {
-      test: "Specific Gravity",
-      result: "1.030",
-      unit: "",
-      referenceRange: "1.005 - 1.030",
-      status: "NORMAL",
-    },
-  ];
+  {
+    test: "Urine Albumin",
+    result: "Negative",
+    unit: "",
+    referenceRange: "Negative",
+    status: "NORMAL",
+  },
+  {
+    test: "Urine Sugar",
+    result: "Negative",
+    unit: "",
+    referenceRange: "Negative",
+    status: "NORMAL",
+  },
+  {
+    test: "Urine pH",
+    result: "6.5",
+    unit: "",
+    referenceRange: "5.0 - 8.0",
+    status: "NORMAL",
+  },
+  {
+    test: "Specific Gravity",
+    result: "1.030",
+    unit: "",
+    referenceRange: "1.005 - 1.030",
+    status: "NORMAL",
+  },
+];
 
   return (
     <>
-      <SubjectInfo subject={subject} />
+      <PatientInfo patient={patient} />
 
       <ReportTable
         title="BIOCHEMISTRY REPORT"

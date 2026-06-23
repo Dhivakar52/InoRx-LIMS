@@ -8,12 +8,12 @@ export interface StudyAmendmentDto {
   targetVersion: string;
 
   status:
-  | "DRAFT"
-  | "SUBMITTED"
-  | "RETURNED"
-  | "APPROVED"
-  | "ACTIVE"
-  | "ARCHIVED";
+    | "DRAFT"
+    | "SUBMITTED"
+    | "RETURNED"
+    | "APPROVED"
+    | "ACTIVE"
+    | "ARCHIVED";
 
   amendmentCode: string;
   amendmentTitle: string;
@@ -35,25 +35,25 @@ export interface StudyAmendmentDto {
   deviationIds: string[];
   capaIds: string[];
   cohorts: CohortDto[];
-  visits: VisitDto[];
-  specimens: SpecimenDto[];
-  tests: TestPanelDto[];
-  migrationSubjects: MigrationSubjectDto[];
+visits: VisitDto[];
+specimens: SpecimenDto[];
+tests: TestPanelDto[];
+migrationSubjects: MigrationSubjectDto[];
 
-  siteActivations: SiteActivationDto[];
+siteActivations: SiteActivationDto[];
 
-  kits: KitReconciliationDto[];
-  approvalHistory: ApprovalDto[];
+kits: KitReconciliationDto[];
+approvalHistory: ApprovalDto[];
 
-  auditTrail: AuditTrailDto[];
+auditTrail: AuditTrailDto[];
 
-  versionHistory: VersionHistoryDto[];
+versionHistory: VersionHistoryDto[];
 
-  currentStatus: string;
+currentStatus:string;
 
-  electronicSignature: string;
+electronicSignature:string;
 
-  mfaVerified: boolean;
+mfaVerified:boolean;
 }
 export interface CohortDto {
   id: number;
@@ -92,14 +92,17 @@ export interface TestPanelDto {
 }
 export interface MigrationSubjectDto {
   subjectId: string;
+
+  subjectName: string;
+
   currentVersion: string;
 
   targetVersion: string;
 
   consentStatus:
-  | "PENDING"
-  | "COMPLETED"
-  | "WAIVED";
+    | "PENDING"
+    | "COMPLETED"
+    | "WAIVED";
 
   reConsentDate: string;
 
@@ -120,9 +123,9 @@ export interface SiteActivationDto {
   siteEffectiveDate: string;
 
   status:
-  | "PENDING"
-  | "ACTIVE"
-  | "SUPERSEDED";
+    | "PENDING"
+    | "ACTIVE"
+    | "SUPERSEDED";
 }
 
 export interface KitReconciliationDto {
@@ -137,9 +140,9 @@ export interface KitReconciliationDto {
   quantity: number;
 
   status:
-  | "ACTIVE"
-  | "OBSOLETE"
-  | "ARCHIVED";
+    | "ACTIVE"
+    | "OBSOLETE"
+    | "ARCHIVED";
 }
 export interface ApprovalDto {
   reviewerId: number;
@@ -149,9 +152,9 @@ export interface ApprovalDto {
   role: string;
 
   decision:
-  | "PENDING"
-  | "APPROVED"
-  | "REJECTED";
+    | "PENDING"
+    | "APPROVED"
+    | "REJECTED";
 
   comments: string;
 

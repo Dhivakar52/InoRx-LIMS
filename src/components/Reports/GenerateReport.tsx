@@ -14,16 +14,6 @@ import { useReactToPrint } from "react-to-print";
 // import jsPDF from "jspdf";
 // import * as XLSX from "xlsx";
 // import { saveAs } from "file-saver";
-
-const subjectIds = [
-  "",
-  "SUBJ-001",
-  "SUBJ-002",
-  "SUBJ-003",
-  "SUBJ-004",
-  "SUBJ-005",
-];
-
 const departments = [
   "",
   "Biochemistry",
@@ -34,8 +24,8 @@ const departments = [
 ];
 
 export default function GenerateReport() {
-  const [department, setDepartment] = useState("");
-  const [subjectId, setSubjectId] = useState("");
+  const [department, setDepartment] =
+    useState("");
 
   const reportRef =
     useRef<HTMLDivElement>(null);
@@ -108,88 +98,46 @@ export default function GenerateReport() {
       <div className="bg-white rounded-xl border shadow-sm p-6">
 
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full lg:w-[800px]">
+          <div className="w-full lg:w-96">
 
-  {/* Subject ID */}
+            <label className="block text-sm font-semibold mb-2">
+              Department
+            </label>
+            <select
+              value={department}
+              onChange={(e) =>
+                setDepartment(e.target.value)
+              }
+              className="
+                w-full
+                h-11
+                rounded-lg
+                border
+                border-gray-300
+                px-3
+                outline-none
+                focus:ring-2
+                focus:ring-blue-500
+              "
+            >
+              {departments.map((item) => (
+                <option
+                  key={item}
+                  value={item}
+                >
+                  {item === ""
+                    ? "Select Department"
+                    : item}
+                </option>
+              ))}
+            </select>
 
-  <div>
-    <label className="block text-sm font-semibold mb-2">
-      Subject ID
-    </label>
-
-    <select
-      value={subjectId}
-      onChange={(e) =>
-        setSubjectId(e.target.value)
-      }
-      className="
-        w-full
-        h-11
-        rounded-lg
-        border
-        border-gray-300
-        px-3
-        outline-none
-        focus:ring-2
-        focus:ring-blue-500
-      "
-    >
-      {subjectIds.map((item) => (
-        <option
-          key={item}
-          value={item}
-        >
-          {item === ""
-            ? "Select Subject ID"
-            : item}
-        </option>
-      ))}
-    </select>
-  </div>
-
-  {/* Department */}
-
-  <div>
-    <label className="block text-sm font-semibold mb-2">
-      Department
-    </label>
-
-    <select
-      value={department}
-      onChange={(e) =>
-        setDepartment(e.target.value)
-      }
-      className="
-        w-full
-        h-11
-        rounded-lg
-        border
-        border-gray-300
-        px-3
-        outline-none
-        focus:ring-2
-        focus:ring-blue-500
-      "
-    >
-      {departments.map((item) => (
-        <option
-          key={item}
-          value={item}
-        >
-          {item === ""
-            ? "Select Department"
-            : item}
-        </option>
-      ))}
-    </select>
-  </div>
-
-</div>
+          </div>
 
           <div className="flex flex-wrap gap-3">
 
             <button
-              disabled={!subjectId || !department}
+              disabled={!department}
               onClick={handlePrint}
               className="
                 flex
@@ -257,7 +205,7 @@ export default function GenerateReport() {
 
       </div>
 
-     {subjectId && department && (
+      {department && (
         <div
           ref={reportRef}
           className="
@@ -270,7 +218,6 @@ export default function GenerateReport() {
           "
         >
           <ReportLayout
-            subjectId={subjectId}
             department={department}
           />
         </div>

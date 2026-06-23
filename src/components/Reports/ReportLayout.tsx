@@ -8,12 +8,10 @@ import ImmunoassayReport from "../Reports/ReportForm/ImmunoassayReport";
 import SampleTrackingReport from "../Reports/ReportForm/SampleTrackingReport";
 
 interface Props {
-  subjectId:string,
   department: string;
 }
 
 export default function ReportLayout({
-  //subjectId,
   department,
 }: Props) {
 

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import SubjectDetails from "./ResultForm/SubjectDetails";
+import PatientDetails from "../ResultEntry/ResultForm/PatientDetails";
 import BacteriologyResult from "../ResultEntry/ResultForm/BacteriologyResult";
 import BioChemistryResult from "../ResultEntry/ResultForm/BioChemistryResult";
 import ClinicalPathologyResult from "../ResultEntry/ResultForm/ClinicalPathologyResult";
@@ -28,9 +28,11 @@ export default function ResultEntry() {
   const [formData, setFormData] = useState({
     labNumber: "",
     subjectId: "",
+    patientName: "",
     gender: "",
     age: "",
     department: "",
+    ward: "",
     requestDate: "",
     receiptDate: "",
     referredBy: "",
@@ -70,16 +72,18 @@ export default function ResultEntry() {
   const handleGetDetails = () => {
     Swal.fire(
       "Success",
-      "Subject details loaded",
+      "Patient details loaded",
       "success"
     );
 
     setFormData((prev) => ({
       ...prev,
       subjectId: "SUB12345",
+      patientName: "John Doe",
       gender: "Male",
       age: "35",
       department: "Bacteriology",
+      ward: "General",
       referredBy: "Dr. Kumar",
     }));
   };
@@ -165,50 +169,50 @@ export default function ResultEntry() {
           </div>
         </div>
         <div className="mt-6">
-          <SubjectDetails
+          <PatientDetails
             formData={formData}
-            handleChange={handleChange} />
+            handleChange={handleChange}/>
         </div>
         <div className="mt-6">
           {selectedDepartment ===
             "Bacteriology" && (
-              <BacteriologyResult
-                formData={formData}
-                handleChange={handleChange}
-              />
-            )}
+            <BacteriologyResult
+              formData={formData}
+              handleChange={handleChange}
+            />
+          )}
 
           {selectedDepartment ===
             "Bio Chemistry" && (
-              <BioChemistryResult
-                formData={formData}
-                handleChange={handleChange}
-              />
-            )}
+            <BioChemistryResult
+              formData={formData}
+              handleChange={handleChange}
+            />
+          )}
 
           {selectedDepartment ===
             "Clinical Pathology" && (
-              <ClinicalPathologyResult
-                formData={formData}
-                handleChange={handleChange}
-              />
-            )}
+            <ClinicalPathologyResult
+              formData={formData}
+              handleChange={handleChange}
+            />
+          )}
 
           {selectedDepartment ===
             "Molecular Biology" && (
-              <MolecularBiologyResult
-                formData={formData}
-                handleChange={handleChange}
-              />
-            )}
+            <MolecularBiologyResult
+              formData={formData}
+              handleChange={handleChange}
+            />
+          )}
 
           {selectedDepartment ===
             "Serology" && (
-              <SerologyResult
-                formData={formData}
-                handleChange={handleChange}
-              />
-            )}
+            <SerologyResult
+              formData={formData}
+              handleChange={handleChange}
+            />
+          )}
         </div>
         <div className="flex justify-between mt-8 pt-5">
           <button

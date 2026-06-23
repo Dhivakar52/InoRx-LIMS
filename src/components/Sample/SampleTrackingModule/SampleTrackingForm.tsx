@@ -1,4 +1,3 @@
-import { CheckCircle2, Clock3 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const SampleTrackingForm = () => {
@@ -37,16 +36,10 @@ const SampleTrackingForm = () => {
     title: "Sample Storage",
     date: sample.storageDate,
   },
-
-  ...(sample.shipmentDate
-    ? [
-        {
-          title: "Sample Shipment",
-          date: sample.shipmentDate,
-        },
-      ]
-    : []),
-
+  {
+    title: "Sample Shipment",
+    date: sample.shipmentDate,
+  },
   {
     title: "Result Entry",
     date: sample.resultEntryDate,
@@ -69,9 +62,7 @@ const SampleTrackingForm = () => {
   ["Acknowledgement Date", sample.acknowledgementDate],
   ["Processing Date", sample.processingDate],
   ["Storage Date", sample.storageDate],
-  ...(sample.shipmentDate
-  ? [["Shipment Date", sample.shipmentDate]]
-  : []),
+  ["Shipment Date", sample.shipmentDate || "Pending"],
   ["Result Entry Date", sample.resultEntryDate || "Pending"],
   ["Result Validation Date", sample.resultValidationDate || "Pending"],
 ];
@@ -216,16 +207,15 @@ const SampleTrackingForm = () => {
                     className={`
                       w-8 h-8 rounded-full
                       flex items-center justify-center
-                      font-semibold                    
+                      font-semibold
+                      ${
+                        step.date
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-100 text-gray-400"
+                      }
                     `}
                   >
-                    {
-                      step.date ? (
-                        <CheckCircle2 className="w-7 h-7 text-green-600" />
-                      ) : (
-                        <Clock3 className="w-7 h-7 text-amber-500" />
-                      )
-                    }
+                    {step.date ? "✓" : "○"}
                   </div>
 
                   {index !==

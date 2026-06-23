@@ -8,7 +8,7 @@ export default function ConsentRetentionTab({
 
       <div>
         <label>
-          Subject Consent Status <span className="text-red-500">*</span>
+          Patient Consent Status <span className="text-red-500">*</span>                
         </label>
 
         <select

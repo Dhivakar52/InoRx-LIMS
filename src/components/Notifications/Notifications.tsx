@@ -1,5 +1,5 @@
 // Notifications.jsx
-import { useCallback, useState } from "react";
+import  { useCallback, useState } from "react";
 import {
   Bell,
   Search,
@@ -16,7 +16,7 @@ const notificationData = [
     id: 1,
     title: "Blood Sample Collection Completed",
     message:
-      "Suject ID #LAB1021 blood sample has been collected successfully for CBC test.",
+      "Patient ID #LAB1021 blood sample has been collected successfully for CBC test.",
     time: "2 mins ago",
     type: "success",
     unread: true,
@@ -25,7 +25,7 @@ const notificationData = [
     id: 2,
     title: "Critical Glucose Level Alert",
     message:
-      "Suject ID #LAB2098 glucose levels are critically high. Immediate review required.",
+      "Patient ID #LAB2098 glucose levels are critically high. Immediate review required.",
     time: "10 mins ago",
     type: "alert",
     unread: true,
@@ -34,7 +34,7 @@ const notificationData = [
     id: 3,
     title: "Urine Sample Pending",
     message:
-      "Urine sample collection for Suject ID #LAB4501 is still pending.",
+      "Urine sample collection for Patient ID #LAB4501 is still pending.",
     time: "18 mins ago",
     type: "pending",
     unread: true,
@@ -43,7 +43,7 @@ const notificationData = [
     id: 4,
     title: "COVID-19 Test Result Ready",
     message:
-      "RT-PCR test results for Suject ID #LAB5542 are now available.",
+      "RT-PCR test results for Patient ID #LAB5542 are now available.",
     time: "30 mins ago",
     type: "success",
     unread: false,
@@ -52,7 +52,7 @@ const notificationData = [
     id: 5,
     title: "Sample Rejected",
     message:
-      "Blood sample for Suject ID #LAB7721 has been rejected due to clotting.",
+      "Blood sample for Patient ID #LAB7721 has been rejected due to clotting.",
     time: "45 mins ago",
     type: "alert",
     unread: false,
@@ -97,7 +97,7 @@ const notificationData = [
     id: 10,
     title: "Biochemistry Report Approved",
     message:
-      "Biochemistry report for Suject ID #LAB9011 has been approved by Dr. Smith.",
+      "Biochemistry report for Patient ID #LAB9011 has been approved by Dr. Smith.",
     time: "5 hours ago",
     type: "success",
     unread: false,
@@ -115,7 +115,7 @@ const notificationData = [
     id: 12,
     title: "Abnormal Thyroid Levels Detected",
     message:
-      "TSH levels for Suject ID #LAB1120 are outside normal range.",
+      "TSH levels for Patient ID #LAB1120 are outside normal range.",
     time: "7 hours ago",
     type: "alert",
     unread: true,
@@ -124,7 +124,7 @@ const notificationData = [
     id: 13,
     title: "MRI Scan Report Ready",
     message:
-      "MRI scan report for Suject ID #RAD2234 is now ready for review.",
+      "MRI scan report for Patient ID #RAD2234 is now ready for review.",
     time: "8 hours ago",
     type: "success",
     unread: false,
@@ -142,7 +142,7 @@ const notificationData = [
     id: 15,
     title: "Low Hemoglobin Alert",
     message:
-      "Suject ID #LAB3412 hemoglobin value is critically low.",
+      "Patient ID #LAB3412 hemoglobin value is critically low.",
     time: "10 hours ago",
     type: "alert",
     unread: true,
@@ -151,7 +151,7 @@ const notificationData = [
     id: 16,
     title: "X-Ray Report Uploaded",
     message:
-      "Chest X-Ray report for Suject ID #RAD8821 has been uploaded.",
+      "Chest X-Ray report for Patient ID #RAD8821 has been uploaded.",
     time: "12 hours ago",
     type: "success",
     unread: false,
@@ -169,7 +169,7 @@ const notificationData = [
     id: 18,
     title: "New Pathology Request",
     message:
-      "A new pathology request has been created for Suject ID #LAB7891.",
+      "A new pathology request has been created for Patient ID #LAB7891.",
     time: "16 hours ago",
     type: "pending",
     unread: false,
@@ -187,14 +187,14 @@ const notificationData = [
     id: 20,
     title: "Critical Potassium Level",
     message:
-      "Suject ID #LAB9921 potassium level requires urgent medical attention.",
+      "Patient ID #LAB9921 potassium level requires urgent medical attention.",
     time: "1 day ago",
     type: "alert",
     unread: true,
   },
 ];
 
-const getIcon = (type: any) => {
+const getIcon = (type:any) => {
   switch (type) {
     case "success":
       return <CheckCircle2 size={22} className="text-green-600" />;
@@ -217,114 +217,114 @@ const Notifications = () => {
   );
 
   type PanelMode = "view" | null;
-  const [panelMode, setPanelMode] = useState<PanelMode>(null);
-  const [selectedItem, setSelectedItem] = useState<any>(null);
+    const [panelMode, setPanelMode] = useState<PanelMode>(null);
+    const [selectedItem, setSelectedItem] = useState<any>(null);
 
-  const handleNotificationClick = (notification: any) => {
-    setSelectedItem(notification);
-    setPanelMode("view");
-  };
+    const handleNotificationClick = (notification: any) => {
+        setSelectedItem(notification);
+        setPanelMode("view");
+    };
 
-  const handleClosePanel = useCallback(() => {
-    setPanelMode(null);
-    setSelectedItem(null);
-  }, []);
-
+     const handleClosePanel = useCallback(() => {
+        setPanelMode(null);
+        setSelectedItem(null);
+      }, []);
+    
 
   return (
     <div className="min-h-screen ">
-      <div className="mx-3 p-6 bg-white rounded-lg shadow-sm my-3">
+        <div className="mx-3 p-6 bg-white rounded-lg shadow-sm my-3">
 
-        {/* Header */}
-        <div className="mb-6 flex justify-between item-center">
-          <div className="flex items-center gap-3 mb-4">
-            <Bell className="w-6 h-6 text-gray-700" />
-            <h1 className="text-2xl font-semibold text-gray-900">All Notifications</h1>
-          </div>
+           {/* Header */}
+          <div className="mb-6 flex justify-between item-center">
+            <div className="flex items-center gap-3 mb-4">
+              <Bell className="w-6 h-6 text-gray-700" />
+              <h1 className="text-2xl font-semibold text-gray-900">All Notifications</h1>
+            </div>
 
-          {/* Search Bar */}
-          <div className="relative w-75">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              value={search}
+            {/* Search Bar */}
+            <div className="relative w-75">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search"
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+                placeholder="Search"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Notifications List */}
-        <div className="space-y-4">
-          {filteredNotifications.map((notification) => (
-            <div
-              key={notification.id}
-              onClick={() => handleNotificationClick(notification)}
-              className={`bg-[#F0F5FF] rounded-lg p-4 cursor-pointer hover:bg-[#E5EDFF] transition-all duration-200 border border-gray-200 shadow-sm hover:shadow-md`}>
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex gap-4">
-                  <div className="mt-1">
-                    {getIcon(notification.type)}
-                  </div>
-
-                  <div>
-                    <h2 className="text-mg font-semibold text-gray-800">
-                      {notification.title}
-                    </h2>
-
-                    <p className="text-gray-600 mt-1 leading-relaxed">
-                      {notification.message}
-                    </p>
-                  </div>
+      {/* Notifications List */}
+      <div className="space-y-4">
+        {filteredNotifications.map((notification) => (
+          <div
+            key={notification.id}
+            onClick={() => handleNotificationClick(notification)}
+            className={`bg-[#F0F5FF] rounded-lg p-4 cursor-pointer hover:bg-[#E5EDFF] transition-all duration-200 border border-gray-200 shadow-sm hover:shadow-md`}>
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex gap-4">
+                <div className="mt-1">
+                  {getIcon(notification.type)}
                 </div>
 
-                <span className="text-sm text-gray-500 whitespace-nowrap">
-                  {notification.time}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+                <div>
+                  <h2 className="text-mg font-semibold text-gray-800">
+                    {notification.title}
+                  </h2>
 
-      <CustomPanel isOpen={panelMode === "view"} title="Notification Details" onClose={handleClosePanel} onSave={handleClosePanel} saveLabel="Close">
-        {selectedItem && (
-          <div className="space-y-4">
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Title</label>
-              <p className="mt-1 text-gray-900 font-semibold">{selectedItem.title}</p>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Message</label>
-              <p className="mt-2 text-gray-700 leading-relaxed">{selectedItem.message}</p>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="border-b pb-3">
-                <label className="block text-sm font-medium text-gray-600">Type</label>
-                <p className="mt-1 text-gray-900 capitalize">
-                  <span className="inline-flex items-center gap-2">
-                    {getIcon(selectedItem.type)}
-                    {selectedItem.type}
-                  </span>
-                </p>
+                  <p className="text-gray-600 mt-1 leading-relaxed">
+                    {notification.message}
+                  </p>
+                </div>
               </div>
-              <div className="border-b pb-3">
-                <label className="block text-sm font-medium text-gray-600">Time</label>
-                <p className="mt-1 text-gray-900">{selectedItem.time}</p>
-              </div>
-            </div>
-            <div className="border-b pb-3">
-              <label className="block text-sm font-medium text-gray-600">Status</label>
-              <p className="mt-1 text-gray-900">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${selectedItem.unread ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}>
-                  {selectedItem.unread ? 'Unread' : 'Read'}
-                </span>
-              </p>
+
+              <span className="text-sm text-gray-500 whitespace-nowrap">
+                {notification.time}
+              </span>
             </div>
           </div>
-        )}
-      </CustomPanel>
+        ))}
+      </div>
+    </div>
+
+    <CustomPanel isOpen={panelMode === "view"} title="Notification Details" onClose={handleClosePanel} onSave={handleClosePanel} saveLabel="Close">
+            {selectedItem && (
+              <div className="space-y-4">
+                <div className="border-b pb-3">
+                  <label className="block text-sm font-medium text-gray-600">Title</label>
+                  <p className="mt-1 text-gray-900 font-semibold">{selectedItem.title}</p>
+                </div>
+                <div className="border-b pb-3">
+                  <label className="block text-sm font-medium text-gray-600">Message</label>
+                  <p className="mt-2 text-gray-700 leading-relaxed">{selectedItem.message}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="border-b pb-3">
+                    <label className="block text-sm font-medium text-gray-600">Type</label>
+                    <p className="mt-1 text-gray-900 capitalize">
+                      <span className="inline-flex items-center gap-2">
+                        {getIcon(selectedItem.type)}
+                        {selectedItem.type}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="border-b pb-3">
+                    <label className="block text-sm font-medium text-gray-600">Time</label>
+                    <p className="mt-1 text-gray-900">{selectedItem.time}</p>
+                  </div>
+                </div>
+                <div className="border-b pb-3">
+                  <label className="block text-sm font-medium text-gray-600">Status</label>
+                  <p className="mt-1 text-gray-900">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${selectedItem.unread ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}>
+                      {selectedItem.unread ? 'Unread' : 'Read'}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            )}
+          </CustomPanel>
     </div>
   );
 };

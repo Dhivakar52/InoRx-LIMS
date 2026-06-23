@@ -1,34 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { Input } from "../ui/input";
 import { useNavigate } from "react-router-dom";
 import Barcode from "react-barcode";
 import { useRef } from "react";
 
 // Mock data for specimens and departments
-const scheduleOptions = [
-  "Screening Visit",
-  "Baseline Visit",
-  "Week 1",
-  "Week 2",
-  "Week 4",
-  "Week 8",
-  "End of Study",
-];
-const testOptions = [
-  "Albumin",
-  "ALP",
-  "Amylase",
-  "ALT",
-  "AST",
-  "Bilirubin",
-  "Creatinine",
-  "Glucose",
-  "Culture Sensitivity",
-  "Gram Stain",
-  "CBC",
-  "Hemoglobin",
-];
 const specimenOptions = [
   "Serum",
   "Plasma",
@@ -54,42 +32,47 @@ const departmentOptions = [
 const initialTests = [
   {
     id: 1,
-    schedule: "Screening Visit",
-    departments: ["Biochemistry"],
-    tests: ["Albumin", "ALP"],
-    specimen: "Serum",
+    examName: "CREATININE",
+    specimen: ["Serum"],
+    subDepartment: ["Bio-Chemistry"],
+    bedSide: "N",
+    repeatCount: 0,
     selected: true,
   },
   {
     id: 2,
-    schedule: "Baseline Visit",
-    departments: ["Biochemistry", "Immunology"],
-    tests: ["ALT", "AST"],
-    specimen: "Serum",
+    examName: "UREA",
+    specimen: ["Serum"],
+    subDepartment: ["Bio-Chemistry"],
+    bedSide: "N",
+    repeatCount: 0,
     selected: true,
   },
   {
     id: 3,
-    schedule: "Week 1",
-    departments: ["Clinical Pathology"],
-    tests: ["CBC", "Hemoglobin"],
-    specimen: "Whole Blood",
+    examName: "URIC ACID",
+    specimen: ["Serum"],
+    subDepartment: ["Bio-Chemistry"],
+    bedSide: "N",
+    repeatCount: 0,
     selected: true,
   },
   {
     id: 4,
-    schedule: "Week 4",
-    departments: ["Microbiology"],
-    tests: ["Culture Sensitivity", "Gram Stain"],
-    specimen: "Urine",
+    examName: "LIPID PROFILE",
+    specimen: ["Serum"],
+    subDepartment: ["Bacteriology"],
+    bedSide: "N",
+    repeatCount: 0,
     selected: true,
   },
   {
     id: 5,
-    schedule: "End of Study",
-    departments: ["Biochemistry", "Clinical Pathology"],
-    tests: ["Creatinine", "Glucose", "Bilirubin"],
-    specimen: "Plasma",
+    examName: "LIVER FUNCTION TEST",
+    specimen: ["Serum"],
+    subDepartment: ["Bio-Chemistry"],
+    bedSide: "N",
+    repeatCount: 0,
     selected: true,
   },
 ];
@@ -154,28 +137,15 @@ export default function TestRegistrationForm() {
   const [subjectDetails, setSubjectDetails] = useState<any>(null);
   const printRef = useRef<HTMLDivElement>(null);
   const [barcodes, setBarcodes] = useState<
-    {
-      testId: number;
-      examName: string;
-      barcodeValue: string;
-    }[]
-  >([]);
+  {
+    testId: number;
+    examName: string;
+    barcodeValue: string;
+  }[]
+>([]);
   const navigate = useNavigate();
   const [showTests, setShowTests] = useState(false);
 
-    const updateTest = (
-    id: number,
-    field: string,
-    value: any
-  ) => {
-    setTests((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, [field]: value }
-          : item
-      )
-    );
-  };
   const handleCheckboxChange = (id: number) => {
     setTests((prev) =>
       prev.map((item) =>
@@ -203,40 +173,50 @@ export default function TestRegistrationForm() {
     setShowTests(true);
   };
 
-  const toggleTest = (
-  id: number,
-  testName: string
-) => {
-  setTests((prev) =>
-    prev.map((item) => {
-      if (item.id === id) {
-        const current = item.tests || [];
+  // // Handle specimen multiselect
+  // const handleSpecimenChange = (id: number, selectedSpecimens: string[]) => {
+  //   setTests((prev) =>
+  //     prev.map((item) =>
+  //       item.id === id ? { ...item, specimen: selectedSpecimens } : item
+  //     )
+  //   );
+  // };
 
-        return {
-          ...item,
-          tests: current.includes(testName)
-            ? current.filter(
-                (x) => x !== testName
-              )
-            : [...current, testName],
-        };
-      }
+  // // Handle department multiselect
+  // const handleDepartmentChange = (id: number, selectedDepartments: string[]) => {
+  //   setTests((prev) =>
+  //     prev.map((item) =>
+  //       item.id === id ? { ...item, subDepartment: selectedDepartments } : item
+  //     )
+  //   );
+  // };
 
-      return item;
-    })
-  );
-};
-  
+  // Toggle specimen selection
+  const toggleSpecimen = (id: number, specimen: string) => {
+    setTests((prev) =>
+      prev.map((item) => {
+        if (item.id === id) {
+          const currentSpecimens = item.specimen;
+          const updatedSpecimens = currentSpecimens.includes(specimen)
+            ? currentSpecimens.filter((s) => s !== specimen)
+            : [...currentSpecimens, specimen];
+          return { ...item, specimen: updatedSpecimens };
+        }
+        return item;
+      })
+    );
+  };
+
   // Toggle department selection
   const toggleDepartment = (id: number, department: string) => {
     setTests((prev) =>
       prev.map((item) => {
         if (item.id === id) {
-          const currentDepartments = item.departments;
+          const currentDepartments = item.subDepartment;
           const updatedDepartments = currentDepartments.includes(department)
             ? currentDepartments.filter((d) => d !== department)
             : [...currentDepartments, department];
-          return { ...item, departments: updatedDepartments };
+          return { ...item, subDepartment: updatedDepartments };
         }
         return item;
       })
@@ -267,7 +247,7 @@ export default function TestRegistrationForm() {
 
     const generated = selectedTests.map((test, index) => ({
       testId: test.id,
-      examName:  test.tests?.join(", ") || "",
+      examName: test.examName,
       barcodeValue: `TR${String(index + 1).padStart(6, "0")}`,
     }));
 
@@ -370,7 +350,12 @@ export default function TestRegistrationForm() {
               </label>
               <span className="text-sm">{subjectDetails.subjectCode}</span>
             </div>
-
+            <div>
+              <label className="block text-xs font-semibold text-gray-600">
+                Name
+              </label>
+              <span className="text-sm">{subjectDetails.name}</span>
+            </div>
             <div>
               <label className="block text-xs font-semibold text-gray-600">
                 Date of Birth
@@ -429,10 +414,11 @@ export default function TestRegistrationForm() {
                         onChange={handleSelectAll}
                       />
                     </th>
-                    <th className="border p-2">Schedule</th>
-                    <th className="border p-2">Department</th>
-                    <th className="border p-2">Test Name</th>
+                    <th className="border p-2">Exam Name</th>
                     <th className="border p-2">Specimen</th>
+                    <th className="border p-2">Department</th>
+                    <th className="border p-2">BedSide</th>
+                    <th className="border p-2">Repeat Count</th>
                   </tr>
                 </thead>
 
@@ -446,28 +432,55 @@ export default function TestRegistrationForm() {
                           onChange={() => handleCheckboxChange(test.id)}
                         />
                       </td>
-                      <td className="border p-2">
-                        <select
-                          className="w-full border rounded px-2 py-1"
-                          value={test.schedule}
-                          onChange={(e) =>
-                            updateTest(test.id, "schedule", e.target.value)
-                          }
-                        >
-                          <option value="">Select Schedule</option>
 
-                          {scheduleOptions.map((item) => (
-                            <option key={item} value={item}>
-                              {item}
-                            </option>
-                          ))}
-                        </select>
+                      <td className="border p-2">
+                        <Input value={test.examName} />
                       </td>
 
                       <td className="border p-2">
                         <div className="relative">
                           <div className="flex flex-wrap gap-1 mb-1">
-                            {test.departments.map((dept) => (
+                            {test.specimen.map((spec) => (
+                              <span
+                                key={spec}
+                                className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded"
+                              >
+                                {spec}
+                                <button
+                                  onClick={() => toggleSpecimen(test.id, spec)}
+                                  className="ml-1 text-blue-600 hover:text-blue-800"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ))}
+                          </div>
+                          <select
+                            className="w-full border rounded px-2 py-1 text-sm"
+                            onChange={(e) => {
+                              if (e.target.value) {
+                                toggleSpecimen(test.id, e.target.value);
+                                e.target.value = "";
+                              }
+                            }}
+                            value=""
+                          >
+                            <option value="">Add Specimen...</option>
+                            {specimenOptions
+                              .filter((opt) => !test.specimen.includes(opt))
+                              .map((spec) => (
+                                <option key={spec} value={spec}>
+                                  {spec}
+                                </option>
+                              ))}
+                          </select>
+                        </div>
+                      </td>
+
+                      <td className="border p-2">
+                        <div className="relative">
+                          <div className="flex flex-wrap gap-1 mb-1">
+                            {test.subDepartment.map((dept) => (
                               <span
                                 key={dept}
                                 className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded"
@@ -494,7 +507,7 @@ export default function TestRegistrationForm() {
                           >
                             <option value="">Add Department...</option>
                             {departmentOptions
-                              .filter((opt) => !test.departments.includes(opt))
+                              .filter((opt) => !test.subDepartment.includes(opt))
                               .map((dept) => (
                                 <option key={dept} value={dept}>
                                   {dept}
@@ -505,138 +518,17 @@ export default function TestRegistrationForm() {
                       </td>
 
                       <td className="border p-2">
-                        <div className="relative">
-
-                          <div className="flex flex-wrap gap-1 mb-1">
-                            {(test.tests || []).map(
-                              (item) => (
-                                <span
-                                  key={item}
-                                  className="
-                                    bg-blue-100
-                                    text-blue-800
-                                    text-xs
-                                    px-2
-                                    py-1
-                                    rounded
-                                  "
-                                >
-                                  {item}
-
-                                  <button
-                                    onClick={() =>
-                                      toggleTest(
-                                        test.id,
-                                        item
-                                      )
-                                    }
-                                    className="ml-1"
-                                  >
-                                    ×
-                                  </button>
-                                </span>
-                              )
-                            )}
-                          </div>
-
-                          <select
-                            className="
-                              w-full
-                              border
-                              rounded
-                              px-2
-                              py-1
-                            "
-                            value=""
-                            onChange={(e) => {
-                              if (e.target.value) {
-                                toggleTest(
-                                  test.id,
-                                  e.target.value
-                                );
-                                e.target.value = "";
-                              }
-                            }}
-                          >
-                            <option value="">
-                              Add Test...
-                            </option>
-
-                            {testOptions
-                              .filter(
-                                (opt) =>
-                                  !test.tests.includes(opt)
-                              )
-                              .map((item) => (
-                                <option
-                                  key={item}
-                                  value={item}
-                                >
-                                  {item}
-                                </option>
-                              ))}
-                          </select>
-                        </div>
+                        <Input value={test.bedSide} />
                       </td>
 
                       <td className="border p-2">
-                        <select
-                          value={test.specimen}
-                          onChange={(e) =>
-                            updateTest(
-                              test.id,
-                              "specimen",
-                              e.target.value
-                            )
-                          }
-                          className="w-full border rounded px-2 py-1"
-                        >
-                          <option value="">
-                            Select Specimen
-                          </option>
-
-                          {specimenOptions.map((specimen) => (
-                            <option
-                              key={specimen}
-                              value={specimen}
-                            >
-                              {specimen}
-                            </option>
-                          ))}
-                        </select>
+                        <Input value={test.repeatCount} />
                       </td>
-
-
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-
-        <div className="flex justify-between pt-6">
-          <button onClick={() => navigate(-1)} className="px-5 py-2 rounded-md bg-gray-200">
-            Back
-          </button>
-          <div className="flex gap-3">
-            <button
-              onClick={handleGenerateBarcode}
-              className="px-5 py-2 rounded-md bg-green-600 text-white"
-            >
-              Generate Barcode
-            </button>
-            <button
-              onClick={handlePrintBarcodes}
-              disabled={barcodes.length === 0}
-              className="px-5 py-2 rounded-md bg-purple-600 text-white disabled:bg-gray-400"
-            >
-              Print Labels
-            </button>
-            <button onClick={handleSave}
-              className="px-5 py-2 rounded-md bg-[#00458F] text-white">
-              Save
-            </button>
-          </div>
-        </div>
           </>
         )}
 
@@ -677,7 +569,31 @@ export default function TestRegistrationForm() {
             </div>
           </div>
         )}
-        
+
+        <div className="flex justify-between pt-6">
+          <button onClick={() => navigate(-1)} className="px-5 py-2 rounded-md bg-gray-200">
+            Back
+          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={handleGenerateBarcode}
+              className="px-5 py-2 rounded-md bg-green-600 text-white"
+            >
+              Generate Barcode
+            </button>
+            <button
+              onClick={handlePrintBarcodes}
+              disabled={barcodes.length === 0}
+              className="px-5 py-2 rounded-md bg-purple-600 text-white disabled:bg-gray-400"
+            >
+              Print Labels
+            </button>
+            <button onClick={handleSave}
+              className="px-5 py-2 rounded-md bg-[#00458F] text-white">
+              Save
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

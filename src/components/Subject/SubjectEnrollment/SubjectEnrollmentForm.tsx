@@ -23,14 +23,6 @@ export default function SubjectEnrollmentForm() {
   const [showBarcode, setShowBarcode] = useState(false);
   const navigate = useNavigate();
 
-  const armCohortOptions = [
-  "Arm A - Treatment",
-  "Arm B - Placebo",
-  "Arm C - Comparator",
-  "Cohort 1",
-  "Cohort 2",
-];
-
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -43,7 +35,6 @@ export default function SubjectEnrollmentForm() {
         subjectId: initialData.subjectId || "",
         dob: initialData.dob || "",
         gender: initialData.gender || "",
-        armCohort: initialData.armCohort || "",
 
         enrollmentDate: initialData.enrollmentDate || "",
         enrollmentStatus: initialData.enrollmentStatus || "",
@@ -101,8 +92,6 @@ export default function SubjectEnrollmentForm() {
         newErrors.dob = "Date of Birth must be in the past";
       }
     }
-    if (!formData.armCohort)
-      newErrors.armCohort = "Arm/Cohort is required";
     // if (
     //   formData.enrollmentDate &&
     //   new Date(formData.enrollmentDate) <
@@ -267,30 +256,6 @@ export default function SubjectEnrollmentForm() {
               onChange={(e) => handleChange("subjectId", e.target.value)}
              className="w-full border rounded-md h-10 px-3 mt-1"/>
             <ErrorText msg={errors.subjectId} />
-          </div>
-          <div>
-            <Label>
-              Arm / Cohort <Req />
-            </Label>
-
-            <select
-              disabled={isViewMode}
-              value={formData.armCohort || ""}
-              onChange={(e) =>
-                handleChange("armCohort", e.target.value)
-              }
-              className="w-full border rounded-md h-10 px-3 mt-1"
-            >
-              <option value="">Select Arm/Cohort</option>
-
-              {armCohortOptions.map((arm) => (
-                <option key={arm} value={arm}>
-                  {arm}
-                </option>
-              ))}
-            </select>
-
-            <ErrorText msg={errors.armCohort} />
           </div>
           <div>
             <Label>Date of Birth <Req /></Label>

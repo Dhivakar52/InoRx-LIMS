@@ -25,6 +25,7 @@ import {
 
 type Registration = {
   id: number;
+  patientName: string;
   testName: string;
   doctor: string;
   status: string;
@@ -40,36 +41,42 @@ export default function Dashboard() {
     () => [
       {
         id: 1001,
+        patientName: "Kumar",
         testName: "CBC",
         doctor: "Dr. Raj",
         status: "Completed",
       },
       {
         id: 1002,
+        patientName: "Priya",
         testName: "LFT",
         doctor: "Dr. Anand",
         status: "Pending",
       },
       {
         id: 1003,
+        patientName: "Rahul",
         testName: "Blood Sugar",
         doctor: "Dr. Kumar",
         status: "Completed",
       },
       {
         id: 1004,
+        patientName: "Divya",
         testName: "Thyroid",
         doctor: "Dr. Priya",
         status: "In Progress",
       },
       {
         id: 1005,
+        patientName: "Arun",
         testName: "Lipid Profile",
         doctor: "Dr. Kumar",
         status: "Completed",
       },
       {
         id: 1006,
+        patientName: "Meena",
         testName: "Vitamin D",
         doctor: "Dr. Raj",
         status: "Pending",
@@ -82,6 +89,10 @@ export default function Dashboard() {
     {
       accessorKey: "id",
       header: "Reg No",
+    },
+    {
+      accessorKey: "patientName",
+      header: "Patient Name",
     },
     {
       accessorKey: "testName",
@@ -100,12 +111,13 @@ export default function Dashboard() {
         return (
           <span
             className={`px-2 py-1 rounded-full text-xs font-medium
-            ${status === "Completed"
+            ${
+              status === "Completed"
                 ? "bg-green-100 text-green-700"
                 : status === "Pending"
-                  ? "bg-yellow-100 text-yellow-700"
-                  : "bg-blue-100 text-blue-700"
-              }`}
+                ? "bg-yellow-100 text-yellow-700"
+                : "bg-blue-100 text-blue-700"
+            }`}
           >
             {status}
           </span>
@@ -138,7 +150,7 @@ export default function Dashboard() {
 
   const stats = [
     {
-      title: "Total Subjects",
+      title: "Total Patients",
       value: "1,250",
       icon: Users,
     },
@@ -172,40 +184,40 @@ export default function Dashboard() {
   return (
     <div className="p-4 bg-slate-50 min-h-screen">
       {/* Header */}
-
+      
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4 gap-3">
-        <div>
-          <h3 className="text-xl font-bold">
-            Laboratory Information Management System
-          </h3>
-        </div>
+  <div>
+    <h3 className="text-xl font-bold">
+      Laboratory Information Management System
+    </h3>
+  </div>
 
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm">
-            <CalendarDays className="w-4 h-4 text-gray-500" />
+ <div className="flex items-center gap-2">
+  <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm">
+    <CalendarDays className="w-4 h-4 text-gray-500" />
 
-            <input
-              type="date"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-              className="border border-gray-300 rounded px-2 py-1 text-sm"
-            />
+    <input
+      type="date"
+      value={fromDate}
+      onChange={(e) => setFromDate(e.target.value)}
+      className="border border-gray-300 rounded px-2 py-1 text-sm"
+    />
 
-            <span className="text-sm text-gray-500">to</span>
+    <span className="text-sm text-gray-500">to</span>
 
-            <input
-              type="date"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-              className="border border-gray-300 rounded px-2 py-1 text-sm"
-            />
-          </div>
+    <input
+      type="date"
+      value={toDate}
+      onChange={(e) => setToDate(e.target.value)}
+      className="border border-gray-300 rounded px-2 py-1 text-sm"
+    />
+  </div>
 
-          <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg shadow-sm">
-            <Search className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+  <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg shadow-sm">
+    <Search className="w-4 h-4" />
+  </button>
+</div>
+</div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
